@@ -1,0 +1,9 @@
+applications:
+- name: pg_csv_upload
+  host: pg_csv_upload
+  path: ./
+  memory: 128M
+  buildpack: python_buildpack
+  command: python csv_postgres.py
+  services:
+   - pg_litemdg_db

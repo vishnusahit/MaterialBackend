@@ -1,0 +1,9 @@
+applications:
+- name: py_mdg_duplicate_chk
+  host: py_mdg_duplicate_chk
+  path: ./
+  memory: 128M
+  buildpack: python_buildpack
+  command: python py_mat_dup_chk.py
+  services:
+   - pg_litemdg_db

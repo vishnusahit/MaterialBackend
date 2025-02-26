@@ -1,0 +1,802 @@
+MATNR,MTART,MATKL,LAENG,BREIT,HOEHE,CUOBF,MAKT_MAKTX
+100001,PROD,YA009,0,0,0,0,Product Group for Y100
+100002,ERSA,YA001,0,0,0,0,MS ANgle plate 45X4X25 Grade 1010
+100003,LEIH,YA600,0,0,0,0,Returnable Packing Material
+100004,LEIH,YA600,0,0,0,0,Returnable Packing Material -01
+100005,UNBW,YA600,0,0,0,0,RTP Packaging Material
+100006,FERT,YA009,0,0,0,0,Serial number
+100007,HALB,YA009,0,0,0,0,Serial number Profile
+100008,HALB,YA009,0,0,0,0,Serial number Profile
+100009,ROH,YA000,0,0,0,0,01w materail
+100010,FERT,YA000,0,0,0,0,Finished test maerial
+100011,ROH,YA000,0,0,0,0,Raw materail
+100012,ROH,YA000,0,0,0,0,Raw materail
+100013,HALB,YA000,0,0,0,0,Stock transfer material
+100014,ROH,YA000,0,0,0,0,Stock transfer material
+100015,FERT,YA000,0,0,0,0,Finished test maerial
+100016,FERT,YA000,0,0,0,0,Finished test maerial
+100017,FERT,YA000,0,0,0,0,Finished test maerial
+100018,FERT,YA000,0,0,0,0,Finished test maerial
+100019,FERT,YA000,0,0,0,0,Finished test maerial
+100020,FERT,YA000,0,0,0,0,Finished test maerial
+100021,FERT,,0,0,0,0,Test
+100022,KMAT,,0,0,0,0,MFG Test
+100023,FERT,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100024,FERT,YA100,0,0,0,0,Hydraulic Unit TEST
+100025,SERV,YA000,0,0,0,0,Lean service test
+100026,YFRT,YA105,0,0,0,0,Gear Pump
+100027,YFRT,YA105,0,0,0,0,Gear Pump- Primary
+100028,YFRT,YA105,0,0,0,0,Gear Pump1
+100029,YFRT,YA105,0,0,0,0,Gear Pump2
+100030,YFRT,YA105,0,0,0,0,Gear Pump3
+100031,YFRT,YA105,0,0,0,0,Gear Pump4
+100032,YFRT,YA105,0,0,0,0,Gear Pump5
+100033,YFRT,YA105,0,0,0,0,Gear Pump6
+100034,YFRT,YA105,0,0,0,0,Gear Pump7
+100035,YFRT,YA105,0,0,0,0,Gear Pump8
+100036,YFRT,YA105,0,0,0,0,Gear Pump9
+100037,YFRT,YA105,0,0,0,0,Gear Pump10
+100038,YFRT,YA105,0,0,0,0,Gear Pump11
+100039,YFRT,YA105,0,0,0,0,Gear Pump12
+100040,YFRT,YA105,0,0,0,0,Gear Pump13
+100041,YFRT,YA105,0,0,0,0,Gear Pump14
+100042,YFRT,YA105,0,0,0,0,Gear Pump15
+100043,YFRT,YA105,0,0,0,0,Gear Pump16
+100044,YFRT,YA105,0,0,0,0,Gear Pump17
+100045,YFRT,YA105,0,0,0,0,Gear Pump18
+100046,YFRT,YA105,0,0,0,0,Gear Pump19
+100047,YFRT,YA105,0,0,0,0,Gear Pump20
+100048,YFRT,YA105,0,0,0,0,Gear Pump21
+100049,YFRT,YA105,0,0,0,0,Gear Pump22
+100050,YFRT,YA105,0,0,0,0,Gear Pump23
+100051,YFRT,YA105,0,0,0,0,Gear Pump24
+100052,YFRT,YA105,0,0,0,0,Gear Pump24
+100053,YFRT,YA105,0,0,0,0,Gear Pump24
+100054,YFRT,YA105,0,0,0,0,Shirt
+100055,YFRT,YA105,0,0,0,0,Workwear
+100056,YFRT,YA105,0,0,0,0,SHIRT - GREEN - MALE - L - PERSON NO
+100057,YFRT,YA105,0,0,0,0,Shirt
+100058,YFRT,YA105,0,0,0,0,Jacket
+100059,YFRT,YA105,0,0,0,0,Trousers
+100060,YFRT,YA105,0,0,0,0,Workwear
+100061,YFRT,YA105,0,0,0,0,Shirt
+100062,YFRT,YA105,0,0,0,0,Jacket
+100063,YFRT,YA105,0,0,0,0,Trousers
+100064,YFRT,YA107,0,0,0,0,Gear Pump - for IAM
+100065,YFRT,YA105,0,0,0,0,Gear Pump - for OES
+100066,VERP,YA105,0,0,0,0,Gear Pump
+100067,YFRT,YA105,0,0,0,0,Gear Pump
+100068,YFRT,YA105,0,0,0,0,test Demo
+100069,YFRT,YA105,0,0,0,0,Gear Pump - Testing
+100070,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100071,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100072,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100073,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100074,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100075,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100076,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100077,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100078,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100079,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100080,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100081,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100082,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100083,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100084,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100085,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100086,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100087,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100088,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100089,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100090,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100091,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100092,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100093,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100094,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100095,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100096,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100097,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100098,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100099,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100100,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100101,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100102,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100103,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100104,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100105,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100106,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100107,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100108,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100109,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100110,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100111,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100112,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100113,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100114,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100115,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100116,YFRT,YA105,0,0,0,0,slotting all
+100117,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100118,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100119,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100120,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100121,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100122,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100123,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100124,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100125,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100126,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100127,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100128,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100129,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100130,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100131,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100132,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100133,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100134,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100135,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100136,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100137,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100138,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100139,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100140,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100141,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100142,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100143,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100144,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100145,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100146,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100147,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100148,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100149,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100150,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100151,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100152,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100153,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100154,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100155,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100156,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100157,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100158,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100159,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100160,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100161,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100162,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100163,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100164,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100165,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100166,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100167,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100168,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100169,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100170,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100171,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100172,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100173,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100174,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100175,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100176,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100177,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100178,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100179,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100180,YFRT,YA105,0,0,0,0,Gear Pump- All
+100181,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100182,YFRT,YA105,0,0,0,0,Gear Pump
+100183,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100184,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100185,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100186,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100187,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100188,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100189,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100190,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100191,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100192,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100193,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100194,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100195,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100196,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100197,YHLB,YA105,0.1,0.1,0.1,0,Gear Pump
+100198,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100199,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100200,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100201,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100202,YFRT,YA105,0,0,0,0,Gear Pump-CD
+100203,YFRT,YA105,0,0,0,0,CD- Demo - POC
+100204,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100205,YFRT,YA105,0,0,0,0,CD
+100206,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100207,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100208,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100209,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100210,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100211,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100212,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100213,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100214,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100215,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100216,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100217,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100218,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100219,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100220,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100221,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100222,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100223,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100224,YHLB,,0,0,0,0,Comp HALB1
+100225,YHLB,,0,0,0,0,Comp HALB1
+100226,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100227,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100228,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100229,YFRT,YA105,0,0,0,0,Gear Pump
+100230,YFRT,YA105,0,0,0,0,Gear Pump
+100231,YFRT,YA105,0,0,0,0,Gear Pump
+100232,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100233,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100234,VERP,YA105,1,1,1,0,Gear Pump
+100235,VERP,YA105,10,10,10,0,Gear Pump
+100236,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100237,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100238,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100239,YHLB,YA105,0,0,0,0,Gear Pump
+100240,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100241,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100242,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100243,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100244,YHLB,YA000,0,0,0,0,Comp HALB1
+100245,YHLB,YA000,0,0,0,0,Comp HALB1
+100246,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100247,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100248,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100249,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100250,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100251,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100252,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100253,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100254,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100255,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100256,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100257,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100258,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100259,YFRT,YA105,0,0,0,0,Gear Pump
+100260,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100261,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100262,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100263,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100264,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100265,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100266,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100267,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100268,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100269,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100270,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100271,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100272,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100273,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100274,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100275,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100276,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100277,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100278,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100279,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100280,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100281,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100282,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100283,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100284,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100285,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100286,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100287,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100288,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100289,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100290,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100291,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100292,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100293,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100294,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100295,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100296,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100297,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100298,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100299,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100300,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100301,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100302,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100303,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100304,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100305,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100306,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100307,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100308,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100309,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100310,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100311,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100312,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100313,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100314,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100315,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100316,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100317,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100318,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100319,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100320,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100321,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100322,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100323,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100324,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100325,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100326,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100327,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100328,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100329,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100330,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100331,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100332,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100333,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100334,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100335,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100336,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100337,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100338,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100339,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100340,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100341,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100342,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100343,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100344,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100345,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100346,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100347,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100348,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100349,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100350,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100351,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100352,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100353,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100354,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100355,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100356,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100357,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100358,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100359,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100360,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100361,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100362,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100363,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100364,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100365,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100366,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100367,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100368,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100369,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100370,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100371,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100372,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100373,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100374,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100375,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100376,YFRT,YA105,0,0,0,0,Gear Pump
+100377,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100378,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100379,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100380,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100381,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100382,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100383,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100384,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100385,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100386,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100387,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100388,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100389,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100390,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100391,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100392,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100393,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100394,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100395,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100396,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100397,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100398,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100399,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100400,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100401,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100402,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100403,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100404,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100405,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100406,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100407,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100408,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100409,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100410,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100411,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100412,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100413,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100414,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100415,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100416,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100417,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100418,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100419,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100420,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100421,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100422,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100423,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100424,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100425,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100426,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100427,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100428,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100429,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100430,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100431,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100432,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100433,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100434,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100435,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100436,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100437,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100438,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100439,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100440,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100441,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100442,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100443,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100444,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100445,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100446,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100447,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100448,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100449,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100450,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100451,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100452,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100453,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100454,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100455,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100456,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100457,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100458,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100459,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100460,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100461,YFRT,YA105,0,0,0,0,Gear Pump
+100462,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100463,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100464,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100465,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100466,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100467,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100468,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100469,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100470,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100471,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100472,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100473,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100474,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100475,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100476,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100477,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100478,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100479,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100480,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100481,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100482,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100483,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100484,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100485,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100486,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100487,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100488,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100489,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100490,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100491,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100492,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100493,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100494,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100495,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100496,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100497,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100498,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100499,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100500,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100501,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100502,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100503,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100504,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100505,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100506,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100507,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100508,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100509,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100510,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100511,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100512,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100513,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100514,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100515,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100516,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100517,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100518,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100519,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100520,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100521,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100522,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100523,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100524,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100525,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100526,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100527,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100528,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100529,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100530,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100531,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100532,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100533,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100534,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100535,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100536,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100537,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100538,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100539,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100540,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100541,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100542,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100543,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100544,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100545,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100546,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100547,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100548,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100549,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100550,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100551,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100552,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100553,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100554,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100555,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100556,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100557,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100558,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100559,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100560,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100561,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100562,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100563,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100564,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100565,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100566,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100567,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100568,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100569,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100570,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100571,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100572,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100573,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100574,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100575,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100576,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100577,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100578,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100579,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100580,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100581,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100582,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100583,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100584,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100585,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100586,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100587,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100588,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100589,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100590,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100591,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100592,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100593,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100594,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100595,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100596,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100597,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100598,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100599,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100600,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100601,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100602,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100603,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100604,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100605,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100606,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100607,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100608,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100609,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100610,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100611,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100612,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100613,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100614,YFRT,YA105,0,0,0,0,Gear Pump
+100615,YHLB,YA105,0,0,0,0,Gear Pump
+100616,YHLB,YA105,0,0,0,0,Gear Pump
+100617,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100618,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100619,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100620,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100621,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100622,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100623,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100624,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100625,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100626,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100627,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100628,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100629,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100630,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100631,YFRT,YA105,0,0,0,0,Gear Pump
+100632,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100633,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100634,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100635,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100636,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100637,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100638,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100639,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100640,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100641,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100642,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100643,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100644,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100645,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100646,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100647,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100648,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100649,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100650,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100651,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100652,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100653,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100654,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100655,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100656,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100657,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100658,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100659,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100660,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100661,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100662,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100663,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100664,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100665,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100666,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100667,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100668,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100669,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100670,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100671,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100672,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100673,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100674,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100675,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100676,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100677,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100678,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100679,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100680,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100681,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100682,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100683,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100684,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100685,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100686,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100687,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100688,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100689,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100690,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100691,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100692,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100693,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100694,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100695,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100696,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100697,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100698,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100699,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100700,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100701,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100702,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100703,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100704,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100705,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100706,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100707,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100708,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100709,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100710,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100711,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100712,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100713,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100714,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100715,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100716,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100717,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100718,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100719,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100720,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100721,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100722,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100723,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100724,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100725,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100726,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100727,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100728,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100729,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100730,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100731,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100732,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100733,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100734,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100735,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100736,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100737,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100738,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100739,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100740,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100741,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100742,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100743,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100744,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100745,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100746,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100747,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100748,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100749,YHWA,YA003,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100750,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100751,YHWA,YA004,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100752,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100753,YHWA,YA005,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100754,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100755,YHWA,YA006,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100756,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100757,YHWA,YA007,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100758,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100759,YHWA,YA008,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100760,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100761,YHWA,YA009,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100762,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100763,YHWA,YA010,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100764,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100765,YHWA,YA100,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100766,YFRT,YA105,0,0,0,0,slotting all
+100767,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100768,YHWA,YA101,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100769,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100770,YHWA,YA102,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100771,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100772,YHWA,YA103,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100773,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100774,YHWA,YA104,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100775,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100776,YHWA,YA105,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100777,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100778,YHWA,YA106,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100779,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100780,YHWA,YA107,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100781,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100782,YHWA,YA108,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100783,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100784,YHWA,YA109,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100785,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100786,YHWA,YA110,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100787,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100788,YHWA,YA111,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100789,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100790,YHWA,YA112,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100791,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100792,YHWA,YA113,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100793,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100794,YHWA,YA114,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100795,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100796,YHWA,YA000,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100797,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100798,YHWA,YA001,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100799,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+100800,YHWA,YA002,0,0,0,0,Hydraulic Unit ABS5.3 - for IAM
+19000,PROD,YA009,0,0,0,0,Product Group for Y100

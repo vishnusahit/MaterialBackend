@@ -1,0 +1,1 @@
+using litemdg as service from '../../srv/service';

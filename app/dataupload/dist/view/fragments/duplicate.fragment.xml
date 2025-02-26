@@ -1,0 +1,66 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:u="sap.ui.unified"
+                         xmlns="sap.m">
+    <Dialog id="uploadDialog" title="" class="sapUiResponsiveContentPadding" beforeOpen=".onBeforeOpenDuplicates"
+            afterClose=".onAfterCloseDuplicates">
+       <Table id="customViewWithTable" autoPopinMode="true" 
+     noDataText="NoDuplicates" growing="true" growingThreshold="30" growingScrollToLoad="true" items="{duplicatesModel>/}" >
+        <headerToolbar>
+            <OverflowToolbar>
+                <content>
+                    <Title id="tableTitle" text="Duplicates" level="H2" />
+                    <ToolbarSpacer />
+                    <Button id="saveToDbButton" text="{i18n>saveToDatabase}" press="handler.onSaveToDbButtonPressed" enabled="false"/>
+                    <Button id="persoButton" icon="sap-icon://action-settings" visible="false" tooltip="{i18n>persoButtonText}" press="handler.onPersoButtonPressed" />
+                    <Button id="exportButton" icon="sap-icon://excel-attachment" tooltip="{i18n>exportButtonText}" press="handler.onExportButtonPressed" enabled="false"/>
+                </content>
+            </OverflowToolbar>
+        </headerToolbar>
+        <columns>
+            <Column mergeDuplicates="true" width="auto" >
+                <Text text="Material Number" />
+            </Column>
+            <Column width="auto" importance = "High">
+                <Text text="Material Type" />
+            </Column>
+            <Column  width="auto">
+                <Text text="Material Group" />
+            </Column>
+            <Column width="auto">
+                <Text text="Length" />
+            </Column>
+            <Column  width="auto">
+                <Text text="Width" />
+            </Column>
+             <Column  width="auto">
+                <Text text="Height" />
+            </Column>
+            <Column  width="auto">
+                <Text text="Internal Object Number" />
+            </Column>
+            <Column  width="auto">
+                <Text text="Description" />
+            </Column>
+        </columns>
+        <items>
+        <ColumnListItem>
+                    <cells>
+                        <Text text="{duplicatesModel>matnr}" />
+                        <Text text="{duplicatesModel>mtart}" />
+                        <Text text="{duplicatesModel>matkl}" />
+                        <Text text="{duplicatesModel>laeng}" />
+                        <Text text="{duplicatesModel>briet}" />
+                        <Text text="{duplicatesModel>hoehe}" />
+                        <Text text="{duplicatesModel>cuobf}" />
+                        <Text text="{duplicatesModel>makt_maktx}" />
+                    </cells>
+        </ColumnListItem>
+        </items>
+    </Table>
+        <beginButton>
+            <Button id="ok" text="OK" press=".onOk" type="Emphasized" enabled="false"/>
+        </beginButton>
+        <endButton>
+            <Button id="cancel" text="Cancel" press=".onCancelDuplicates"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

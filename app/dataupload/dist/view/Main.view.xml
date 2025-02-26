@@ -1,0 +1,236 @@
+<mvc:View controllerName="dataupload.controller.Main"
+    xmlns:c="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:u="sap.ui.unified"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+    displayBlock = "true">
+       <f:DynamicPage
+        id="dynamicPageId"
+        preserveHeaderStateOnScroll="true"
+        headerExpanded="true"
+        showFooter="true"
+        fitContent="true"  >
+      
+        <f:title>
+            <f:DynamicPageTitle id="_IDGenDynamicPageTitle">
+                <f:heading>
+                    <Title id="_IDGenTitle1" text="{i18n>title}" />
+                </f:heading>
+                <f:content />
+                <f:actions>
+                    <ToolbarSpacer id="_IDGenToolbarSpacer" />
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+   
+        <f:header>
+            <f:DynamicPageHeader id="_IDGenDynamicPageHeader" pinnable="true">
+           
+              <HBox id="hboxFilters" width="100%" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom sapUiBody" >
+                  <!-- <u:FileUploader
+                    id="uploader"
+                    fileType="xlsx"
+                    multiple="false"
+                    fileAllowed=".onFileAllowed"
+                    fileEmpty=".onFileEmpty"
+                    uploadComplete=".onUploadComplete"
+                    typeMissmatch=".onTypeMismatch"
+                    sendXHR="true"
+                    useMultipart="false"
+                    placeholder="Choose a XLSX File..."
+                    httpRequestMethod="Put"/> -->
+                    <!-- <Label text="EntitySet"></Label>
+                    <Select>
+                    </Select> -->
+                    <!-- <Button id="idExcelUploadBtn" text="Excel Upload" press=".onOk" type="Emphasized" enabled="true"/> -->
+                    <Button id="idExcelUploadBtn" text="Excel Upload" press=".onExcelUploadBtnPress" type="Emphasized" enabled="true"/>
+                </HBox>
+               
+             
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <Table id="rulesTable" 	sticky="HeaderToolbar,ColumnHeaders"
+						inset="false"
+						items="{ExcelData>/}"                        
+					   class="sapFDynamicPageAlignContent"
+					   width="auto"
+                       mode="MultiSelect">
+
+                	<headerToolbar>						
+                        <OverflowToolbar id="_IDGenOverflowToolbar">
+                        <Toolbar id="_IDGenToolbar">
+							<Title id="_IDGenTitle" text="Products" level="H2"/>
+						</Toolbar>
+                        <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+                         <Button id="_IDGenButton" text="Edit" type="Emphasized" press=".onEdit"/>
+                     <Button id="_IDGenButton1" text="Delete" type="Transparent" press=".onDelete"/>
+                     <Button id="_IDGenButton2" text="Copy" type="Transparent"/>
+                     <Button id="_IDGenButton3" icon="sap-icon://action" type="Transparent"/>
+                        </OverflowToolbar>
+                        
+					</headerToolbar>
+					<columns>
+						<Column id="_IDGenColumn"
+								width="12em">
+							<Text id="_IDGenText" text="Table Name" />
+						</Column>
+						<Column id="_IDGenColumn1"
+								minScreenWidth="Tablet"
+								demandPopin="true">
+							<Text id="_IDGenText1" text="Column Name" />
+						</Column>
+						<Column id="_IDGenColumn2"
+								minScreenWidth="Tablet"
+								demandPopin="true"
+								>
+							<Text id="_IDGenText2" text="Column Description" />
+						</Column>
+                        	<Column id="_IDGenColumn3"
+								minScreenWidth="Tablet"
+								demandPopin="true"
+								>
+							<Text id="_IDGenText3" text="Business Rule Name" />
+						</Column>
+                        	<Column id="_IDGenColumn4"
+								minScreenWidth="Tablet"
+								demandPopin="true"
+								>
+							<Text id="_IDGenText4" text="Rule Type" />
+						</Column>
+						<Column id="_IDGenColumn5"
+								hAlign="End">
+							<Text id="_IDGenText5" text="Rule Definition" />
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem id="_IDGenColumnListItem">
+							<cells>
+								<!-- <ObjectIdentifier
+										title="{ExcelData>Table_name}"
+										text="{ProductId}"/> -->
+                                <ObjectIdentifier id="tableName"
+										title="{ExcelData>Table_name}"
+										/>
+								<Text id="columnName"
+										text="{ExcelData>Column_name}" />
+								<Text id="columnDescription"
+										text="{ExcelData>Column_description}" />
+                                <Text id="businessRuleName"
+										text="{ExcelData>Business_rule_name}" />
+                                <Text id="ruleType"
+										text="{ExcelData>Rule_type}" />
+                                <Text id="ruleDefinition"
+										text="{ExcelData>Rule_Definition}" />                        
+								<!-- <ObjectNumber
+										number="{
+											parts:[{path:'Price'},{path:'CurrencyCode'}],
+											type: 'sap.ui.model.type.Currency',
+											formatOptions: {showMeasure: false}
+										}"
+										unit="{CurrencyCode}" /> -->
+							</cells>
+						</ColumnListItem>
+					</items>       
+
+            </Table>
+            <!-- <t:Table
+                id="rulesTable"
+                rows="{ExcelData>/}"
+                selectionMode="MultiToggle"
+                rowMode="Auto" 
+            >
+            
+                <t:extension>
+                    <OverflowToolbar id="_IDGenOverflowToolbar" style="Clear" >
+                     <Title id="_IDGenTitle" text="Rules"></Title>
+                     <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+                     <Button id="_IDGenButton" text="Edit" type="Emphasized" press=".onEdit"/>
+                     <Button id="_IDGenButton1" text="Delete" type="Transparent" press=".onDelete"/>
+                     <Button id="_IDGenButton2" text="Copy" type="Transparent"/>
+                     <Button id="_IDGenButton3" icon="sap-icon://action" type="Transparent"/>
+
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column id="_IDGenColumn" width="auto">
+                        <Label id="_IDGenLabel" text="Table Name" />
+                        <t:template>
+                            <Text id="_IDGenText"
+                                text="{ExcelData>Table_name}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column id="_IDGenColumn1" width="auto">
+                        <Label id="_IDGenLabel1" text="Column Name" />
+                        <t:template>
+                            <Text id="_IDGenText1"
+                                text="{ExcelData>Column_name}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column id="_IDGenColumn2"
+                        width="auto"
+                        hAlign="End"
+                    >
+                        <Label id="_IDGenLabel2" text="Column Description" />
+                        <t:template>
+                            <Text id="_IDGenText2"
+                                text="{ExcelData>Column_description}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column id="_IDGenColumn3" width="auto">
+                        <Label id="_IDGenLabel3" text="Business Rule Name " />
+                        <t:template>
+                            <Text id="_IDGenText3"
+                                text="{ExcelData>Business_rule_name}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                      <t:Column id="_IDGenColumn4" width="auto">
+                        <Label id="_IDGenLabel4" text="Rule Type " />
+                        <t:template>
+                            <Text id="_IDGenText4"
+                                text="{ExcelData>Rule_type}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                     <t:Column id="_IDGenColumn5" width="auto">
+                        <Label id="_IDGenLabel5" text="Rule Definition " />
+                        <t:template>
+                            <Text id="_IDGenText5"
+                                text="{ExcelData>Rule_Definition}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+                
+            </t:Table> -->
+        </f:content>
+         <f:footer>
+             <OverflowToolbar id="idHomeViewOverFlowBar">
+                <ToolbarSpacer id="idToolbarSpacer" />
+                <Button
+                    
+                    id="idBotButton"
+                    text="Create"
+                    type="Emphasized"
+                    class="sapUiMediumMarginEnd"
+                    press="onCreate"
+                />
+                <Button id="idDraftBtn" text="Draft" press="onDraftPress"/>
+            </OverflowToolbar>
+
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View>

@@ -1,0 +1,2121 @@
+@server = http://localhost:4004
+
+
+### Mara
+# @name Mara_GET
+GET {{server}}/odata/v4/litemdg/Mara
+
+
+
+### Mara Drafts GET
+# @name Mara_Drafts_GET
+GET {{server}}/odata/v4/litemdg/Mara?$filter=(IsActiveEntity eq false)
+
+
+
+### Mara Draft POST
+# @name Mara_Draft_POST
+POST {{server}}/odata/v4/litemdg/Mara
+Content-Type: application/json
+
+{
+  "MATNR": "Mara-2604996",
+  "MAKT_MAKTX": "MAKT_MAKTX-2604996",
+  "BISMT": "BISMT-2604996",
+  "LVORM": true,
+  "MATKL": "L-2604996",
+  "MBRSH": "6",
+  "MEINS": {
+    "UOM": "136"
+  },
+  "MSTAE": "96",
+  "MSTDE": "2005-08-18",
+  "MTART": {
+    "Material_type": "6468"
+  },
+  "SPART": "96",
+  "EXTWG": "EXTWG-2604996",
+  "MAGRV": "4996",
+  "MTPOS_MARA": "4996",
+  "PRDHA": "PRDHA-2604996",
+  "WRKST": "WRKST-2604996",
+  "EAN11": "EAN11-2604996",
+  "VOLEH": {
+    "unit": "Volume_unit-21239920"
+  },
+  "VOLUM": 14112323.305,
+  "LAENG": 33,
+  "BREIT": 35,
+  "HOEHE": 86,
+  "CUOBF": 6,
+  "NTGEW": 20044087.387,
+  "GEWEI": "996",
+  "BRGEW": 1287126.103,
+  "MEABM": "996",
+  "SLED_BBD": "6",
+  "MHDHB": "4996",
+  "RAUBE": "96",
+  "MHDRZ": "4996",
+  "IPRKZ": "6",
+  "TRAGR": "4996",
+  "EKWSL": "4996",
+  "QMPUR": true,
+  "Status": "us-2604996",
+  "plant": [
+    {
+      "WERKS": {
+        "WERKS": "Plant_List-24005574"
+      },
+      "MMSTA": "82",
+      "PRCTR": {
+        "PRCTR": "r-23533046"
+      },
+      "XCHPF_marc": true,
+      "DISMM": "82",
+      "MAABC": "2",
+      "DISPO": "282",
+      "BESKZ": "2",
+      "EKGRP": "282",
+      "LVORM": true,
+      "FIXLS": 21279196.111,
+      "LADGR": "8282",
+      "MTVFP": "82",
+      "DGRMRPPP": "DGRMRPPP-6598282",
+      "RDPRF": "8282",
+      "DISLS": "82",
+      "BSTFE": 3249234.239,
+      "SCM_GRPRT": "SCM_GRPRT-6598282",
+      "BSTMA": 22372385.277,
+      "BSTMI": 22698739.232,
+      "BEARZ": 19059.19,
+      "HERKL": "282",
+      "to_Storage_Location": [
+        {
+          "LGORT": "4468",
+          "LGPBE": "LGPBE-15144468"
+        },
+        {
+          "LGORT": "4469",
+          "LGPBE": "LGPBE-15144469"
+        }
+      ]
+    }
+  ],
+  "to_sales_delivery": [
+    {
+      "VKORG": "7604",
+      "VTWEG": "04",
+      "RDPRF": "7604",
+      "PRODH": "PRODH-28617604",
+      "LVORM": true,
+      "MTPOS": "7604"
+    },
+    {
+      "VKORG": "7605",
+      "VTWEG": "05",
+      "RDPRF": "7605",
+      "PRODH": "PRODH-28617605",
+      "LVORM": false,
+      "MTPOS": "7605"
+    }
+  ],
+  "to_valuation": [
+    {
+      "BWKEY": "8911",
+      "BWTAR": "on-4618911",
+      "STPRS": 28460283.886,
+      "BWTTY": "1",
+      "BKLAS": "8911",
+      "CURRENCY_KEY": "8911",
+      "CURTP": "11",
+      "VERPR": 27007084.14,
+      "VPRSV": "1"
+    },
+    {
+      "BWKEY": "8912",
+      "BWTAR": "on-4618912",
+      "STPRS": 17882143.611,
+      "BWTTY": "2",
+      "BKLAS": "8912",
+      "CURRENCY_KEY": "8912",
+      "CURTP": "12",
+      "VERPR": 31611912.3,
+      "VPRSV": "2"
+    }
+  ],
+  "to_Description": [
+    {
+      "code": "1896",
+      "Description": "Description-16891896"
+    },
+    {
+      "code": "1897",
+      "Description": "Description-16891897"
+    }
+  ],
+  "createdAt": "2011-06-26T00:00:00.000Z",
+  "createdBy": "createdBy.1ju10@example.com",
+  "modifiedAt": "2020-02-05T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.1ju10@example.com"
+}
+
+
+### Result from POST request above
+@draftID = {{Mara_Draft_POST.response.body.$.ID}}
+
+
+### Mara Draft PATCH
+# @name Mara_Draft_Patch
+PATCH {{server}}/odata/v4/litemdg/Mara(ID={{draftID}},IsActiveEntity=false)
+Content-Type: application/json
+
+{
+  "MATNR": "Mara-2604996",
+  "MAKT_MAKTX": "MAKT_MAKTX-2604996",
+  "BISMT": "BISMT-2604996",
+  "LVORM": true,
+  "MATKL": "L-2604996",
+  "MBRSH": "6",
+  "MEINS": {
+    "UOM": "136"
+  },
+  "MSTAE": "96",
+  "MSTDE": "2005-08-18",
+  "MTART": {
+    "Material_type": "6468"
+  },
+  "SPART": "96",
+  "EXTWG": "EXTWG-2604996",
+  "MAGRV": "4996",
+  "MTPOS_MARA": "4996",
+  "PRDHA": "PRDHA-2604996",
+  "WRKST": "WRKST-2604996",
+  "EAN11": "EAN11-2604996",
+  "VOLEH": {
+    "unit": "Volume_unit-21239920"
+  },
+  "VOLUM": 14112323.305,
+  "LAENG": 33,
+  "BREIT": 35,
+  "HOEHE": 86,
+  "CUOBF": 6,
+  "NTGEW": 20044087.387,
+  "GEWEI": "996",
+  "BRGEW": 1287126.103,
+  "MEABM": "996",
+  "SLED_BBD": "6",
+  "MHDHB": "4996",
+  "RAUBE": "96",
+  "MHDRZ": "4996",
+  "IPRKZ": "6",
+  "TRAGR": "4996",
+  "EKWSL": "4996",
+  "QMPUR": true,
+  "Status": "us-2604996",
+  "plant": [
+    {
+      "WERKS": {
+        "WERKS": "Plant_List-24005574"
+      },
+      "MMSTA": "82",
+      "PRCTR": {
+        "PRCTR": "r-23533046"
+      },
+      "XCHPF_marc": true,
+      "DISMM": "82",
+      "MAABC": "2",
+      "DISPO": "282",
+      "BESKZ": "2",
+      "EKGRP": "282",
+      "LVORM": true,
+      "FIXLS": 21279196.111,
+      "LADGR": "8282",
+      "MTVFP": "82",
+      "DGRMRPPP": "DGRMRPPP-6598282",
+      "RDPRF": "8282",
+      "DISLS": "82",
+      "BSTFE": 3249234.239,
+      "SCM_GRPRT": "SCM_GRPRT-6598282",
+      "BSTMA": 22372385.277,
+      "BSTMI": 22698739.232,
+      "BEARZ": 19059.19,
+      "HERKL": "282",
+      "to_Storage_Location": [
+        {
+          "LGORT": "4468",
+          "LGPBE": "LGPBE-15144468"
+        },
+        {
+          "LGORT": "4469",
+          "LGPBE": "LGPBE-15144469"
+        }
+      ]
+    }
+  ],
+  "to_sales_delivery": [
+    {
+      "VKORG": "7604",
+      "VTWEG": "04",
+      "RDPRF": "7604",
+      "PRODH": "PRODH-28617604",
+      "LVORM": true,
+      "MTPOS": "7604"
+    },
+    {
+      "VKORG": "7605",
+      "VTWEG": "05",
+      "RDPRF": "7605",
+      "PRODH": "PRODH-28617605",
+      "LVORM": false,
+      "MTPOS": "7605"
+    }
+  ],
+  "to_valuation": [
+    {
+      "BWKEY": "8911",
+      "BWTAR": "on-4618911",
+      "STPRS": 28460283.886,
+      "BWTTY": "1",
+      "BKLAS": "8911",
+      "CURRENCY_KEY": "8911",
+      "CURTP": "11",
+      "VERPR": 27007084.14,
+      "VPRSV": "1"
+    },
+    {
+      "BWKEY": "8912",
+      "BWTAR": "on-4618912",
+      "STPRS": 17882143.611,
+      "BWTTY": "2",
+      "BKLAS": "8912",
+      "CURRENCY_KEY": "8912",
+      "CURTP": "12",
+      "VERPR": 31611912.3,
+      "VPRSV": "2"
+    }
+  ],
+  "to_Description": [
+    {
+      "code": "1896",
+      "Description": "Description-16891896"
+    },
+    {
+      "code": "1897",
+      "Description": "Description-16891897"
+    }
+  ],
+  "createdAt": "2011-06-26T00:00:00.000Z",
+  "createdBy": "createdBy.1ju10@example.com",
+  "modifiedAt": "2020-02-05T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.1ju10@example.com"
+}
+
+
+### Mara Draft Prepare
+# @name Mara_Draft_Prepare
+POST {{server}}/odata/v4/litemdg/Mara(ID={{draftID}},IsActiveEntity=false)/AdminService.draftPrepare
+Content-Type: application/json
+
+{}
+
+
+### Mara Draft Activate
+# @name Mara_Draft_Activate
+POST {{server}}/odata/v4/litemdg/Mara(ID={{draftID}},IsActiveEntity=false)/AdminService.draftActivate
+Content-Type: application/json
+
+{}
+
+
+### mara_dummy
+# @name mara_dummy_GET
+GET {{server}}/odata/v4/litemdg/mara_dummy
+
+
+
+### mara_dummy
+# @name mara_dummy_POST
+POST {{server}}/odata/v4/litemdg/mara_dummy
+Content-Type: application/json
+
+{
+  "MATNR": "mara_dummy-18717881",
+  "ID": "18717881-97f1-47bc-bc36-b40d9f093160",
+  "MAKT_MAKTX": "MAKT_MAKTX-18717881",
+  "BISMT": "BISMT-18717881",
+  "LVORM": false,
+  "MATKL": "-18717881",
+  "MBRSH": "1",
+  "MEINS_UOM": "881",
+  "MSTAE": "81",
+  "MSTDE": "2015-11-09",
+  "MTART_Material_type": "7881",
+  "SPART": "81",
+  "EXTWG": "EXTWG-18717881",
+  "MAGRV": "7881",
+  "MTPOS_MARA": "7881",
+  "PRDHA": "PRDHA-18717881",
+  "WRKST": "WRKST-18717881",
+  "EAN11": "EAN11-18717881",
+  "VOLEH_unit": "VOLEH_unit-18717881",
+  "VOLUM": 5508878.31,
+  "LAENG": 49,
+  "BREIT": 50,
+  "HOEHE": 91,
+  "CUOBF": 91,
+  "NTGEW": 20339764.185,
+  "GEWEI": "881",
+  "BRGEW": 31587887.187,
+  "MEABM": "881",
+  "SLED_BBD": "1",
+  "MHDHB": "7881",
+  "RAUBE": "81",
+  "MHDRZ": "7881",
+  "IPRKZ": "1",
+  "TRAGR": "7881",
+  "EKWSL": "7881",
+  "QMPUR": false,
+  "REQUEST_NUMBER": 29,
+  "MAX_NO": 41,
+  "CREATION_TYPE": "CREATION_TYPE-18717881",
+  "Status": "s-18717881",
+  "plant": [
+    {
+      "WERKS_WERKS": "Plant_dummy-30684895",
+      "MMSTA": "95",
+      "PRCTR_PRCTR": "R-30684895",
+      "XCHPF_marc": false,
+      "DISMM": "95",
+      "MAABC": "5",
+      "DISPO": "895",
+      "BESKZ": "5",
+      "EKGRP": "895",
+      "LVORM": false,
+      "FIXLS": 28148856.226,
+      "LADGR": "4895",
+      "MTVFP": "95",
+      "DGRMRPPP": "DGRMRPPP-30684895",
+      "RDPRF": "4895",
+      "DISLS": "95",
+      "BSTFE": 22522474.195,
+      "SCM_GRPRT": "SCM_GRPRT-30684895",
+      "BSTMA": 6885891.166,
+      "BSTMI": 18470237.172,
+      "BEARZ": 89428.96,
+      "HERKL": "895",
+      "to_Storage_Location": [
+        {
+          "LGORT": "1292",
+          "LGPBE": "LGPBE-7451292"
+        },
+        {
+          "LGORT": "1293",
+          "LGPBE": "LGPBE-7451293"
+        }
+      ]
+    },
+    {
+      "WERKS_WERKS": "Plant_dummy-30684896",
+      "MMSTA": "96",
+      "PRCTR_PRCTR": "R-30684896",
+      "XCHPF_marc": true,
+      "DISMM": "96",
+      "MAABC": "6",
+      "DISPO": "896",
+      "BESKZ": "6",
+      "EKGRP": "896",
+      "LVORM": true,
+      "FIXLS": 7786207.224,
+      "LADGR": "4896",
+      "MTVFP": "96",
+      "DGRMRPPP": "DGRMRPPP-30684896",
+      "RDPRF": "4896",
+      "DISLS": "96",
+      "BSTFE": 29149657.84,
+      "SCM_GRPRT": "SCM_GRPRT-30684896",
+      "BSTMA": 19188314.13,
+      "BSTMI": 1188621.144,
+      "BEARZ": 70561.23,
+      "HERKL": "896",
+      "to_Storage_Location": [
+        {
+          "LGORT": "9166",
+          "LGPBE": "LGPBE-27369166"
+        },
+        {
+          "LGORT": "9167",
+          "LGPBE": "LGPBE-27369167"
+        }
+      ]
+    }
+  ],
+  "to_sales_delivery": [
+    {
+      "VKORG": "9145",
+      "VTWEG": "45",
+      "RDPRF": "9145",
+      "PRODH": "PRODH-22319145",
+      "LVORM": false,
+      "MTPOS": "9145"
+    },
+    {
+      "VKORG": "9146",
+      "VTWEG": "46",
+      "RDPRF": "9146",
+      "PRODH": "PRODH-22319146",
+      "LVORM": true,
+      "MTPOS": "9146"
+    }
+  ],
+  "to_valuation": [
+    {
+      "BWKEY": "0810",
+      "BWTAR": "my-5510810",
+      "STPRS": 31370518.123,
+      "BWTTY": "0",
+      "BKLAS": "0810",
+      "CURRENCY_KEY": "0810",
+      "CURTP": "10",
+      "VERPR": 18017462.23,
+      "VPRSV": "0"
+    },
+    {
+      "BWKEY": "0811",
+      "BWTAR": "my-5510811",
+      "STPRS": 30361197.283,
+      "BWTTY": "1",
+      "BKLAS": "0811",
+      "CURRENCY_KEY": "0811",
+      "CURTP": "11",
+      "VERPR": 25808120.24,
+      "VPRSV": "1"
+    }
+  ],
+  "to_Description": [
+    {
+      "code": "1861",
+      "Description": "Description-27011861"
+    },
+    {
+      "code": "1862",
+      "Description": "Description-27011862"
+    }
+  ],
+  "createdAt": "2014-03-31T00:00:00.000Z",
+  "createdBy": "createdBy.b56t5@example.com",
+  "modifiedAt": "2015-09-15T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.b56t5@example.org"
+}
+
+
+### mara_dummy
+# @name mara_dummy_PATCH
+PATCH {{server}}/odata/v4/litemdg/mara_dummy(ID=18717881-97f1-47bc-bc36-b40d9f093160,MATNR='mara_dummy-18717881')
+Content-Type: application/json
+
+{
+  "MATNR": "mara_dummy-18717881",
+  "ID": "18717881-97f1-47bc-bc36-b40d9f093160",
+  "MAKT_MAKTX": "MAKT_MAKTX-18717881",
+  "BISMT": "BISMT-18717881",
+  "LVORM": false,
+  "MATKL": "-18717881",
+  "MBRSH": "1",
+  "MEINS_UOM": "881",
+  "MSTAE": "81",
+  "MSTDE": "2015-11-09",
+  "MTART_Material_type": "7881",
+  "SPART": "81",
+  "EXTWG": "EXTWG-18717881",
+  "MAGRV": "7881",
+  "MTPOS_MARA": "7881",
+  "PRDHA": "PRDHA-18717881",
+  "WRKST": "WRKST-18717881",
+  "EAN11": "EAN11-18717881",
+  "VOLEH_unit": "VOLEH_unit-18717881",
+  "VOLUM": 5508878.31,
+  "LAENG": 49,
+  "BREIT": 50,
+  "HOEHE": 91,
+  "CUOBF": 91,
+  "NTGEW": 20339764.185,
+  "GEWEI": "881",
+  "BRGEW": 31587887.187,
+  "MEABM": "881",
+  "SLED_BBD": "1",
+  "MHDHB": "7881",
+  "RAUBE": "81",
+  "MHDRZ": "7881",
+  "IPRKZ": "1",
+  "TRAGR": "7881",
+  "EKWSL": "7881",
+  "QMPUR": false,
+  "REQUEST_NUMBER": 29,
+  "MAX_NO": 41,
+  "CREATION_TYPE": "CREATION_TYPE-18717881",
+  "Status": "s-18717881",
+  "plant": [
+    {
+      "WERKS_WERKS": "Plant_dummy-30684895",
+      "MMSTA": "95",
+      "PRCTR_PRCTR": "R-30684895",
+      "XCHPF_marc": false,
+      "DISMM": "95",
+      "MAABC": "5",
+      "DISPO": "895",
+      "BESKZ": "5",
+      "EKGRP": "895",
+      "LVORM": false,
+      "FIXLS": 28148856.226,
+      "LADGR": "4895",
+      "MTVFP": "95",
+      "DGRMRPPP": "DGRMRPPP-30684895",
+      "RDPRF": "4895",
+      "DISLS": "95",
+      "BSTFE": 22522474.195,
+      "SCM_GRPRT": "SCM_GRPRT-30684895",
+      "BSTMA": 6885891.166,
+      "BSTMI": 18470237.172,
+      "BEARZ": 89428.96,
+      "HERKL": "895",
+      "to_Storage_Location": [
+        {
+          "LGORT": "1292",
+          "LGPBE": "LGPBE-7451292"
+        },
+        {
+          "LGORT": "1293",
+          "LGPBE": "LGPBE-7451293"
+        }
+      ]
+    },
+    {
+      "WERKS_WERKS": "Plant_dummy-30684896",
+      "MMSTA": "96",
+      "PRCTR_PRCTR": "R-30684896",
+      "XCHPF_marc": true,
+      "DISMM": "96",
+      "MAABC": "6",
+      "DISPO": "896",
+      "BESKZ": "6",
+      "EKGRP": "896",
+      "LVORM": true,
+      "FIXLS": 7786207.224,
+      "LADGR": "4896",
+      "MTVFP": "96",
+      "DGRMRPPP": "DGRMRPPP-30684896",
+      "RDPRF": "4896",
+      "DISLS": "96",
+      "BSTFE": 29149657.84,
+      "SCM_GRPRT": "SCM_GRPRT-30684896",
+      "BSTMA": 19188314.13,
+      "BSTMI": 1188621.144,
+      "BEARZ": 70561.23,
+      "HERKL": "896",
+      "to_Storage_Location": [
+        {
+          "LGORT": "9166",
+          "LGPBE": "LGPBE-27369166"
+        },
+        {
+          "LGORT": "9167",
+          "LGPBE": "LGPBE-27369167"
+        }
+      ]
+    }
+  ],
+  "to_sales_delivery": [
+    {
+      "VKORG": "9145",
+      "VTWEG": "45",
+      "RDPRF": "9145",
+      "PRODH": "PRODH-22319145",
+      "LVORM": false,
+      "MTPOS": "9145"
+    },
+    {
+      "VKORG": "9146",
+      "VTWEG": "46",
+      "RDPRF": "9146",
+      "PRODH": "PRODH-22319146",
+      "LVORM": true,
+      "MTPOS": "9146"
+    }
+  ],
+  "to_valuation": [
+    {
+      "BWKEY": "0810",
+      "BWTAR": "my-5510810",
+      "STPRS": 31370518.123,
+      "BWTTY": "0",
+      "BKLAS": "0810",
+      "CURRENCY_KEY": "0810",
+      "CURTP": "10",
+      "VERPR": 18017462.23,
+      "VPRSV": "0"
+    },
+    {
+      "BWKEY": "0811",
+      "BWTAR": "my-5510811",
+      "STPRS": 30361197.283,
+      "BWTTY": "1",
+      "BKLAS": "0811",
+      "CURRENCY_KEY": "0811",
+      "CURTP": "11",
+      "VERPR": 25808120.24,
+      "VPRSV": "1"
+    }
+  ],
+  "to_Description": [
+    {
+      "code": "1861",
+      "Description": "Description-27011861"
+    },
+    {
+      "code": "1862",
+      "Description": "Description-27011862"
+    }
+  ],
+  "createdAt": "2014-03-31T00:00:00.000Z",
+  "createdBy": "createdBy.b56t5@example.com",
+  "modifiedAt": "2015-09-15T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.b56t5@example.org"
+}
+
+
+### mara_dummy
+# @name mara_dummy_DELETE
+DELETE {{server}}/odata/v4/litemdg/mara_dummy(ID=18717881-97f1-47bc-bc36-b40d9f093160,MATNR='mara_dummy-18717881')
+Content-Type: application/json
+
+
+### Plant_dummy
+# @name Plant_dummy_GET
+GET {{server}}/odata/v4/litemdg/Plant_dummy
+
+
+
+### Plant_dummy
+# @name Plant_dummy_POST
+POST {{server}}/odata/v4/litemdg/Plant_dummy
+Content-Type: application/json
+
+{
+  "WERKS_WERKS": "Plant_dummy-30684895",
+  "MMSTA": "95",
+  "PRCTR_PRCTR": "R-30684895",
+  "XCHPF_marc": false,
+  "DISMM": "95",
+  "MAABC": "5",
+  "DISPO": "895",
+  "BESKZ": "5",
+  "EKGRP": "895",
+  "LVORM": false,
+  "FIXLS": 28148856.226,
+  "LADGR": "4895",
+  "MTVFP": "95",
+  "DGRMRPPP": "DGRMRPPP-30684895",
+  "RDPRF": "4895",
+  "DISLS": "95",
+  "BSTFE": 22522474.195,
+  "SCM_GRPRT": "SCM_GRPRT-30684895",
+  "BSTMA": 6885891.166,
+  "BSTMI": 18470237.172,
+  "BEARZ": 89428.96,
+  "HERKL": "895",
+  "to_Storage_Location": [
+    {
+      "LGORT": "1292",
+      "LGPBE": "LGPBE-7451292"
+    },
+    {
+      "LGORT": "1293",
+      "LGPBE": "LGPBE-7451293"
+    }
+  ]
+}
+
+
+### Plant_dummy
+# @name Plant_dummy_PATCH
+PATCH {{server}}/odata/v4/litemdg/Plant_dummy(mat_plant=[object Object],WERKS_WERKS='Plant_dummy-30684895')
+Content-Type: application/json
+
+{
+  "WERKS_WERKS": "Plant_dummy-30684895",
+  "MMSTA": "95",
+  "PRCTR_PRCTR": "R-30684895",
+  "XCHPF_marc": false,
+  "DISMM": "95",
+  "MAABC": "5",
+  "DISPO": "895",
+  "BESKZ": "5",
+  "EKGRP": "895",
+  "LVORM": false,
+  "FIXLS": 28148856.226,
+  "LADGR": "4895",
+  "MTVFP": "95",
+  "DGRMRPPP": "DGRMRPPP-30684895",
+  "RDPRF": "4895",
+  "DISLS": "95",
+  "BSTFE": 22522474.195,
+  "SCM_GRPRT": "SCM_GRPRT-30684895",
+  "BSTMA": 6885891.166,
+  "BSTMI": 18470237.172,
+  "BEARZ": 89428.96,
+  "HERKL": "895",
+  "to_Storage_Location": [
+    {
+      "LGORT": "1292",
+      "LGPBE": "LGPBE-7451292"
+    },
+    {
+      "LGORT": "1293",
+      "LGPBE": "LGPBE-7451293"
+    }
+  ]
+}
+
+
+### Plant_dummy
+# @name Plant_dummy_DELETE
+DELETE {{server}}/odata/v4/litemdg/Plant_dummy(mat_plant=[object Object],WERKS_WERKS='Plant_dummy-30684895')
+Content-Type: application/json
+
+
+### Storage_dummy
+# @name Storage_dummy_GET
+GET {{server}}/odata/v4/litemdg/Storage_dummy
+
+
+
+### Storage_dummy
+# @name Storage_dummy_POST
+POST {{server}}/odata/v4/litemdg/Storage_dummy
+Content-Type: application/json
+
+{
+  "LGORT": "1292",
+  "LGPBE": "LGPBE-7451292"
+}
+
+
+### Storage_dummy
+# @name Storage_dummy_PATCH
+PATCH {{server}}/odata/v4/litemdg/Storage_dummy(plant=[object Object],LGORT='1292')
+Content-Type: application/json
+
+{
+  "LGORT": "1292",
+  "LGPBE": "LGPBE-7451292"
+}
+
+
+### Storage_dummy
+# @name Storage_dummy_DELETE
+DELETE {{server}}/odata/v4/litemdg/Storage_dummy(plant=[object Object],LGORT='1292')
+Content-Type: application/json
+
+
+### Description_dummy
+# @name Description_dummy_GET
+GET {{server}}/odata/v4/litemdg/Description_dummy
+
+
+
+### Description_dummy
+# @name Description_dummy_POST
+POST {{server}}/odata/v4/litemdg/Description_dummy
+Content-Type: application/json
+
+{
+  "code": "1861",
+  "Description": "Description-27011861"
+}
+
+
+### Description_dummy
+# @name Description_dummy_PATCH
+PATCH {{server}}/odata/v4/litemdg/Description_dummy(Material=[object Object],code='1861')
+Content-Type: application/json
+
+{
+  "code": "1861",
+  "Description": "Description-27011861"
+}
+
+
+### Description_dummy
+# @name Description_dummy_DELETE
+DELETE {{server}}/odata/v4/litemdg/Description_dummy(Material=[object Object],code='1861')
+Content-Type: application/json
+
+
+### Rules
+# @name Rules_GET
+GET {{server}}/odata/v4/litemdg/Rules
+
+
+
+### Rules
+# @name Rules_POST
+POST {{server}}/odata/v4/litemdg/Rules
+Content-Type: application/json
+
+{
+  "ID": "28246917-9ad9-4846-a825-0e56110e7720",
+  "Table_name": "Table_name-28246917",
+  "Column_name": "Column_name-28246917",
+  "Column_description": "Column_description-28246917",
+  "Business_rule_name": "Business_rule_name-28246917",
+  "Rule_type": "Rule_type-28246917",
+  "Rule_Definition": "Rule_Definition-28246917",
+  "Rule_Value": "Rule_Value-28246917"
+}
+
+
+### Rules
+# @name Rules_PATCH
+PATCH {{server}}/odata/v4/litemdg/Rules/28246917-9ad9-4846-a825-0e56110e7720
+Content-Type: application/json
+
+{
+  "ID": "28246917-9ad9-4846-a825-0e56110e7720",
+  "Table_name": "Table_name-28246917",
+  "Column_name": "Column_name-28246917",
+  "Column_description": "Column_description-28246917",
+  "Business_rule_name": "Business_rule_name-28246917",
+  "Rule_type": "Rule_type-28246917",
+  "Rule_Definition": "Rule_Definition-28246917",
+  "Rule_Value": "Rule_Value-28246917"
+}
+
+
+### Rules
+# @name Rules_DELETE
+DELETE {{server}}/odata/v4/litemdg/Rules/28246917-9ad9-4846-a825-0e56110e7720
+Content-Type: application/json
+
+
+### Rules_validation
+# @name Rules_validation_GET
+GET {{server}}/odata/v4/litemdg/Rules_validation
+
+
+
+### Rules_validation
+# @name Rules_validation_POST
+POST {{server}}/odata/v4/litemdg/Rules_validation
+Content-Type: application/json
+
+{
+  "ID": "27783994-e203-4c92-89f1-15fe5cd9ddd3",
+  "Entity": "Entity-27783994",
+  "Business_ID": "Business_ID-27783994",
+  "Column_Validates": "Column_Validates-27783994",
+  "validate_outcome": "validate_outcome-27783994",
+  "Rule_type": "Rule_type-27783994",
+  "Reason": "Reason-27783994"
+}
+
+
+### Rules_validation
+# @name Rules_validation_PATCH
+PATCH {{server}}/odata/v4/litemdg/Rules_validation/27783994-e203-4c92-89f1-15fe5cd9ddd3
+Content-Type: application/json
+
+{
+  "ID": "27783994-e203-4c92-89f1-15fe5cd9ddd3",
+  "Entity": "Entity-27783994",
+  "Business_ID": "Business_ID-27783994",
+  "Column_Validates": "Column_Validates-27783994",
+  "validate_outcome": "validate_outcome-27783994",
+  "Rule_type": "Rule_type-27783994",
+  "Reason": "Reason-27783994"
+}
+
+
+### Rules_validation
+# @name Rules_validation_DELETE
+DELETE {{server}}/odata/v4/litemdg/Rules_validation/27783994-e203-4c92-89f1-15fe5cd9ddd3
+Content-Type: application/json
+
+
+### Value_help
+# @name Value_help_GET
+GET {{server}}/odata/v4/litemdg/Value_help
+
+
+
+### Value_help
+# @name Value_help_POST
+POST {{server}}/odata/v4/litemdg/Value_help
+Content-Type: application/json
+
+{
+  "ID": "17528592-1b8d-4dc3-ae62-27d0b526c9c4",
+  "Table_name": "Table_name-17528592",
+  "UI_block": "UI_block-17528592",
+  "Column_name": "Column_name-17528592",
+  "Business_name": "Business_name-17528592",
+  "Value": "Value-17528592",
+  "Description": "Description-17528592",
+  "createdAt": "2016-11-25T00:00:00.000Z",
+  "createdBy": "createdBy.afp5c@example.net",
+  "modifiedAt": "2017-12-31T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.afp5c@example.net"
+}
+
+
+### Value_help
+# @name Value_help_PATCH
+PATCH {{server}}/odata/v4/litemdg/Value_help/17528592-1b8d-4dc3-ae62-27d0b526c9c4
+Content-Type: application/json
+
+{
+  "ID": "17528592-1b8d-4dc3-ae62-27d0b526c9c4",
+  "Table_name": "Table_name-17528592",
+  "UI_block": "UI_block-17528592",
+  "Column_name": "Column_name-17528592",
+  "Business_name": "Business_name-17528592",
+  "Value": "Value-17528592",
+  "Description": "Description-17528592",
+  "createdAt": "2016-11-25T00:00:00.000Z",
+  "createdBy": "createdBy.afp5c@example.net",
+  "modifiedAt": "2017-12-31T00:00:00.000Z",
+  "modifiedBy": "modifiedBy.afp5c@example.net"
+}
+
+
+### Value_help
+# @name Value_help_DELETE
+DELETE {{server}}/odata/v4/litemdg/Value_help/17528592-1b8d-4dc3-ae62-27d0b526c9c4
+Content-Type: application/json
+
+
+### ExcelUpload
+# @name ExcelUpload_GET
+GET {{server}}/odata/v4/litemdg/ExcelUpload
+
+
+
+### plant
+# @name plant_GET
+GET {{server}}/odata/v4/litemdg/plant
+
+
+
+### plant
+# @name plant_POST
+POST {{server}}/odata/v4/litemdg/plant
+Content-Type: application/json
+
+{
+  "WERKS": {
+    "WERKS": "Plant_List-24005574"
+  },
+  "MMSTA": "82",
+  "PRCTR": {
+    "PRCTR": "r-23533046"
+  },
+  "XCHPF_marc": true,
+  "DISMM": "82",
+  "MAABC": "2",
+  "DISPO": "282",
+  "BESKZ": "2",
+  "EKGRP": "282",
+  "LVORM": true,
+  "FIXLS": 21279196.111,
+  "LADGR": "8282",
+  "MTVFP": "82",
+  "DGRMRPPP": "DGRMRPPP-6598282",
+  "RDPRF": "8282",
+  "DISLS": "82",
+  "BSTFE": 3249234.239,
+  "SCM_GRPRT": "SCM_GRPRT-6598282",
+  "BSTMA": 22372385.277,
+  "BSTMI": 22698739.232,
+  "BEARZ": 19059.19,
+  "HERKL": "282",
+  "to_Storage_Location": [
+    {
+      "LGORT": "4468",
+      "LGPBE": "LGPBE-15144468"
+    },
+    {
+      "LGORT": "4469",
+      "LGPBE": "LGPBE-15144469"
+    }
+  ]
+}
+
+
+### plant
+# @name plant_PATCH
+PATCH {{server}}/odata/v4/litemdg/plant(mat_plant=[object Object],WERKS=[object Object])
+Content-Type: application/json
+
+{
+  "WERKS": {
+    "WERKS": "Plant_List-24005574"
+  },
+  "MMSTA": "82",
+  "PRCTR": {
+    "PRCTR": "r-23533046"
+  },
+  "XCHPF_marc": true,
+  "DISMM": "82",
+  "MAABC": "2",
+  "DISPO": "282",
+  "BESKZ": "2",
+  "EKGRP": "282",
+  "LVORM": true,
+  "FIXLS": 21279196.111,
+  "LADGR": "8282",
+  "MTVFP": "82",
+  "DGRMRPPP": "DGRMRPPP-6598282",
+  "RDPRF": "8282",
+  "DISLS": "82",
+  "BSTFE": 3249234.239,
+  "SCM_GRPRT": "SCM_GRPRT-6598282",
+  "BSTMA": 22372385.277,
+  "BSTMI": 22698739.232,
+  "BEARZ": 19059.19,
+  "HERKL": "282",
+  "to_Storage_Location": [
+    {
+      "LGORT": "4468",
+      "LGPBE": "LGPBE-15144468"
+    },
+    {
+      "LGORT": "4469",
+      "LGPBE": "LGPBE-15144469"
+    }
+  ]
+}
+
+
+### plant
+# @name plant_DELETE
+DELETE {{server}}/odata/v4/litemdg/plant(mat_plant=[object Object],WERKS=[object Object])
+Content-Type: application/json
+
+
+### Description
+# @name Description_GET
+GET {{server}}/odata/v4/litemdg/Description
+
+
+
+### Description
+# @name Description_POST
+POST {{server}}/odata/v4/litemdg/Description
+Content-Type: application/json
+
+{
+  "code": "1896",
+  "Description": "Description-16891896"
+}
+
+
+### Description
+# @name Description_PATCH
+PATCH {{server}}/odata/v4/litemdg/Description(Material=[object Object],code='1896')
+Content-Type: application/json
+
+{
+  "code": "1896",
+  "Description": "Description-16891896"
+}
+
+
+### Description
+# @name Description_DELETE
+DELETE {{server}}/odata/v4/litemdg/Description(Material=[object Object],code='1896')
+Content-Type: application/json
+
+
+### Change_Request
+# @name Change_Request_GET
+GET {{server}}/odata/v4/litemdg/Change_Request
+
+
+
+### Change_Request
+# @name Change_Request_POST
+POST {{server}}/odata/v4/litemdg/Change_Request
+Content-Type: application/json
+
+{
+  "REQUEST_NUMBER": 24102733,
+  "InstanceID": "InstanceID-24102733",
+  "REQUEST_TYPE": "REQUEST_TYPE-24102733",
+  "Overall_status": "Overall_status-24102733",
+  "Model": "Model-24102733",
+  "Requested_By": "Requested_By-24102733",
+  "Requested_Date": "2018-06-29",
+  "Requested_Time": "22:59:53",
+  "Requested_on": "Requested_on-24102733",
+  "Approved_By": "Approved_By-24102733",
+  "Aprroved_date": "2007-11-19",
+  "Aprroved_Time": "22:59:53",
+  "Completed_On": "Completed_On-24102733",
+  "Notes": "Notes-24102733",
+  "Replication_status": "Replication_status-24102733",
+  "Details": [
+    {
+      "Object_ID": "Change_Request_Details-31695431",
+      "Description": "Description-31695431",
+      "Object_CUID": "Object_CUID-31695431",
+      "Replication_status": "Replication_status-31695431",
+      "to_Change_Documents": [
+        {
+          "Table": "Change_Documents-4074418",
+          "Field_Name": "Change_Documents-4074418",
+          "Old_Value": "Old_Value-4074418",
+          "New_Value": "New_Value-4074418",
+          "Processor": "Processor-4074418",
+          "timestamp": "timestamp-4074418",
+          "Object_Description": "Object_Description-4074418"
+        },
+        {
+          "Table": "Change_Documents-4074419",
+          "Field_Name": "Change_Documents-4074419",
+          "Old_Value": "Old_Value-4074419",
+          "New_Value": "New_Value-4074419",
+          "Processor": "Processor-4074419",
+          "timestamp": "timestamp-4074419",
+          "Object_Description": "Object_Description-4074419"
+        }
+      ]
+    },
+    {
+      "Object_ID": "Change_Request_Details-31695432",
+      "Description": "Description-31695432",
+      "Object_CUID": "Object_CUID-31695432",
+      "Replication_status": "Replication_status-31695432",
+      "to_Change_Documents": [
+        {
+          "Table": "Change_Documents-19905031",
+          "Field_Name": "Change_Documents-19905031",
+          "Old_Value": "Old_Value-19905031",
+          "New_Value": "New_Value-19905031",
+          "Processor": "Processor-19905031",
+          "timestamp": "timestamp-19905031",
+          "Object_Description": "Object_Description-19905031"
+        },
+        {
+          "Table": "Change_Documents-19905032",
+          "Field_Name": "Change_Documents-19905032",
+          "Old_Value": "Old_Value-19905032",
+          "New_Value": "New_Value-19905032",
+          "Processor": "Processor-19905032",
+          "timestamp": "timestamp-19905032",
+          "Object_Description": "Object_Description-19905032"
+        }
+      ]
+    }
+  ],
+  "to_Action_Details": [
+    {
+      "User_Step": "Change_Request_User_Actions_Details-3862501",
+      "Processer": "Processer-3862501",
+      "Action": "Action-3862501",
+      "Time_Stamp": "Time_Stamp-3862501"
+    },
+    {
+      "User_Step": "Change_Request_User_Actions_Details-3862502",
+      "Processer": "Processer-3862502",
+      "Action": "Action-3862502",
+      "Time_Stamp": "Time_Stamp-3862502"
+    }
+  ]
+}
+
+
+### Change_Request
+# @name Change_Request_PATCH
+PATCH {{server}}/odata/v4/litemdg/Change_Request/24102733
+Content-Type: application/json
+
+{
+  "REQUEST_NUMBER": 24102733,
+  "InstanceID": "InstanceID-24102733",
+  "REQUEST_TYPE": "REQUEST_TYPE-24102733",
+  "Overall_status": "Overall_status-24102733",
+  "Model": "Model-24102733",
+  "Requested_By": "Requested_By-24102733",
+  "Requested_Date": "2018-06-29",
+  "Requested_Time": "22:59:53",
+  "Requested_on": "Requested_on-24102733",
+  "Approved_By": "Approved_By-24102733",
+  "Aprroved_date": "2007-11-19",
+  "Aprroved_Time": "22:59:53",
+  "Completed_On": "Completed_On-24102733",
+  "Notes": "Notes-24102733",
+  "Replication_status": "Replication_status-24102733",
+  "Details": [
+    {
+      "Object_ID": "Change_Request_Details-31695431",
+      "Description": "Description-31695431",
+      "Object_CUID": "Object_CUID-31695431",
+      "Replication_status": "Replication_status-31695431",
+      "to_Change_Documents": [
+        {
+          "Table": "Change_Documents-4074418",
+          "Field_Name": "Change_Documents-4074418",
+          "Old_Value": "Old_Value-4074418",
+          "New_Value": "New_Value-4074418",
+          "Processor": "Processor-4074418",
+          "timestamp": "timestamp-4074418",
+          "Object_Description": "Object_Description-4074418"
+        },
+        {
+          "Table": "Change_Documents-4074419",
+          "Field_Name": "Change_Documents-4074419",
+          "Old_Value": "Old_Value-4074419",
+          "New_Value": "New_Value-4074419",
+          "Processor": "Processor-4074419",
+          "timestamp": "timestamp-4074419",
+          "Object_Description": "Object_Description-4074419"
+        }
+      ]
+    },
+    {
+      "Object_ID": "Change_Request_Details-31695432",
+      "Description": "Description-31695432",
+      "Object_CUID": "Object_CUID-31695432",
+      "Replication_status": "Replication_status-31695432",
+      "to_Change_Documents": [
+        {
+          "Table": "Change_Documents-19905031",
+          "Field_Name": "Change_Documents-19905031",
+          "Old_Value": "Old_Value-19905031",
+          "New_Value": "New_Value-19905031",
+          "Processor": "Processor-19905031",
+          "timestamp": "timestamp-19905031",
+          "Object_Description": "Object_Description-19905031"
+        },
+        {
+          "Table": "Change_Documents-19905032",
+          "Field_Name": "Change_Documents-19905032",
+          "Old_Value": "Old_Value-19905032",
+          "New_Value": "New_Value-19905032",
+          "Processor": "Processor-19905032",
+          "timestamp": "timestamp-19905032",
+          "Object_Description": "Object_Description-19905032"
+        }
+      ]
+    }
+  ],
+  "to_Action_Details": [
+    {
+      "User_Step": "Change_Request_User_Actions_Details-3862501",
+      "Processer": "Processer-3862501",
+      "Action": "Action-3862501",
+      "Time_Stamp": "Time_Stamp-3862501"
+    },
+    {
+      "User_Step": "Change_Request_User_Actions_Details-3862502",
+      "Processer": "Processer-3862502",
+      "Action": "Action-3862502",
+      "Time_Stamp": "Time_Stamp-3862502"
+    }
+  ]
+}
+
+
+### Change_Request
+# @name Change_Request_DELETE
+DELETE {{server}}/odata/v4/litemdg/Change_Request/24102733
+Content-Type: application/json
+
+
+### Storage_Location
+# @name Storage_Location_GET
+GET {{server}}/odata/v4/litemdg/Storage_Location
+
+
+
+### Storage_Location
+# @name Storage_Location_POST
+POST {{server}}/odata/v4/litemdg/Storage_Location
+Content-Type: application/json
+
+{
+  "LGORT": "4468",
+  "LGPBE": "LGPBE-15144468"
+}
+
+
+### Storage_Location
+# @name Storage_Location_PATCH
+PATCH {{server}}/odata/v4/litemdg/Storage_Location(plant=[object Object],LGORT='4468')
+Content-Type: application/json
+
+{
+  "LGORT": "4468",
+  "LGPBE": "LGPBE-15144468"
+}
+
+
+### Storage_Location
+# @name Storage_Location_DELETE
+DELETE {{server}}/odata/v4/litemdg/Storage_Location(plant=[object Object],LGORT='4468')
+Content-Type: application/json
+
+
+### Sales_Delivery
+# @name Sales_Delivery_GET
+GET {{server}}/odata/v4/litemdg/Sales_Delivery
+
+
+
+### Sales_Delivery
+# @name Sales_Delivery_POST
+POST {{server}}/odata/v4/litemdg/Sales_Delivery
+Content-Type: application/json
+
+{
+  "VKORG": "7604",
+  "VTWEG": "04",
+  "RDPRF": "7604",
+  "PRODH": "PRODH-28617604",
+  "LVORM": true,
+  "MTPOS": "7604"
+}
+
+
+### Sales_Delivery
+# @name Sales_Delivery_PATCH
+PATCH {{server}}/odata/v4/litemdg/Sales_Delivery(Material=[object Object],VKORG='7604',VTWEG='04')
+Content-Type: application/json
+
+{
+  "VKORG": "7604",
+  "VTWEG": "04",
+  "RDPRF": "7604",
+  "PRODH": "PRODH-28617604",
+  "LVORM": true,
+  "MTPOS": "7604"
+}
+
+
+### Sales_Delivery
+# @name Sales_Delivery_DELETE
+DELETE {{server}}/odata/v4/litemdg/Sales_Delivery(Material=[object Object],VKORG='7604',VTWEG='04')
+Content-Type: application/json
+
+
+### Valuation
+# @name Valuation_GET
+GET {{server}}/odata/v4/litemdg/Valuation
+
+
+
+### Valuation
+# @name Valuation_POST
+POST {{server}}/odata/v4/litemdg/Valuation
+Content-Type: application/json
+
+{
+  "BWKEY": "8911",
+  "BWTAR": "on-4618911",
+  "STPRS": 28460283.886,
+  "BWTTY": "1",
+  "BKLAS": "8911",
+  "CURRENCY_KEY": "8911",
+  "CURTP": "11",
+  "VERPR": 27007084.14,
+  "VPRSV": "1"
+}
+
+
+### Valuation
+# @name Valuation_PATCH
+PATCH {{server}}/odata/v4/litemdg/Valuation(Material=[object Object],BWKEY='8911',BWTAR='on-4618911')
+Content-Type: application/json
+
+{
+  "BWKEY": "8911",
+  "BWTAR": "on-4618911",
+  "STPRS": 28460283.886,
+  "BWTTY": "1",
+  "BKLAS": "8911",
+  "CURRENCY_KEY": "8911",
+  "CURTP": "11",
+  "VERPR": 27007084.14,
+  "VPRSV": "1"
+}
+
+
+### Valuation
+# @name Valuation_DELETE
+DELETE {{server}}/odata/v4/litemdg/Valuation(Material=[object Object],BWKEY='8911',BWTAR='on-4618911')
+Content-Type: application/json
+
+
+### Change_Request_Details
+# @name Change_Request_Details_GET
+GET {{server}}/odata/v4/litemdg/Change_Request_Details
+
+
+
+### Change_Request_Details
+# @name Change_Request_Details_POST
+POST {{server}}/odata/v4/litemdg/Change_Request_Details
+Content-Type: application/json
+
+{
+  "Object_ID": "Change_Request_Details-31695431",
+  "Description": "Description-31695431",
+  "Object_CUID": "Object_CUID-31695431",
+  "Replication_status": "Replication_status-31695431",
+  "to_Change_Documents": [
+    {
+      "Table": "Change_Documents-4074418",
+      "Field_Name": "Change_Documents-4074418",
+      "Old_Value": "Old_Value-4074418",
+      "New_Value": "New_Value-4074418",
+      "Processor": "Processor-4074418",
+      "timestamp": "timestamp-4074418",
+      "Object_Description": "Object_Description-4074418"
+    },
+    {
+      "Table": "Change_Documents-4074419",
+      "Field_Name": "Change_Documents-4074419",
+      "Old_Value": "Old_Value-4074419",
+      "New_Value": "New_Value-4074419",
+      "Processor": "Processor-4074419",
+      "timestamp": "timestamp-4074419",
+      "Object_Description": "Object_Description-4074419"
+    }
+  ]
+}
+
+
+### Change_Request_Details
+# @name Change_Request_Details_PATCH
+PATCH {{server}}/odata/v4/litemdg/Change_Request_Details(Change=[object Object],Object_ID='Change_Request_Details-31695431')
+Content-Type: application/json
+
+{
+  "Object_ID": "Change_Request_Details-31695431",
+  "Description": "Description-31695431",
+  "Object_CUID": "Object_CUID-31695431",
+  "Replication_status": "Replication_status-31695431",
+  "to_Change_Documents": [
+    {
+      "Table": "Change_Documents-4074418",
+      "Field_Name": "Change_Documents-4074418",
+      "Old_Value": "Old_Value-4074418",
+      "New_Value": "New_Value-4074418",
+      "Processor": "Processor-4074418",
+      "timestamp": "timestamp-4074418",
+      "Object_Description": "Object_Description-4074418"
+    },
+    {
+      "Table": "Change_Documents-4074419",
+      "Field_Name": "Change_Documents-4074419",
+      "Old_Value": "Old_Value-4074419",
+      "New_Value": "New_Value-4074419",
+      "Processor": "Processor-4074419",
+      "timestamp": "timestamp-4074419",
+      "Object_Description": "Object_Description-4074419"
+    }
+  ]
+}
+
+
+### Change_Request_Details
+# @name Change_Request_Details_DELETE
+DELETE {{server}}/odata/v4/litemdg/Change_Request_Details(Change=[object Object],Object_ID='Change_Request_Details-31695431')
+Content-Type: application/json
+
+
+### UOM
+# @name UOM_GET
+GET {{server}}/odata/v4/litemdg/UOM
+
+
+
+### Material_type
+# @name Material_type_GET
+GET {{server}}/odata/v4/litemdg/Material_type
+
+
+
+### Volume_unit
+# @name Volume_unit_GET
+GET {{server}}/odata/v4/litemdg/Volume_unit
+
+
+
+### Sales_Delivery_dummy
+# @name Sales_Delivery_dummy_GET
+GET {{server}}/odata/v4/litemdg/Sales_Delivery_dummy
+
+
+
+### Sales_Delivery_dummy
+# @name Sales_Delivery_dummy_POST
+POST {{server}}/odata/v4/litemdg/Sales_Delivery_dummy
+Content-Type: application/json
+
+{
+  "VKORG": "9145",
+  "VTWEG": "45",
+  "RDPRF": "9145",
+  "PRODH": "PRODH-22319145",
+  "LVORM": false,
+  "MTPOS": "9145"
+}
+
+
+### Sales_Delivery_dummy
+# @name Sales_Delivery_dummy_PATCH
+PATCH {{server}}/odata/v4/litemdg/Sales_Delivery_dummy(Material=[object Object],VKORG='9145',VTWEG='45')
+Content-Type: application/json
+
+{
+  "VKORG": "9145",
+  "VTWEG": "45",
+  "RDPRF": "9145",
+  "PRODH": "PRODH-22319145",
+  "LVORM": false,
+  "MTPOS": "9145"
+}
+
+
+### Sales_Delivery_dummy
+# @name Sales_Delivery_dummy_DELETE
+DELETE {{server}}/odata/v4/litemdg/Sales_Delivery_dummy(Material=[object Object],VKORG='9145',VTWEG='45')
+Content-Type: application/json
+
+
+### Valuation_dummy
+# @name Valuation_dummy_GET
+GET {{server}}/odata/v4/litemdg/Valuation_dummy
+
+
+
+### Valuation_dummy
+# @name Valuation_dummy_POST
+POST {{server}}/odata/v4/litemdg/Valuation_dummy
+Content-Type: application/json
+
+{
+  "BWKEY": "0810",
+  "BWTAR": "my-5510810",
+  "STPRS": 31370518.123,
+  "BWTTY": "0",
+  "BKLAS": "0810",
+  "CURRENCY_KEY": "0810",
+  "CURTP": "10",
+  "VERPR": 18017462.23,
+  "VPRSV": "0"
+}
+
+
+### Valuation_dummy
+# @name Valuation_dummy_PATCH
+PATCH {{server}}/odata/v4/litemdg/Valuation_dummy(Material=[object Object],BWKEY='0810',BWTAR='my-5510810')
+Content-Type: application/json
+
+{
+  "BWKEY": "0810",
+  "BWTAR": "my-5510810",
+  "STPRS": 31370518.123,
+  "BWTTY": "0",
+  "BKLAS": "0810",
+  "CURRENCY_KEY": "0810",
+  "CURTP": "10",
+  "VERPR": 18017462.23,
+  "VPRSV": "0"
+}
+
+
+### Valuation_dummy
+# @name Valuation_dummy_DELETE
+DELETE {{server}}/odata/v4/litemdg/Valuation_dummy(Material=[object Object],BWKEY='0810',BWTAR='my-5510810')
+Content-Type: application/json
+
+
+### Plant_List
+# @name Plant_List_GET
+GET {{server}}/odata/v4/litemdg/Plant_List
+
+
+
+### Profit_Center
+# @name Profit_Center_GET
+GET {{server}}/odata/v4/litemdg/Profit_Center
+
+
+
+### Change_Request_User_Actions_Details
+# @name Change_Request_User_Actions_Details_GET
+GET {{server}}/odata/v4/litemdg/Change_Request_User_Actions_Details
+
+
+
+### Change_Request_User_Actions_Details
+# @name Change_Request_User_Actions_Details_POST
+POST {{server}}/odata/v4/litemdg/Change_Request_User_Actions_Details
+Content-Type: application/json
+
+{
+  "User_Step": "Change_Request_User_Actions_Details-3862501",
+  "Processer": "Processer-3862501",
+  "Action": "Action-3862501",
+  "Time_Stamp": "Time_Stamp-3862501"
+}
+
+
+### Change_Request_User_Actions_Details
+# @name Change_Request_User_Actions_Details_PATCH
+PATCH {{server}}/odata/v4/litemdg/Change_Request_User_Actions_Details(Change=[object Object],User_Step='Change_Request_User_Actions_Details-3862501')
+Content-Type: application/json
+
+{
+  "User_Step": "Change_Request_User_Actions_Details-3862501",
+  "Processer": "Processer-3862501",
+  "Action": "Action-3862501",
+  "Time_Stamp": "Time_Stamp-3862501"
+}
+
+
+### Change_Request_User_Actions_Details
+# @name Change_Request_User_Actions_Details_DELETE
+DELETE {{server}}/odata/v4/litemdg/Change_Request_User_Actions_Details(Change=[object Object],User_Step='Change_Request_User_Actions_Details-3862501')
+Content-Type: application/json
+
+
+### Change_Documents
+# @name Change_Documents_GET
+GET {{server}}/odata/v4/litemdg/Change_Documents
+
+
+
+### Change_Documents
+# @name Change_Documents_POST
+POST {{server}}/odata/v4/litemdg/Change_Documents
+Content-Type: application/json
+
+{
+  "Table": "Change_Documents-4074418",
+  "Field_Name": "Change_Documents-4074418",
+  "Old_Value": "Old_Value-4074418",
+  "New_Value": "New_Value-4074418",
+  "Processor": "Processor-4074418",
+  "timestamp": "timestamp-4074418",
+  "Object_Description": "Object_Description-4074418"
+}
+
+
+### Change_Documents
+# @name Change_Documents_PATCH
+PATCH {{server}}/odata/v4/litemdg/Change_Documents(Request_details=[object Object],Table='Change_Documents-4074418',Field_Name='Change_Documents-4074418')
+Content-Type: application/json
+
+{
+  "Table": "Change_Documents-4074418",
+  "Field_Name": "Change_Documents-4074418",
+  "Old_Value": "Old_Value-4074418",
+  "New_Value": "New_Value-4074418",
+  "Processor": "Processor-4074418",
+  "timestamp": "timestamp-4074418",
+  "Object_Description": "Object_Description-4074418"
+}
+
+
+### Change_Documents
+# @name Change_Documents_DELETE
+DELETE {{server}}/odata/v4/litemdg/Change_Documents(Request_details=[object Object],Table='Change_Documents-4074418',Field_Name='Change_Documents-4074418')
+Content-Type: application/json
+
+
+### ProcessExcel
+# @name ProcessExcel_POST
+POST {{server}}/odata/v4/litemdg/ProcessExcel
+Content-Type: application/json
+
+{
+  "ip_mara": [
+    {
+      "MATNR": "MATNR-22086849",
+      "MAKT_MAKTX": "MAKT_MAKTX-22086849",
+      "BISMT": "BISMT-22086849",
+      "LVORM": false,
+      "MATKL": "-22086849",
+      "MBRSH": "9",
+      "MEINS": "849",
+      "MEINS_UOM": "849",
+      "MSTAE": "49",
+      "MSTDE": "2023-06-12",
+      "MTART": "6849",
+      "MTART_Material_type": "6849",
+      "SPART": "49",
+      "EXTWG": "EXTWG-22086849",
+      "MAGRV": "6849",
+      "MTPOS_MARA": "6849",
+      "PRDHA": "PRDHA-22086849",
+      "WRKST": "WRKST-22086849",
+      "EAN11": "EAN11-22086849",
+      "VOLEH_unit": "849",
+      "VOLUM": 17067634.788,
+      "LAENG": 26,
+      "BREIT": 52,
+      "HOEHE": 5,
+      "CUOBF": 30,
+      "NTGEW": 22572782.228,
+      "GEWEI": "849",
+      "BRGEW": 29582686.288,
+      "MEABM": "849",
+      "SLED_BBD": "9",
+      "MHDHB": "6849",
+      "RAUBE": "49",
+      "MHDRZ": "6849",
+      "IPRKZ": "9",
+      "TRAGR": "6849",
+      "EKWSL": "6849",
+      "QMPUR": false
+    }
+  ],
+  "ip_plant": [
+    {
+      "mat_plant_MATNR": "mat_plant_MATNR-22086849",
+      "WERKS": "WERKS-22086849",
+      "WERKS_WERKS": "WERKS_WERKS-22086849",
+      "MMSTA": "49",
+      "PRCTR": "R-22086849",
+      "PRCTR_PRCTR": "R-22086849",
+      "XCHPF_marc": false,
+      "DISMM": "49",
+      "MAABC": "9",
+      "DISPO": "849",
+      "BESKZ": "9",
+      "EKGRP": "849",
+      "LVORM": false,
+      "FIXLS": 24657056.154,
+      "LADGR": "6849",
+      "MTVFP": "49",
+      "DGRMRPPP": "DGRMRPPP-22086849",
+      "RDPRF": "6849",
+      "DISLS": "49",
+      "BSTFE": 3870608.274,
+      "SCM_GRPRT": "SCM_GRPRT-22086849",
+      "BSTMA": 15965541.46,
+      "BSTMI": 29776037.145,
+      "BEARZ": 6285.1,
+      "HERKL": "849"
+    }
+  ],
+  "ip_storage": [
+    {
+      "plant_mat_plant_MATNR": "plant_mat_plant_MATNR-22086849",
+      "plant_WERKS_WERKS": "plant_WERKS_WERKS-22086849",
+      "LGORT": "6849",
+      "LGPBE": "LGPBE-22086849"
+    }
+  ],
+  "ip_description": [
+    {
+      "Material_MATNR": "Material_MATNR-22086849",
+      "code": "6849",
+      "Description": "Description-22086849"
+    }
+  ]
+}
+
+
+### Uplod_to_Dummy
+# @name Uplod_to_Dummy_POST
+POST {{server}}/odata/v4/litemdg/Uplod_to_Dummy
+Content-Type: application/json
+
+{
+  "ip_mara": [
+    {
+      "MATNR": "MATNR-3547353",
+      "MAKT_MAKTX": "MAKT_MAKTX-3547353",
+      "BISMT": "BISMT-3547353",
+      "LVORM": false,
+      "MATKL": "L-3547353",
+      "MBRSH": "3",
+      "MEINS": "353",
+      "MEINS_UOM": "353",
+      "MSTAE": "53",
+      "MSTDE": "2001-11-24",
+      "MTART": "7353",
+      "MTART_Material_type": "7353",
+      "SPART": "53",
+      "EXTWG": "EXTWG-3547353",
+      "MAGRV": "7353",
+      "MTPOS_MARA": "7353",
+      "PRDHA": "PRDHA-3547353",
+      "WRKST": "WRKST-3547353",
+      "EAN11": "EAN11-3547353",
+      "VOLEH_unit": "353",
+      "VOLUM": 16777919.401,
+      "LAENG": 51,
+      "BREIT": 18,
+      "HOEHE": 52,
+      "CUOBF": 17,
+      "NTGEW": 24306425.208,
+      "GEWEI": "353",
+      "BRGEW": 26793673.313,
+      "MEABM": "353",
+      "SLED_BBD": "3",
+      "MHDHB": "7353",
+      "RAUBE": "53",
+      "MHDRZ": "7353",
+      "IPRKZ": "3",
+      "TRAGR": "7353",
+      "EKWSL": "7353",
+      "QMPUR": false
+    }
+  ],
+  "ip_plant": [
+    {
+      "mat_plant_MATNR": "mat_plant_MATNR-3547353",
+      "WERKS": "WERKS-3547353",
+      "WERKS_WERKS": "WERKS_WERKS-3547353",
+      "MMSTA": "53",
+      "PRCTR": "TR-3547353",
+      "PRCTR_PRCTR": "TR-3547353",
+      "XCHPF_marc": false,
+      "DISMM": "53",
+      "MAABC": "3",
+      "DISPO": "353",
+      "BESKZ": "3",
+      "EKGRP": "353",
+      "LVORM": false,
+      "FIXLS": 7567405.303,
+      "LADGR": "7353",
+      "MTVFP": "53",
+      "DGRMRPPP": "DGRMRPPP-3547353",
+      "RDPRF": "7353",
+      "DISLS": "53",
+      "BSTFE": 8677466.315,
+      "SCM_GRPRT": "SCM_GRPRT-3547353",
+      "BSTMA": 3158818.293,
+      "BSTMI": 1508893.65,
+      "BEARZ": 94199.23,
+      "HERKL": "353"
+    }
+  ],
+  "ip_storage": [
+    {
+      "plant_mat_plant_MATNR": "plant_mat_plant_MATNR-3547353",
+      "plant_WERKS_WERKS": "plant_WERKS_WERKS-3547353",
+      "LGORT": "7353",
+      "LGPBE": "LGPBE-3547353"
+    }
+  ],
+  "ip_description": [
+    {
+      "Material_MATNR": "Material_MATNR-3547353",
+      "code": "7353",
+      "Description": "Description-3547353"
+    }
+  ]
+}
+
+
+### Validate
+# @name Validate_POST
+POST {{server}}/odata/v4/litemdg/Validate
+Content-Type: application/json
+
+{
+  "ip_mara": [
+    {
+      "MATNR": "MATNR-15582202",
+      "MAKT_MAKTX": "MAKT_MAKTX-15582202",
+      "BISMT": "BISMT-15582202",
+      "LVORM": true,
+      "MATKL": "-15582202",
+      "MBRSH": "2",
+      "MEINS": "202",
+      "MEINS_UOM": "202",
+      "MSTAE": "02",
+      "MSTDE": "2014-03-17",
+      "MTART": "2202",
+      "MTART_Material_type": "2202",
+      "SPART": "02",
+      "EXTWG": "EXTWG-15582202",
+      "MAGRV": "2202",
+      "MTPOS_MARA": "2202",
+      "PRDHA": "PRDHA-15582202",
+      "WRKST": "WRKST-15582202",
+      "EAN11": "EAN11-15582202",
+      "VOLEH_unit": "202",
+      "VOLUM": 7238719.207,
+      "LAENG": 84,
+      "BREIT": 86,
+      "HOEHE": 6,
+      "CUOBF": 49,
+      "NTGEW": 24105880.107,
+      "GEWEI": "202",
+      "BRGEW": 9193165.286,
+      "MEABM": "202",
+      "SLED_BBD": "2",
+      "MHDHB": "2202",
+      "RAUBE": "02",
+      "MHDRZ": "2202",
+      "IPRKZ": "2",
+      "TRAGR": "2202",
+      "EKWSL": "2202",
+      "QMPUR": true
+    }
+  ],
+  "ip_plant": [
+    {
+      "mat_plant_MATNR": "mat_plant_MATNR-15582202",
+      "WERKS": "WERKS-15582202",
+      "WERKS_WERKS": "WERKS_WERKS-15582202",
+      "MMSTA": "02",
+      "PRCTR": "R-15582202",
+      "PRCTR_PRCTR": "R-15582202",
+      "XCHPF_marc": true,
+      "DISMM": "02",
+      "MAABC": "2",
+      "DISPO": "202",
+      "BESKZ": "2",
+      "EKGRP": "202",
+      "LVORM": true,
+      "FIXLS": 15563268.64,
+      "LADGR": "2202",
+      "MTVFP": "02",
+      "DGRMRPPP": "DGRMRPPP-15582202",
+      "RDPRF": "2202",
+      "DISLS": "02",
+      "BSTFE": 407812.291,
+      "SCM_GRPRT": "SCM_GRPRT-15582202",
+      "BSTMA": 18407154.217,
+      "BSTMI": 12455759.13,
+      "BEARZ": 77087.13,
+      "HERKL": "202"
+    }
+  ],
+  "ip_storage": [
+    {
+      "plant_mat_plant_MATNR": "plant_mat_plant_MATNR-15582202",
+      "plant_WERKS_WERKS": "plant_WERKS_WERKS-15582202",
+      "LGORT": "2202",
+      "LGPBE": "LGPBE-15582202"
+    }
+  ],
+  "ip_description": [
+    {
+      "Material_MATNR": "Material_MATNR-15582202",
+      "code": "2202",
+      "Description": "Description-15582202"
+    }
+  ]
+}
+
+
+### Trigger_workflow
+# @name Trigger_workflow_POST
+POST {{server}}/odata/v4/litemdg/Trigger_workflow
+Content-Type: application/json
+
+{
+  "ip_mara": [
+    {
+      "MATNR": "MATNR-3029154",
+      "MAKT_MAKTX": "MAKT_MAKTX-3029154",
+      "BISMT": "BISMT-3029154",
+      "LVORM": true,
+      "MATKL": "L-3029154",
+      "MBRSH": "4",
+      "MEINS": "154",
+      "MEINS_UOM": "154",
+      "MSTAE": "54",
+      "MSTDE": "2015-10-03",
+      "MTART": "9154",
+      "MTART_Material_type": "9154",
+      "SPART": "54",
+      "EXTWG": "EXTWG-3029154",
+      "MAGRV": "9154",
+      "MTPOS_MARA": "9154",
+      "PRDHA": "PRDHA-3029154",
+      "WRKST": "WRKST-3029154",
+      "EAN11": "EAN11-3029154",
+      "VOLEH_unit": "154",
+      "VOLUM": 24469887.31,
+      "LAENG": 57,
+      "BREIT": 49,
+      "HOEHE": 39,
+      "CUOBF": 4,
+      "NTGEW": 17895424.278,
+      "GEWEI": "154",
+      "BRGEW": 11431705.35,
+      "MEABM": "154",
+      "SLED_BBD": "4",
+      "MHDHB": "9154",
+      "RAUBE": "54",
+      "MHDRZ": "9154",
+      "IPRKZ": "4",
+      "TRAGR": "9154",
+      "EKWSL": "9154",
+      "QMPUR": true
+    }
+  ],
+  "ip_plant": [
+    {
+      "mat_plant_MATNR": "mat_plant_MATNR-3029154",
+      "WERKS": "WERKS-3029154",
+      "WERKS_WERKS": "WERKS_WERKS-3029154",
+      "MMSTA": "54",
+      "PRCTR": "TR-3029154",
+      "PRCTR_PRCTR": "TR-3029154",
+      "XCHPF_marc": true,
+      "DISMM": "54",
+      "MAABC": "4",
+      "DISPO": "154",
+      "BESKZ": "4",
+      "EKGRP": "154",
+      "LVORM": true,
+      "FIXLS": 6331216.144,
+      "LADGR": "9154",
+      "MTVFP": "54",
+      "DGRMRPPP": "DGRMRPPP-3029154",
+      "RDPRF": "9154",
+      "DISLS": "54",
+      "BSTFE": 17500958.22,
+      "SCM_GRPRT": "SCM_GRPRT-3029154",
+      "BSTMA": 27446599.222,
+      "BSTMI": 10014125.795,
+      "BEARZ": 33510.9,
+      "HERKL": "154"
+    }
+  ],
+  "ip_storage": [
+    {
+      "plant_mat_plant_MATNR": "plant_mat_plant_MATNR-3029154",
+      "plant_WERKS_WERKS": "plant_WERKS_WERKS-3029154",
+      "LGORT": "9154",
+      "LGPBE": "LGPBE-3029154"
+    }
+  ],
+  "ip_description": [
+    {
+      "Material_MATNR": "Material_MATNR-3029154",
+      "code": "9154",
+      "Description": "Description-3029154"
+    }
+  ]
+}
+
+
+### SaveToDB
+# @name SaveToDB_POST
+POST {{server}}/odata/v4/litemdg/SaveToDB
+Content-Type: application/json
+
+{
+  "ip_req_no": 70
+}

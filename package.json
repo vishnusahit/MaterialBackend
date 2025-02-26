@@ -1,0 +1,72 @@
+{
+  "name": "pg_litemdg",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@cap-js-community/odata-v2-adapter": "^1.13.3",
+    "@cap-js/postgres": "^1.10.1",
+    "@sap-cloud-sdk/http-client": "^3.24.0",
+    "@sap-cloud-sdk/resilience": "^3.24.0",
+    "@sap/cds": "^8",
+    "@sap/xssec": "^4",
+    "cf-nodejs-logging-support": "^7.3.0",
+    "express": "^4",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@cap-js/cds-types": "^0.6",
+    "@cap-js/sqlite": "^1",
+    "@sap/cds-dk": "^8",
+    "@sap/ux-specification": "^1.124.0",
+    "rimraf": "^5.0.5"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-litemdg": "cds watch --open litemdg/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy pg_litemdg --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-dataupload": "cds watch --open dataupload/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "postgres",
+        "impl": "@cap-js/postgres",
+        "pool": {
+          "acquireTimeoutMillis": 500000,
+          "min": 0,
+          "max": 1000,
+          "fifo": true
+        },
+        "credentials": {
+          "host": "localhost",
+          "port": 5432,
+          "database": "litemdg",
+          "user": "postgres",
+          "password": "postgres",
+          "requestTimeout": 200000000
+        },
+        "schema_evolution": "true"
+      },
+      "sap_process_automation_service_user_access_New": {
+        "kind": "rest",
+        "credentials": {
+          "destination": "sap_process_automation_service_user_access_New"
+        }
+      },
+      "auth": "xsuaa"
+    },
+    "server": {
+      "body_parser": {
+        "limit": "20mb"
+      }
+    }
+  },
+  "sapux": [
+    "app/litemdg"
+  ]
+}

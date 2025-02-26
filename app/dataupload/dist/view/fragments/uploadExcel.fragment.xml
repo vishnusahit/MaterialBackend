@@ -1,0 +1,38 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns:u="sap.ui.unified" 
+                         xmlns="sap.m" >
+    
+
+    <Dialog id="uploadDialog1" title="Excel Upload" class="sapUiResponsiveContentPadding"
+        beforeOpen=".onBeforeOpen"     afterClose=".onAfterClose">
+        <content>
+            
+             <VBox id="_IDGenVBox1" class="sapUiSmallMarginBottom">
+                
+                <Button id="idDownloadTemplateBtn" icon="sap-icon://download" text="Download Template" press=".onDownloadTemplate" type="Emphasized"/>
+                 
+              
+               
+            </VBox>
+            <VBox id="_IDGenVBox">              
+               <u:FileUploader
+                    id="idExceluploader"
+                    fileType="xlsx"
+                    multiple="false"
+                    fileAllowed=".onFileAllowed"
+                    fileEmpty=".onFileEmpty"
+                    uploadComplete=".onUploadComplete"
+                    typeMissmatch=".onTypeMismatch"
+                    sendXHR="true"
+                    useMultipart="false"
+                    placeholder="Choose a XLSX File..."
+                    httpRequestMethod="Put"/>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button id="confirmButton" text="Upload" press=".onOk" enabled="false"/>
+        </beginButton>
+        <endButton>
+            <Button id="_IDGenButton4" text="Cancel" press=".onCancel"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

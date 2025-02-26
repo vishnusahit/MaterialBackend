@@ -1,0 +1,25 @@
+{
+  // uncomment entries once all libraries have been installed via 'npm install'
+  "eslint.validate": [
+    // "cds",
+    // "csn",
+    // "csv",
+    // "csv (semicolon)",
+    // "tab",
+    // "tsv"
+  ],
+  "files.watcherExclude": {},
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "pg_local_host",
+      "database": "litemdg",
+      "username": "postgres",
+      "password": "postgres"
+    }
+  ],
+  "SAP HANA Database Explorer.ShowXsAdvancedConnections": true
+}

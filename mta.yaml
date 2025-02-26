@@ -1,0 +1,107 @@
+_schema-version: 3.3.0
+ID: LiteMDG
+description: A simple CAP project.
+version: 1.0.0
+modules:
+  - name: LiteMDG-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: POS_SQL
+      - name: LiteMDG-auth
+      - name: LiteMDG-destination-service
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-http-endpoint: /health
+      readiness-health-check-type: http
+    build-parameters:
+      builder: npm
+  - name: LiteMDG_db_deployer
+    type: nodejs
+    path: gen/pg
+    requires:
+      - name: POS_SQL
+    parameters:
+      buildpack: nodejs_buildpack
+      no-route: true
+      no-start: true
+      tasks:
+        - command: npm start
+          name: deploy-to-postgresql
+  - name: LiteMDG-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: LiteMDG-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - dataupload.zip
+          name: dataupload
+          target-path: resources/
+  - name: dataupload
+    type: html5
+    path: app/dataupload
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms:
+        []
+resources:
+  - name: POS_SQL
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: postgresql-db
+      service-plan: standard
+  - name: LiteMDG-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: LiteMDG-html5-srv
+      service-plan: app-host
+  - name: LiteMDG-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+            existing_destinations_policy: update
+        version: 1.0.0
+      service: destination
+      service-name: LiteMDG-destination-service
+      service-plan: lite
+  - name: LiteMDG-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: LiteMDG
+        tenant-mode: dedicated
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
