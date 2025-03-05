@@ -37,4 +37,5 @@ service litemdg {
     action Trigger_workflow(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns Integer;
     action SaveTocommon(ip_req_no: Integer) returns String;
     action FieldStatus(ip_type: String) returns many common.FieldStatus;
+    action InsertMaterial(ip_MaterialID:String,ip_NewMaterial:String) returns String;
 }

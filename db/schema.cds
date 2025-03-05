@@ -16,10 +16,12 @@ entity Mara_staging : cuid, managed {
 
         @mandatory
         MBRSH             : String(1) default 'M'; // Industry Sector
+        MEINS_1             : String(3);
         MEINS             : Association to UOM default 'KG';
         MSTAE             : String(2); // Cross-Plant Material Status
         MSTDE             : Date; // Date from which the Cross-Plant Material Status is Valid
 
+        MTART_1           : String(4);
         @mandatory
         MTART             : Association to Material_type;
         SPART             : String(2); // Division
@@ -29,6 +31,7 @@ entity Mara_staging : cuid, managed {
         PRDHA             : String(18); // Product Hierarchy
         WRKST             : String(48); // Basic Material
         EAN11             : String(18); // International Article Number (EAN/UPC)
+        VOLEH_1           : String;
         VOLEH             : Association to Volume_unit default 'M3'; // Volume Unit
         VOLUM             : Decimal(13, 3); // Volume
         LAENG             : Integer;
@@ -178,6 +181,7 @@ entity Plant {
         @mandatory
     key WERKS               : Association to Plant_List;
         MMSTA               : String(2); //Plant-Specific Material Status
+        PRCTR_1             : String;
         PRCTR               : Association to Profit_Center;
         XCHPF_marc          : Boolean; //Batch Management Requirement Indicator
 

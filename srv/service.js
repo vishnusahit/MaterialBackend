@@ -1,4 +1,5 @@
 const cds = require("@sap/cds");
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = class Service extends cds.ApplicationService {
   init() {
@@ -1243,6 +1244,124 @@ module.exports = class Service extends cds.ApplicationService {
       }
       return result;
     });
+    this.on("InsertMaterial", async (req) => {
+
+      const { ip_MaterialID,ip_NewMaterial  } = req.data;
+
+      const ip_Matnr = ip_MaterialID;
+      const ip_NewMatnr = ip_NewMaterial;
+
+      const tx = cds.transaction(req);
+
+      try {
+        const materialData = await tx.run(
+          SELECT.one.from(Mara).where({ ID: ip_Matnr })
+        );
+
+        if (!materialData) {
+          req.error(500, `Material ${ip_Matnr} not found.`);
+        }
+        const gen_ID = await generateCUID()
+        materialData.ID = gen_ID;
+        materialData.MATNR = ip_NewMatnr;
+
+        const draft_data = {
+          creationdatetime: new Date().toISOString(),
+          createdbyuser: 'anonymous',
+          draftiscreatedbyme: true,
+          lastchangedatetime: new Date().toISOString(),
+          lastchangedbyuser: 'anonymous',
+          inprocessbyuser: 'anonymous',
+          draftisprocessedbyme: true
+        };
+
+        draft_data.draftuuid = await generateCUID()
+
+
+        await tx.run(INSERT.into("draft_draftadministrativedata").entries(draft_data));
+
+        materialData.draftadministrativedata_draftuuid = draft_data.draftuuid
+
+        await tx.run(
+          INSERT.into("litemdg.mara.drafts").entries(materialData)
+        );
+
+
+        const newmaterialData = await tx.run(
+          SELECT.one.from("litemdg.mara.drafts").where({ MATNR: ip_NewMatnr })
+        );
+
+
+        const newMaterialID = newmaterialData.ID;
+
+        const plantData = await tx.run(SELECT.from(plant).where({ mat_plant_ID: ip_Matnr }));
+        const salesDeliveryData = await tx.run(SELECT.from(Sales_Delivery).where({ Material_ID: ip_Matnr }));
+        const valuationData = await tx.run(SELECT.from(Valuation).where({ Material_ID: ip_Matnr }));
+        const descriptionData = await tx.run(SELECT.from(Description).where({ Material_ID: ip_Matnr }));
+        const storageData = await tx.run(SELECT.from(Storage_Location).where({ plant_mat_plant_ID: ip_Matnr }));
+
+        if (plantData.length) {
+          const updatedPlantData = plantData.map(({ mat_plant_ID, ...rest }) => ({
+            ...rest,
+            mat_plant_MATNR: ip_NewMatnr,
+            mat_plant_ID: gen_ID,
+            draftadministrativedata_draftuuid: draft_data.draftuuid
+          }));
+
+          await tx.run(INSERT.into('litemdg.plant.drafts').entries(updatedPlantData));
+        }
+
+        if (salesDeliveryData.length) {
+          const updatedSalesDeliveryData = salesDeliveryData.map(({ Material_ID, ...rest }) => ({
+            ...rest,
+            Material_MATNR: ip_NewMatnr,
+            Material_ID: gen_ID,
+            draftadministrativedata_draftuuid: draft_data.draftuuid
+          }));
+
+          await tx.run(INSERT.into('litemdg.sales.delivery.drafts').entries(updatedSalesDeliveryData));
+        }
+
+        if (valuationData.length) {
+          const updatedValuationData = valuationData.map(({ Material_ID, ...rest }) => ({
+            ...rest,
+            Material_MATNR: ip_NewMatnr,
+            Material_ID: gen_ID,
+            draftadministrativedata_draftuuid: draft_data.draftuuid
+          }));
+
+          await tx.run(INSERT.into('litemdg.valuation.drafts').entries(updatedValuationData));
+        }
+
+        if (descriptionData.length) {
+          const updatedDescriptionData = descriptionData.map(({ Material_ID, ...rest }) => ({
+            ...rest,
+            Material_MATNR: ip_NewMatnr,
+            Material_ID: gen_ID,
+            draftadministrativedata_draftuuid: draft_data.draftuuid
+          }));
+
+          await tx.run(INSERT.into('litemdg.description.drafts').entries(updatedDescriptionData));
+        }
+
+        if (storageData.length) {
+          const updatedStorageData = storageData.map(({ plant_mat_plant_ID, ...rest }) => ({
+            ...rest,
+            plant_mat_plant_ID: gen_ID,
+            plant_mat_plant_MATNR: ip_NewMatnr,
+            draftadministrativedata_draftuuid: draft_data.draftuuid
+          }));
+
+          await tx.run(INSERT.into('litemdg.storage.loaction.drafts').entries(updatedStorageData));
+        }
+        await tx.commit()
+        return `Material ${ip_NewMatnr} successfully inserted into drafts.`;
+      } catch (error) {
+        console.error("Error in InsertMaterial action:", error);
+        req.error(500, "Failed to insert material into drafts.");
+      }
+
+    });
 
     return super.init();
   }
@@ -1470,6 +1589,10 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
   });
 
   return result;
+}
+
+async function generateCUID() {
+  return uuidv4().slice(0, 36); 
 }
 
 async function CallEntity(entity, data) {

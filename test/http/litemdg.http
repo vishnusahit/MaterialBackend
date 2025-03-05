@@ -2119,3 +2119,13 @@ Content-Type: application/json
 {
   "ip_req_no": 70
 }
+
+### InsertMaterial
+# @name InsertMaterial
+POST {{server}}/odata/v4/litemdg/InsertMaterial
+Content-Type: application/json
+
+{
+  "ip_MaterialID": "0ee466c6-3653-4883-ae9c-772a9199307f",
+  "ip_NewMaterial": "5652"
+}
