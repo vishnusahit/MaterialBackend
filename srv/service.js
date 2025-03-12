@@ -25,34 +25,15 @@ module.exports = class Service extends cds.ApplicationService {
     const srv = this;
 
     srv.after(["CREATE"], "Mara.drafts", async (req) => {
+
       const { ID, MATNR } = req;
+      const entity = "Material"
 
       req.Status = "Inactive";
-      const maxRequest = await SELECT.one
-        .from("litemdg.Change_Request")
-        .columns("REQUEST_NUMBER")
-        .where("REQUEST_NUMBER IS NOT NULL")
-        .orderBy({ REQUEST_NUMBER: "desc" });
-
-      let req_no =
-        maxRequest && maxRequest.REQUEST_NUMBER !== undefined
-          ? maxRequest.REQUEST_NUMBER + 1
-          : 1;
-
-      const result = await SELECT.one
-        .from("litemdg.mara_dummy")
-        .columns([{ MAX_NO: "MAX(MAX_NO)" }])
-        .where({ REQUEST_NUMBER: req_no });
-      let max_no =
-        result && result["MAX(MAX_NO)"] !== undefined
-          ? result["MAX(MAX_NO)"] + 1
-          : 1;
-
       const maraDummyData = {
         ID: ID,
         MATNR: MATNR,
-        REQUEST_NUMBER: req_no,
-        MAX_NO: max_no,
+        CREATION_TYPE: "SINGLE",
       };
 
       await INSERT.into("litemdg.mara_dummy").entries(maraDummyData);
@@ -60,202 +41,67 @@ module.exports = class Service extends cds.ApplicationService {
       await UPDATE("litemdg.mara.drafts")
         .set({ Status: "Inactive" })
         .where({ ID: ID });
-    });
 
-    srv.after(["UPDATE"], "Mara.drafts", async (req) => {
-      const { ID } = req;
-
-      const mara_data = await SELECT.one
-        .from(Mara)
-        .where({ ID: ID });
-
-      if (!mara_data) {
-        const existingMaraDummyData = await SELECT.one
-          .from("litemdg.mara_dummy")
-          .where({ ID: ID });
-
-        const maxRequest = await SELECT.one
-          .from("litemdg.Change_Request")
-          .columns("REQUEST_NUMBER")
-          .where("REQUEST_NUMBER IS NOT NULL")
-          .orderBy({ REQUEST_NUMBER: "desc" });
-
-        let req_no =
-          maxRequest && maxRequest.REQUEST_NUMBER !== undefined
-            ? maxRequest.REQUEST_NUMBER + 1
-            : 1;
-
-        const result = await SELECT.one
-          .from("litemdg.mara_dummy")
-          .columns([{ MAX_NO: "MAX(MAX_NO)" }])
-          .where({ REQUEST_NUMBER: req_no });
-        let max_no =
-          result && result["MAX(MAX_NO)"] !== undefined
-            ? result["MAX(MAX_NO)"] + 1
-            : 1;
-
-        const updatedData = {
-          MATNR:
-            req.MATNR !== undefined ? req.MATNR : existingMaraDummyData.MATNR,
-          BISMT:
-            req.BISMT !== undefined ? req.BISMT : existingMaraDummyData.BISMT,
-          LVORM:
-            req.LVORM !== undefined ? req.LVORM : existingMaraDummyData.LVORM,
-          MATKL:
-            req.MATKL !== undefined ? req.MATKL : existingMaraDummyData.MATKL,
-          MBRSH:
-            req.MBRSH !== undefined ? req.MBRSH : existingMaraDummyData.MBRSH,
-          MEINS:
-            req.MEINS_UOM !== undefined
-              ? req.MEINS_UOM
-              : existingMaraDummyData.MEINS_UOM,
-          MSTAE:
-            req.MSTAE !== undefined ? req.MSTAE : existingMaraDummyData.MSTAE,
-          MSTDE:
-            req.MSTDE !== undefined ? req.MSTDE : existingMaraDummyData.MSTDE,
-          MTART_Material_type:
-            req.MTART_Material_type !== undefined
-              ? req.MTART_Material_type
-              : existingMaraDummyData.MTART_Material_type,
-          SPART:
-            req.SPART !== undefined ? req.SPART : existingMaraDummyData.SPART,
-          XCHPF:
-            req.XCHPF !== undefined ? req.XCHPF : existingMaraDummyData.XCHPF,
-          EXTWG:
-            req.EXTWG !== undefined ? req.EXTWG : existingMaraDummyData.EXTWG,
-          MAGRV:
-            req.MAGRV !== undefined ? req.MAGRV : existingMaraDummyData.MAGRV,
-          MTPOS_MARA:
-            req.MTPOS_MARA !== undefined
-              ? req.MTPOS_MARA
-              : existingMaraDummyData.MTPOS_MARA,
-          PRDHA:
-            req.PRDHA !== undefined ? req.PRDHA : existingMaraDummyData.PRDHA,
-          WRKST:
-            req.WRKST !== undefined ? req.WRKST : existingMaraDummyData.WRKST,
-          EAN11:
-            req.EAN11 !== undefined ? req.EAN11 : existingMaraDummyData.EAN11,
-          VOLEH:
-            req.VOLEH_unit !== undefined
-              ? req.VOLEH_unit
-              : existingMaraDummyData.VOLEH_unit,
-          VOLUM:
-            req.VOLUM !== undefined ? req.VOLUM : existingMaraDummyData.VOLUM,
-          // MMSTA: req.MMSTA !== undefined ? req.MMSTA : existingMaraDummyData.MMSTA,
-          // PRCTR: req.PRCTR !== undefined ? req.PRCTR : existingMaraDummyData.PRCTR,
-          // XCHPF_marc: req.XCHPF_marc !== undefined ? req.XCHPF_marc : existingMaraDummyData.XCHPF_marc,
-          DISGR:
-            req.DISGR !== undefined ? req.DISGR : existingMaraDummyData.DISGR,
-          LADGR:
-            req.LADGR !== undefined ? req.LADGR : existingMaraDummyData.LADGR,
-          LAENG:
-            req.LAENG !== undefined ? req.LAENG : existingMaraDummyData.LAENG,
-          BREIT:
-            req.BREIT !== undefined ? req.BREIT : existingMaraDummyData.BREIT,
-          HOEHE:
-            req.HOEHE !== undefined ? req.HOEHE : existingMaraDummyData.HOEHE,
-          CUOBF:
-            req.CUOBF !== undefined ? req.CUOBF : existingMaraDummyData.CUOBF,
-          MAKT_MAKTX:
-            req.MAKT_MAKTX !== undefined
-              ? req.MAKT_MAKTX
-              : existingMaraDummyData.MAKT_MAKTX,
-          REQUEST_NUMBER: req_no,
-          CREATION_TYPE: "SINGLE",
-          Status: "Inactive",
-          MAX_NO: max_no,
-        };
-        await UPDATE("litemdg.mara_dummy").set(updatedData).where({ ID: ID });
-      }
+      await Rules_default(req,srv,entity,ID)
     });
     srv.before(["DELETE"], "Mara.drafts", async (req) => {
       const { ID } = req.data;
-
       await DELETE.from("litemdg.mara_dummy").where({ ID: ID });
     });
     srv.before(["CREATE"], "Plant.drafts", async (req) => {
       const { mat_plant_ID } = req.data;
-
-      await DELETE.from("litemdg.mara_dummy").where({ ID: ID });
+      const ID = mat_plant_ID;
+      const entity = "Plant" 
+      await Rules_default(req,srv,entity,ID)
+    });
+    srv.before(["CREATE"], "Sales_Delivery.drafts", async (req) => {
+      const { Material_ID } = req.data;
+      const ID = Material_ID;
+      const entity = "Sales" 
+      await Rules_default(req,srv,entity,ID)
+    });
+    srv.before(["CREATE"], "Valuation.drafts", async (req) => {
+      const { Material_ID } = req.data;
+      const ID = Material_ID;
+      const entity = "Valuation" 
+      await Rules_default(req,srv,entity,ID)
+    });
+    srv.before(["CREATE"], "Storage_Location.drafts", async (req) => {
+      const { plant_mat_plant_id } = req.data;
+      const ID = plant_mat_plant_id;
+      const entity = "StorageLocation" 
+      await Rules_default(req,srv,entity,ID)
     });
 
     srv.before(["UPDATE"], "plant.drafts", async (req) => {
-      let IsNull;
-      let Column_name = "PRCTR";
       const { mat_plant_ID } = req.data;
-
-      // const result = await SELECT.from('litemdg.Mara.drafts').where({ ID: ID}) ;
-      // const matplantID = await SELECT.from('litemdg.plant.drafts')
-      //   .columns('mat_plant_ID')
-      //   .where({ mat_Plant_ID: mat_Plant_ID , mat_plant_MATNR: mat_plant_MATNR , WERKS_WERKS:WERKS_WERKS });
-
-      const mat_Plant_ID = mat_plant_ID;
-
-      const rules = await SELECT.from("litemdg.rules").where({
-        Table_name: "plant",
-      });
-
-      for (const rule of rules) {
-        const { column_name, rule_definition, rule_value } = rule;
-
-        let modifiedCondition = rule_definition;
-
-        // let ruleCondition = "MARC.WERKS = 'Y110'";
-        // let modifiedCondition = ruleCondition;
-
-        try {
-          // Extract fields prefixed with "MARA."
-          const maraFields = [
-            ...rule_definition.matchAll(/MARA\.([a-zA-Z_]+)/g),
-          ].map((match) => match[1]);
-
-          // Fetch field values from the database
-          for (const field of maraFields) {
-            const query = await SELECT.from("litemdg.mara.drafts")
-              .columns(field)
-              .where({ id: mat_Plant_ID });
-            const result = query[0][field];
-            IsNull = query[0]["prctr"];
-
-            modifiedCondition = modifiedCondition.replace(
-              `MARA.${field}`,
-              `'${result}'`
-            );
-          }
-
-          // Replace "MARC" references if needed
-          modifiedCondition = modifiedCondition
-            .replace(/MARC/g, "req.data")
-            .replace(/(?<![=!<>])=(?![=<>])/g, "==")
-            .replace(/\bOR\b/g, "||")
-            .replace(/\bAND\b/g, "&&");
-
-          // Evaluate the condition (use a safe evaluation method)
-          const conditionMet = evaluateCondition(modifiedCondition); // Example eval function below.
-
-          function evaluateCondition(modifiedCondition) {
-            try {
-              return eval(modifiedCondition);
-            } catch (error) {
-              console.error("Error evaluating condition:", error);
-              return false;
-            }
-          }
-
-          // Update PRCTR if condition is true
-          if (conditionMet) {
-            req.data[column_name] = rule_value;
-            req.info({
-              code: "REFRESH",
-              message: "Data has been updated, please refresh.",
-              numericSeverity: 1, // Info level
-              target: "/plant",
-            });
-          }
-        } catch (error) {
-          console.error("Error processing rule condition:", error);
-        }
-      }
+      const ID = mat_plant_ID;
+      const entity = "Plant" 
+      await Rules_Derivation(req,srv,entity,ID)
+    });
+    srv.before(["UPDATE"], "Mara.drafts", async (req) => {
+      const { ID } = req.data;
+      // const ID = mat_plant_ID;
+      const entity = "Material" 
+      await Rules_Derivation(req,srv,entity,ID)
+    });
+    srv.before(["UPDATE"], "Sales_Delivery.drafts", async (req) => {
+      const { Material_ID } = req.data;
+      const ID = Material_ID;
+      const entity = "Sales" 
+      await Rules_Derivation(req,srv,entity,ID)
+    });
+    srv.before(["UPDATE"], "Valuation.drafts", async (req) => {
+      const { Material_ID } = req.data;
+      const ID = Material_ID;
+      const entity = "Valuation" 
+      await Rules_Derivation(req,srv,entity,ID)
+    });
+    srv.before(["UPDATE"], "Storage_Location.drafts", async (req) => {
+      const { plant_mat_plant_id } = req.data;
+      const ID = plant_mat_plant_id;
+      const entity = "StorageLocation" 
+      await Rules_Derivation(req,srv,entity,ID)
     });
 
     srv.after(["EDIT"], Mara, async (req) => {
@@ -326,76 +172,6 @@ module.exports = class Service extends cds.ApplicationService {
       }
     });
 
-
-
-    // srv.before(["CREATE"], Mara, async (req) => {
-    //   console.log(req.user);
-
-    //   const flag = await SELECT.one
-    //     .from("litemdg.mara_dummy")
-    //     .columns("CREATION_TYPE")
-    //     .where({ ID: req.data.ID });
-
-    //   if (flag.CREATION_TYPE == "SINGLE") {
-    //     const timestamp = new Date(req.timestamp);
-
-    //     const creationDate =
-    //       timestamp.getFullYear() +
-    //       String(timestamp.getMonth() + 1).padStart(2, "0") +
-    //       String(timestamp.getDate()).padStart(2, "0");
-
-    //     const creationTime =
-    //       String(timestamp.getHours()).padStart(2, "0") +
-    //       String(timestamp.getMinutes()).padStart(2, "0") +
-    //       String(timestamp.getSeconds()).padStart(2, "0");
-
-    //     const maxRequest = await SELECT.one
-    //       .from("litemdg.Change_Request")
-    //       .columns("REQUEST_NUMBER")
-    //       .where("REQUEST_NUMBER IS NOT NULL")
-    //       .orderBy({ REQUEST_NUMBER: "desc" });
-
-    //     let req_no =
-    //       maxRequest && maxRequest.REQUEST_NUMBER !== undefined
-    //         ? maxRequest.REQUEST_NUMBER + 1
-    //         : 1;
-
-    //     const result = await createWorkflowInstance(
-    //       req.data,
-    //       req.user.attr.email,
-    //       timestamp,
-    //       req_no
-    //     );
-
-    //     // if (result.rootInstanceId){
-
-    //     // await INSERT.into("litemdg.Change_Request").entries({
-    //     //   REQUEST_NUMBER: req_no,
-    //     //   // InstanceID: result.rootInstanceId,
-    //     //   REQUEST_TYPE: "CREATE",
-    //     //   Overall_status: "Open",
-    //     //   Model: "Material",
-    //     //   Requested_By: req.user.attr.email,
-    //     //   Requested_Date: creationDate,
-    //     //   Requested_Time: creationTime,
-    //     //   Requested_on: timestamp,
-
-    //     // });
-
-    //     // await INSERT.into("litemdg.Change_Request_details").entries({
-    //     //   Change_REQUEST_NUMBER: req_no,
-    //     //   Object_ID: req.data.MATNR,
-    //     //   Description: req.data.MAKT_MAKTX,
-    //     //   Object_CUID: req.data.ID,
-    //     // });
-    //     req.notify(`Request Number#${req_no} submitted for approval`);
-    //   }
-
-    //   // console.log(result);
-
-    //   // }
-    // });
-
     srv.before(["SAVE"], Mara, async (req) => {
 
       console.log(req.user);
@@ -429,6 +205,7 @@ module.exports = class Service extends cds.ApplicationService {
           : 1;
       if (req.event === "CREATE") {
         if (flag.CREATION_TYPE == "SINGLE") {
+          await Rules_validation(req,srv);
 
           await DELETE.from("litemdg.mara_dummy").where({ ID: req.data.ID });
           var Type_Request = 'CREATE'
@@ -468,6 +245,7 @@ module.exports = class Service extends cds.ApplicationService {
         }
       }
       if (req.event === "UPDATE") {
+        await Rules_validation(req,srv)
         var Type_Request = 'CHANGE'
         const result = await createWorkflowInstance(req.data, req.user.attr.email, creationTime, creationDate, req_no, Type_Request);
 
@@ -621,6 +399,14 @@ module.exports = class Service extends cds.ApplicationService {
           if (descriptionData.length) await INSERT.into(Description).entries(descriptionData);
 
           console.log(`Moved data back from dummy tables to original tables for Material Numbers: ${materialNumbers}`);
+
+          await DELETE.from(mara_dummy).where({ MATNR: { in: materialNumbers } });
+          await DELETE.from(Plant_dummy).where({ mat_plant_MATNR: { in: materialNumbers } });
+          await DELETE.from(Storage_dummy).where({ plant_mat_plant_MATNR: { in: materialNumbers } });
+          await DELETE.from(Sales_dummy).where({ Material_MATNR: { in: materialNumbers } });
+          await DELETE.from(Valuation_dummy).where({ Material_MATNR: { in: materialNumbers } });
+          await DELETE.from(Description_dummy).where({ Material_MATNR: { in: materialNumbers } });
+          console.log(`Deleted entries from dummy tables after restoring data for Material Numbers: ${materialNumbers}`);
         }
       }
     });
@@ -1265,13 +1051,15 @@ module.exports = class Service extends cds.ApplicationService {
         materialData.ID = gen_ID;
         materialData.MATNR = ip_NewMatnr;
 
+        let dummy_data = materialData;
+
         const draft_data = {
           creationdatetime: new Date().toISOString(),
-          createdbyuser: 'anonymous',
+          createdbyuser: req.user.attr.email,
           draftiscreatedbyme: true,
           lastchangedatetime: new Date().toISOString(),
-          lastchangedbyuser: 'anonymous',
-          inprocessbyuser: 'anonymous',
+          lastchangedbyuser: req.user.attr.email,
+          inprocessbyuser: req.user.attr.email,
           draftisprocessedbyme: true
         };
 
@@ -1284,6 +1072,11 @@ module.exports = class Service extends cds.ApplicationService {
 
         await tx.run(
           INSERT.into("litemdg.mara.drafts").entries(materialData)
+        );
+
+        dummy_data.CREATION_TYPE = 'SINGLE'
+        await tx.run(
+          INSERT.into(mara_dummy).entries(dummy_data)
         );
 
 
@@ -1301,14 +1094,15 @@ module.exports = class Service extends cds.ApplicationService {
         const storageData = await tx.run(SELECT.from(Storage_Location).where({ plant_mat_plant_ID: ip_Matnr }));
 
         if (plantData.length) {
-          const updatedPlantData = plantData.map(({ mat_plant_ID, ...rest }) => ({
-            ...rest,
-            mat_plant_MATNR: ip_NewMatnr,
-            mat_plant_ID: gen_ID,
-            draftadministrativedata_draftuuid: draft_data.draftuuid
+          const updatedPlantData = await plantData.map(({ mat_plant_ID,mat_plant_MATNR, ...rest }) => ({
+              ...rest,
+              draftadministrativedata_draftuuid : draft_data.draftuuid,
+              mat_plant_MATNR: ip_NewMatnr,
+              mat_plant_ID: gen_ID,
           }));
-
-          await tx.run(INSERT.into('litemdg.plant.drafts').entries(updatedPlantData));
+          console.log(updatedPlantData);
+  
+          await tx.run(INSERT.into('litemdg.Plant.drafts').entries(updatedPlantData));
         }
 
         if (salesDeliveryData.length) {
@@ -1386,17 +1180,17 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
         },
         Material: {
           Product: reqData.MATNR || "",
-          BaseUnit: reqData.MEINS_UOM || "",
+          BaseUnit: reqData.MEINS || "",
           Division: reqData.SPART || "",
           NetWeight: reqData.NTGEW ? reqData.NTGEW.toString() : "0.000",
           WeightUnit: reqData.GEWEI || "",
           GrossWeight: reqData.BRGEW ? reqData.BRGEW.toString() : "0.000",
-          ProductType: reqData.MTART_Material_type || "",
+          ProductType: reqData.MTART || "",
           ProductGroup: reqData.MATKL || "",
           ProductOldID: reqData.BISMT || "",
           IndustrySector: reqData.MBRSH || "",
           ProductHierarchy: reqData.PRDHA || "",
-          VolumeUnit: reqData.VOLEH_unit || "",
+          VolumeUnit: reqData.VOLEH || "",
           MaterialVolume: reqData.VOLUM ? reqData.VOLUM.toString() : "0.000",
           CrossPlantStatus: reqData.MSTAE || "",
           ItemCategoryGroup: reqData.MTPOS_MARA || "",
@@ -1427,7 +1221,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
           to_ProductUnitsOfMeasure: [
             {
               Product: reqData.MATNR,
-              BaseUnit: reqData.MEINS_UOM || "",
+              BaseUnit: reqData.MEINS || "",
               VolumeUnit: reqData.VOLEH_unit || "",
               WeightUnit: reqData.GEWEI || "",
               GrossWeight: reqData.BRGEW ? reqData.BRGEW.toString() : "0.000",
@@ -1503,11 +1297,11 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
     reqData.plant.forEach((plant) => {
       let plantEntry = {
         Product: reqData.MATNR || "",
-        Plant: plant.WERKS1_WERKS || "",
+        Plant: plant.WERKS || "",
         MRPType: plant.DISMM || "",
         ProfileCode: "40", // Placeholder value
         ABCIndicator: plant.MAABC || "",
-        ProfitCenter: plant.PRCTR1_PRCTR || "",
+        ProfitCenter: plant.PRCTR || "",
         MRPResponsible: plant.DISPO || "",
         ProcurementType: plant.BESKZ || "",
         PurchasingGroup: plant.EKGRP || "",
@@ -1521,10 +1315,10 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
           AvailabilityCheckType: plant.MTVFP || "",
           LoadingGroup: plant.LADGR || "",
           Product: reqData.MATNR || "",
-          Plant: plant.WERKS1_WERKS || "",
+          Plant: plant.WERKS || "",
         },
         to_ProductSupplyPlanning: {
-          Plant: plant.WERKS1_WERKS || "",
+          Plant: plant.WERKS || "",
           MRPType: plant.DISMM || "",
           Product: reqData.MATNR || "",
           Currency: "JPY",
@@ -1540,12 +1334,12 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
           MinimumLotSizeQuantity: plant.BSTMI ? plant.BSTMI.toString() : "0",
         },
         to_ProductWorkScheduling: {
-          Plant: plant.WERKS1_WERKS || "",
+          Plant: plant.WERKS || "",
           Product: reqData.MATNR || "",
           ProductProcessingTime: plant.BEARZ ? plant.BEARZ.toString() : "0",
         },
         to_ProdPlantInternationalTrade: {
-          Plant: plant.WERKS1_WERKS || "",
+          Plant: plant.WERKS || "",
           Product: reqData.MATNR || "",
           CountryOfOrigin: plant.HERKL || "JP",
         },
@@ -1558,7 +1352,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
         plant.to_Storage_Location.forEach((storage) => {
           let storageEntry = {
             Product: reqData.MATNR || "",
-            Plant: plant.WERKS1_WERKS || "",
+            Plant: plant.WERKS || "",
             StorageLocation: storage.LGORT || "",
             IsMarkedForDeletion: false, // Placeholder
             WarehouseStorageBin: storage.LGPBE || "",
@@ -1589,6 +1383,265 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
   });
 
   return result;
+}
+
+async function Rules_validation(req, srv) {
+  const { RuleHeader, RuleLineItems } = srv.entities
+  const { ID } = req.data;
+  let modifiedCondition = "";
+  let error_msg, default_value;
+  let error_array = ['1st errror', '2nd error']
+
+  const ruleHeaders = await SELECT.from(RuleHeader).where({ tableEntity: "Material", ruleType: "Validation" });
+
+  for (const ruleHeader of ruleHeaders) {
+
+    const ruleLineItems = await SELECT.from(RuleLineItems).where({
+      ruleHeader_ID: ruleHeader.ID
+    });
+
+    let conditions = [];
+
+    for (const rule of ruleLineItems) {
+
+      const { modelTable, modelTableField, operator, modelTableFieldValue, errorMessage, defaultValue } = rule;
+      let fieldValue;
+      error_msg = errorMessage;
+      default_value = defaultValue;
+
+      if (modelTable === "MARA") {
+        const query = await SELECT.from("litemdg.mara.drafts")
+          .columns(modelTableField)
+          .where({ id: ID });
+
+        const fieldKey = modelTableField.toLowerCase();
+        fieldValue = query[0] ? query[0][fieldKey] : null;
+      } else if (modelTable === "MARC") {
+        const query = await SELECT.from("litemdg.plant.drafts")
+          .columns(modelTableField)
+          .where({ mat_Plant_ID: ID });
+
+        const fieldKey = modelTableField.toLowerCase();
+        fieldValue = query[0] ? query[0][fieldKey] : null;
+      }
+
+
+      if (fieldValue !== undefined && fieldValue !== null) {
+        let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
+        conditions.push(condition);
+        if (conditions.length > 0) {
+          if (operator && (operator === "OR" || operator === "AND")) {
+            conditions[conditions.length - 1] += ` ${operator}`;
+          }
+        }
+      }
+    }
+
+
+    modifiedCondition = conditions.join(" ").replace(/ OR /g, " || ").replace(/ AND /g, " && ").replace();
+
+
+    const conditionMet = evaluateCondition(modifiedCondition);
+
+    function evaluateCondition(condition) {
+      try {
+        return eval(condition);
+      } catch (error) {
+        console.error("Error evaluating condition:", error);
+        return false;
+      }
+    }
+
+
+    if (conditionMet && ruleHeader.isMandatory === false) {
+
+      let defaultValues = [];
+
+      if (typeof default_value === 'string' && default_value.includes(',')) {
+        defaultValues = default_value.split(',').map(val => val.trim());
+      } else {
+        defaultValues = [default_value];
+      }
+
+      function normalizeValue(value, type) {
+        if (type === "number") {
+          return parseFloat(value);
+        } else if (type === "string") {
+          return String(value).replace(/^0+/, "");
+        }
+        return value;
+      }
+
+      const targetValue = req.data[ruleHeader.targetField];
+      const targetType = typeof targetValue;
+
+      const normalizedDefaults = defaultValues.map(val => normalizeValue(val, targetType));
+
+
+      if (!normalizedDefaults.includes(normalizeValue(targetValue, targetType))) {
+        req.error({
+          code: 'Validation Error',
+          message: error_msg,
+          status: 418
+        })
+
+      }
+
+      // if (!defaultValues.includes(req.data[ruleHeader.targetField])) {
+      //     req.error(500, error_msg);
+      // }
+    } else if (conditionMet && ruleHeader.isMandatory === true) {
+      if (req.data[ruleHeader.targetField] === null || req.data[ruleHeader.targetField] === undefined) { // Corrected equality checks
+        req.error(500, error_msg);
+      }
+    }
+
+  }
+
+}
+
+async function Rules_Derivation(req, srv, entity, ID) {
+  const { RuleHeader, RuleLineItems } = srv.entities
+  const mat_ID = ID;
+  let modifiedCondition = "";
+  let default_value;
+
+  const ruleHeaders = await SELECT.from(RuleHeader).where({ tableEntity: entity, ruleType: "Derivation" });
+
+  for (const ruleHeader of ruleHeaders) {
+
+    const ruleLineItems = await SELECT.from(RuleLineItems).where({
+      ruleHeader_ID: ruleHeader.ID
+    });
+
+    let conditions = [];
+
+    for (const rule of ruleLineItems) {
+
+      const { modelTable, modelTableField, operator, modelTableFieldValue, defaultValue } = rule;
+      let fieldValue;
+      default_value = defaultValue;
+
+      if (entity === "Plant") {
+        if (modelTable === "MARA") {
+          const query = await SELECT.from("litemdg.mara.drafts")
+            .columns(modelTableField)
+            .where({ id: mat_ID });
+
+          const fieldKey = modelTableField.toLowerCase();
+          fieldValue = query[0] ? query[0][fieldKey] : null;
+        } else if (modelTable === "MARC") {
+          fieldValue = req.data[modelTableField];
+        }
+      } else if (entity === "Material") {
+        if (modelTable === "MARA") {
+          fieldValue = req.data[modelTableField];
+        }
+      } else if (entity === "Sales") {
+        if (modelTable === "MARA") {
+          const query = await SELECT.from("litemdg.mara.drafts")
+            .columns(modelTableField)
+            .where({ id: mat_ID });
+
+          const fieldKey = modelTableField.toLowerCase();
+          fieldValue = query[0] ? query[0][fieldKey] : null;
+        } else if (modelTable === "Sales") {
+          fieldValue = req.data[modelTableField];
+        }
+      } else if (entity === "Valuation") {
+        if (modelTable === "MARA") {
+          const query = await SELECT.from("litemdg.mara.drafts")
+            .columns(modelTableField)
+            .where({ id: mat_ID });
+
+          const fieldKey = modelTableField.toLowerCase();
+          fieldValue = query[0] ? query[0][fieldKey] : null;
+        } else if (modelTable === "Valuation") {
+          fieldValue = req.data[modelTableField];
+        }
+      } else if (entity === "StorageLocation") {
+        if (modelTable === "MARA") {
+          const query = await SELECT.from("litemdg.mara.drafts")
+            .columns(modelTableField)
+            .where({ id: mat_ID });
+
+          const fieldKey = modelTableField.toLowerCase();
+          fieldValue = query[0] ? query[0][fieldKey] : null;
+        } else if (modelTable === "MARC") {
+          const query = await SELECT.from("litemdg.Plant.drafts")
+            .columns(modelTableField)
+            .where({ mat_plant_ID: mat_ID });
+
+          const fieldKey = modelTableField.toLowerCase();
+          fieldValue = query[0] ? query[0][fieldKey] : null;
+        } else if (modelTable === "StorageLocation") {
+          fieldValue = req.data[modelTableField];
+        }
+
+      }
+
+
+      if (fieldValue !== undefined && fieldValue !== null) {
+        let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
+        conditions.push(condition);
+        if (conditions.length > 0) {
+          if (operator && (operator === "OR" || operator === "AND")) {
+            conditions[conditions.length - 1] += ` ${operator}`;
+          }
+        }
+      }
+    }
+
+
+    modifiedCondition = conditions.join(" ").replace(/ OR /g, " || ").replace(/ AND /g, " && ").replace();
+
+
+    const conditionMet = evaluateCondition(modifiedCondition);
+
+    function evaluateCondition(condition) {
+      try {
+        return eval(condition);
+      } catch (error) {
+        console.error("Error evaluating condition:", error);
+        return false;
+      }
+    }
+
+    // Update ProfitCenter if condition is met
+    if (conditionMet) {
+      req.data[ruleHeader.targetField] = default_value
+      req.info({
+        code: "REFRESH",
+        message: "Data has been updated, please refresh.",
+        numericSeverity: 1, // Info level
+        target: "/plant",
+      });
+    }
+  }
+
+}
+
+async function Rules_default(req,srv,entity,ID){
+  const { RuleHeader,RuleLineItems} = srv.entities
+  const ruleHeaders = await SELECT.from(RuleHeader).where({tableEntity: entity, ruleType: "Default"});
+    
+
+  for (const ruleHeader of ruleHeaders) {
+    var default_value;
+
+    const ruleLineItems = await SELECT.from(RuleLineItems).where({
+      ruleHeader_ID: ruleHeader.ID
+    });
+
+      for (const rule of ruleLineItems) {
+          const { defaultValue } = rule;
+          default_value = defaultValue; 
+      }
+    req.data[ruleHeader.targetField] = default_value
+
+  }
+
+  console.log("Updated Data:", req.data);
 }
 
 async function generateCUID() {

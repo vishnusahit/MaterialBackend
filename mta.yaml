@@ -7,7 +7,7 @@ modules:
     type: nodejs
     path: gen/srv
     requires:
-      - name: POS_SQL
+      - name: POS_SQL1
       - name: LiteMDG-auth
       - name: LiteMDG-destination-service
     provides:
@@ -24,7 +24,7 @@ modules:
     type: nodejs
     path: gen/pg
     requires:
-      - name: POS_SQL
+      - name: POS_SQL1
     parameters:
       buildpack: nodejs_buildpack
       no-route: true
@@ -58,7 +58,7 @@ modules:
       supported-platforms:
         []
 resources:
-  - name: POS_SQL
+  - name: POS_SQL1
     type: org.cloudfoundry.managed-service
     parameters:
       service: postgresql-db
