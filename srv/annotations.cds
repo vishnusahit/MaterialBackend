@@ -74,3 +74,21 @@ annotate service.Sales_Delivery with {
    MTPOS        @title: 'Item Category Group for Material Master';
    VTWEG        @title: 'Distribution Channel';
 }
+
+annotate service.Valuation with {
+  BWKEY         @title: 'Valuation Area';
+   STPRS         @title: 'Standard Price';
+   BWTAR         @title: 'Valuation Type';
+   BWTTY         @title: 'Valuation Category';
+   BKLAS         @title: 'Valuation Class';
+   CURRENCY_KEY  @title: 'Currency Key';
+   CURTP         @title: 'Currency Type and Valuation View';
+   VERPR         @title: 'Moving Average Price / Periodic Unit Price';
+   VPRSV         @title: 'Price Control Indicator';
+};
+
+annotate service.Storage_Location with {
+   LGORT  @title: 'Storage Location';
+   LGPBE  @title: 'Storage Bin';
+};
+

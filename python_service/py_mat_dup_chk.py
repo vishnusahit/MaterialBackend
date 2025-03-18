@@ -22,13 +22,13 @@ CORS(app, support_credentials=True)
 port = int(os.environ.get('PORT', 3000))
 env = AppEnv()
 
-def fetch_data():
+def fetch_data(creation_type,ID):
     
-    conn = psycopg2.connect(database="EEfEUmSshDFa",
-                        host="postgres-ed70bc29-4270-4521-878a-7bc06ec249cd.ce4jcviyvogb.eu-central-1.rds.amazonaws.com",
-                        user="d107ec387aa2",
-                        password="c5311310a935f08822345f1c0a9",
-                        port="7641")
+    conn = psycopg2.connect(database="MdVKYuOXRgcg",
+                        host="postgres-fbf38ca8-ff94-472c-a9b4-d2311f22682a.ce4jcviyvogb.eu-central-1.rds.amazonaws.com",
+                        user="a0fad52ec8e6",
+                        password="b00eaa277678d9a79f8921f5529d35",
+                        port="7785")
     
       
     # query = '''
@@ -70,17 +70,26 @@ def fetch_data():
            SELECT id, matnr, mtart, matkl, laeng, breit, hoehe, cuobf, makt_maktx, createdat, createdby, 
              flag, max_no, table_name, request_number as requestnumber
              FROM (
-             SELECT id, matnr, mtart1_material_type as mtart, matkl, laeng, breit, hoehe, cuobf, makt_maktx, createdat, createdby, 
+             SELECT id, matnr, mtart as mtart, matkl, laeng, breit, hoehe, cuobf, des.description as makt_maktx, createdat, createdby, 
                rd.Change_request_number as request_number, 0 AS flag, 0 AS max_no, 'mdg_mara_staging' AS table_name
-             FROM mdg_mara_staging as mara LEFT JOIN mdg_change_request_details rd
-              ON mara.matnr = rd.Material_number 
+             FROM mdg_mara_staging as mara LEFT JOIN mdg_request_number_change_request_details rd
+              ON mara.matnr = rd.Object_ID 
+              INNER JOIN mdg_description des ON
+              mara.matnr = des.material_matnr AND des.code = 'EN'
              UNION
-             SELECT id, matnr, mtart1_material_type as mtart, matkl, laeng, breit, hoehe, cuobf, makt_maktx, createdat, createdby, 
+             SELECT id, matnr, mtart as mtart, matkl, laeng, breit, hoehe, cuobf, desc_dummy.description as makt_maktx, createdat, createdby, 
                request_number, 0 AS flag, max_no, 'mdg_mara_staging_dummy' AS table_name
-             FROM mdg_mara_staging_dummy
-              ) AS combined_materials
-              
-'''
+             FROM mdg_dummy_mara_staging_dummy as mara_dummy
+             INNER JOIN mdg_dummy_description_dummy desc_dummy ON
+              mara_dummy.matnr = desc_dummy.material_matnr AND desc_dummy.code = 'EN'
+             UNION 
+             SELECT id, matnr, mtart as mtart, matkl, laeng, breit, hoehe, cuobf, desc_draft.description as makt_maktx, createdat, createdby, 
+              0 AS request_number, 0 AS flag, 0 AS max_no, 'mdg_mara_staging_draft' AS table_name
+             FROM litemdg_mara_drafts as mara_drafts
+             INNER JOIN litemdg_description_drafts desc_draft ON
+              mara_drafts.matnr = desc_draft.material_matnr AND desc_draft.code = 'EN'
+              ) AS combined_materials            
+    '''
 
 
     src = pd.read_sql(query, con=conn)
@@ -91,7 +100,7 @@ def fetch_data():
 
     li_ = ['matnr','mtart', 'matkl', 'laeng', 'breit', 'hoehe', 'cuobf', 'makt_maktx']
     df = results[li_]
-
+    
     df = df.ffill()
     df.fillna({'mtart': 'Unknown', 'matkl': 'Unknown', 'laeng': 0, 'breit': 0, 'hoehe': 0, 'cuobf': 0, 'makt_maktx': ''}, inplace=True)
     df.nunique()
@@ -167,63 +176,104 @@ def fetch_data():
     # overall_max_request_number_query = '''
     # SELECT MAX(change_request_number) AS max_request_number FROM mdg_change_request_details
     # '''
-    overall_max_request_number_query = '''
-    SELECT MAX(request_number) AS max_request_number
-    FROM (
-    SELECT rd.change_request_number AS request_number
-    FROM mdg_mara_staging mara
-    LEFT JOIN mdg_change_request_details rd
-    ON mara.matnr = rd.Material_number
-    UNION
-    SELECT request_number
-    FROM mdg_mara_staging_dummy
-) AS combined;
-'''
 
-    overall_max_request_number_result = pd.read_sql(overall_max_request_number_query, con=conn)
-    overall_max_request_number = overall_max_request_number_result['max_request_number'].iloc[0]
+    if creation_type == 'MASS':
+     overall_max_request_number_query = '''
+      SELECT MAX(request_number) AS max_request_number
+      FROM (
+      SELECT rd.change_request_number AS request_number
+      FROM mdg_mara_staging mara
+      LEFT JOIN mdg_request_number_change_request_details rd
+      ON mara.matnr = rd.Object_ID
+      UNION
+      SELECT request_number
+      FROM mdg_dummy_mara_staging_dummy
+      ) AS combined;
+      '''
+
+
+     overall_max_request_number_result = pd.read_sql(overall_max_request_number_query, con=conn)
+     overall_max_request_number = overall_max_request_number_result['max_request_number'].iloc[0]
     
+     latest_record_query = f''' 
+     SELECT MAX(max_no) as latest_record 
+     FROM mdg_dummy_mara_staging_dummy 
+     WHERE request_number = {overall_max_request_number}
+     '''
 
-    #print(duplicates) 
-    # duplicates = duplicates.groupby('Cluster').filter(lambda x: len(x) > 1)
-    # overall_max_request_number = duplicates['requestnumber'].max()
-    # final_duplicates = duplicates[duplicates['requestnumber'] == overall_max_request_number]
-    final_duplicates = duplicates.groupby('Cluster').filter(
-    lambda x: len(x) > 1 and overall_max_request_number in x['requestnumber'].values)
+     overall_latest_record_result = pd.read_sql(latest_record_query, con=conn)
+     latest_record_max_no = overall_latest_record_result['latest_record'].iloc[0]
+   
+    
+     #print(duplicates) 
+     # duplicates = duplicates.groupby('Cluster').filter(lambda x: len(x) > 1)
+     # overall_max_request_number = duplicates['requestnumber'].max()
+     # final_duplicates = duplicates[duplicates['requestnumber'] == overall_max_request_number]
+     final_duplicates = duplicates.groupby('Cluster').filter(
+     lambda x: len(x) > 1 and overall_max_request_number in x['requestnumber'].values
+     and latest_record_max_no in x['max_no'].values)
 
-    # overall_max_no = final_duplicates['max_no'].max()
+     # overall_max_no = final_duplicates['max_no'].max()
 
-    # # Filter the records from the clusters which contain the overall maximum max_no
-    # final_duplicates = final_duplicates[final_duplicates['max_no'] == overall_max_no]
+     # # Filter the records from the clusters which contain the overall maximum max_no
+     # final_duplicates = final_duplicates[final_duplicates['max_no'] == overall_max_no]
 
-    final_duplicates = final_duplicates.drop_duplicates(subset=['id', 'matnr', 'Cluster', 'requestnumber'])
-    print(duplicates)  
-#     mdg_mara_staging_dummy_data = results[(results['flag'] == 1) & (results['table_name'] == 'mdg_mara_staging_dummy')]
+     final_duplicates = final_duplicates.drop_duplicates(subset=['id', 'matnr', 'Cluster', 'requestnumber'])
+     print(duplicates) 
 
-#     update_query = """
-#     UPDATE mdg_mara_staging_dummy
-#     SET flag = %s
-#     WHERE id = %s
-#     """
-
-#     # Prepare the data to update
-#     update_data = [(1, id_val) for id_val in mdg_mara_staging_dummy_data['id']]
-
-# # Execute the update query
-#     with conn.cursor() as cursor:
-#      cursor.executemany(update_query, update_data)
-#     conn.commit()
+    elif creation_type == 'SINGLE':
+        
+     final_duplicates = duplicates.groupby('Cluster').filter(lambda x: ID in x['id'].values)
+      
 
     conn.close()
     return(final_duplicates)
+def test():
+  
+    conn = psycopg2.connect(database="hOdGtSHCVhyc",
+                        host="postgres-c96a63a3-9cc4-4b13-82fc-c73dd26fcc37.ce4jcviyvogb.eu-central-1.rds.amazonaws.com",
+                        user="6af286503a9f",
+                        password="b42f2f1cd52af13e915f0",
+                        port="7836")
+    
+
+    query = """
+      SELECT * from configurationschema.change_and_field_management_db_duplicate_check_fields where model = 'Material';
+     """
+
+    df = pd.read_sql(query, con=conn)
+
+    li_ = df["field_name"].tolist()
+
+    return {"Field_Names": li_}
+
+    # return df
+
         
 @app.route('/result')
 @cross_origin(supports_credentials=True)
 def app_disp():    
-    duplicate=fetch_data()  
+    duplicate=fetch_data('MASS',None)  
     duplicate_json = duplicate.to_json(orient='records')
     return Response(duplicate_json, mimetype='application/json')
-    #return  Response(duplicate,mimetype='application/json')                
+    #return  Response(duplicate,mimetype='application/json')   
+
+@app.route('/fetch_duplicates')
+@cross_origin(support_credentials=True)
+def duplicates():
+    ID = request.args.get('ID')
+    duplicate=fetch_data('SINGLE',ID)
+    duplicate_json = duplicate.to_json(orient='records')
+    return Response(duplicate_json, mimetype='application/json')
+    # return jsonify({"Received ID": ID}) 
+
+@app.route('/test')
+@cross_origin(support_credentials=True)
+def fields():
+    
+    duplicate=test()
+    return jsonify(duplicate) 
+        
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port,debug=True)

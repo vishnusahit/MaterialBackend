@@ -42,13 +42,59 @@ module.exports = class Service extends cds.ApplicationService {
         .set({ Status: "Inactive" })
         .where({ ID: ID });
 
+    });
+    srv.before(["CREATE"], "Mara.drafts", async(req) => {
+      const { ID, MATNR } = req.data;
+      const existingRecord = await SELECT.one.from(Mara).where({ MATNR : MATNR });
+      const existingRecord_dummy = await SELECT.one.from("litemdg.mara.drafts").where({ MATNR : MATNR });
+      if (!existingRecord && !existingRecord_dummy) {
+      const entity = "Material";
+      console.log("request data: "+ req);
       await Rules_default(req,srv,entity,ID)
+      }
+      else{
+        req.error(500,"Material Number Already exists");
+      }
     });
     srv.before(["DELETE"], "Mara.drafts", async (req) => {
       const { ID } = req.data;
       await DELETE.from("litemdg.mara_dummy").where({ ID: ID });
     });
-    srv.before(["CREATE"], "Plant.drafts", async (req) => {
+    srv.after(["UPDATE"], "Mara.drafts", async (req) => {
+      const { ID, MAKT_MAKTX, MATNR } = req;
+      if (MAKT_MAKTX || MAKT_MAKTX === null) {
+        const draft_UUID = await SELECT.from("litemdg.Mara.drafts").where({
+          ID: ID,
+        });
+        let DescriptionEntry = {
+          Material_MATNR: MATNR,
+          Material_ID: ID,
+          code: "EN",
+          Description: MAKT_MAKTX,
+          draftadministrativedata_draftuuid:
+            draft_UUID[0].DraftAdministrativeData_DraftUUID,
+        };
+
+        // await UPSERT.into("litemdg.description.drafts")
+        //   .entries(DescriptionEntry)
+        //   .columns("Description");
+
+        const existingEntry = await SELECT.one
+          .from("litemdg.description.drafts")
+          .where({ Material_ID: ID, Material_MATNR: MATNR, code: "EN" });
+
+        if (existingEntry) {
+          await UPDATE("litemdg.description.drafts")
+            .set({ Description: MAKT_MAKTX,draftadministrativedata_draftuuid:draft_UUID[0].DraftAdministrativeData_DraftUUID })
+            .where({ Material_ID: ID, Material_MATNR: MATNR, code: "EN" });
+        } else {
+          await INSERT.into("litemdg.description.drafts").entries(
+            DescriptionEntry
+          );
+        }
+      }
+    });
+    srv.before(["CREATE"], "plant.drafts", async (req) => {
       const { mat_plant_ID } = req.data;
       const ID = mat_plant_ID;
       const entity = "Plant" 
@@ -107,7 +153,7 @@ module.exports = class Service extends cds.ApplicationService {
     srv.after(["EDIT"], Mara, async (req) => {
 
       const { ID } = req;
-      await DELETE.from("litemdg.mara_dummy").where({ ID: ID });
+      // await DELETE.from("litemdg.mara_dummy").where({ ID: ID });
       const tx = cds.transaction(req);
 
       try {
@@ -132,8 +178,9 @@ module.exports = class Service extends cds.ApplicationService {
           await tx.run(INSERT.into(Plant_dummy).entries(plantData));
         }
         var storageData = []
-        for (entry of plantData) {
-          var LocationData = await tx.run(SELECT.from(Storage_Location).where({ plant_mat_plant_ID: entry.mat_plant_ID, plant_WERKS_WERKS: entry.WERKS }));
+
+        for (const entry of plantData) {
+          var LocationData = await tx.run(SELECT.from(Storage_Location).where({ plant_mat_plant_ID: entry.mat_plant_ID, plant_WERKS: entry.WERKS }));
           storageData.push(...LocationData)
         }
         if (storageData.length) {
@@ -168,7 +215,9 @@ module.exports = class Service extends cds.ApplicationService {
         await tx.commit();
         console.log(`Successfully copied data for Material ID: ${ID}`);
       } catch (error) {
+        await tx.rollback();  // Rollback the transaction
         console.error("Error while copying data:", error);
+        throw new Error(`Data copy failed: ${error.message}`);
       }
     });
 
@@ -579,7 +628,7 @@ module.exports = class Service extends cds.ApplicationService {
               SELECT.one
                 .from(Plant_dummy)
                 .where({
-                  WERKS_WERKS: entry.plant_WERKS_WERKS,
+                  WERKS: entry.plant_WERKS,
                   mat_plant_MATNR: entry.plant_mat_plant_MATNR,
                 })
             );
@@ -697,7 +746,7 @@ module.exports = class Service extends cds.ApplicationService {
       ip_mara.forEach(function (item) {
         payload.context.material.Material.push({
           Product: replaceNull(item.MATNR),
-          BaseUnit: replaceNull(item.MEINS1_UOM),
+          BaseUnit: replaceNull(item.MEINS),
           Division: replaceNull(item.SPART),
           NetWeight: replaceDec(item.NTGEW),
           WeightUnit: replaceNull(item.GEWEI),
@@ -707,7 +756,7 @@ module.exports = class Service extends cds.ApplicationService {
           ProductOldID: replaceNull(item.BISMT),
           IndustrySector: replaceNull(item.MBRSH),
           ProductHierarchy: replaceNull(item.PRDHA),
-          VolumeUnit: replaceNull(item.VOLEH_unit),
+          VolumeUnit: replaceNull(item.VOLEH),
           MaterialVolume: replaceDec(item.VOLUM),
           CrossPlantStatus: replaceNull(item.MSTAE),
           ItemCategoryGroup: replaceNull(item.MTPOS_MARA),
@@ -865,7 +914,7 @@ module.exports = class Service extends cds.ApplicationService {
 
             const descriptionDummyData = await tx.run(
               SELECT.from(Description_dummy).where({
-                Material_MATNR: maraDummyData[0].ID,
+                Material_ID: maraDummyData[0].ID,
               })
             );
 
@@ -881,7 +930,7 @@ module.exports = class Service extends cds.ApplicationService {
                   SELECT.from(Storage_dummy).where({
                     plant_mat_plant_ID: plant.mat_plant_ID,
                     plant_mat_plant_MATNR: plant.mat_plant_MATNR,
-                    plant_WERKS_WERKS: plant.WERKS_WERKS,
+                    plant_WERKS: plant.WERKS,
                   })
                 );
 
@@ -970,7 +1019,7 @@ module.exports = class Service extends cds.ApplicationService {
                     DELETE.from(Storage_dummy).where({
                       plant_mat_plant_ID: plant.mat_plant_ID,
                       plant_mat_plant_MATNR: plant.mat_plant_MATNR,
-                      plant_WERKS_WERKS: plant.WERKS_WERKS,
+                      plant_WERKS: plant.WERKS,
                     })
                   );
                 }
@@ -1146,7 +1195,7 @@ module.exports = class Service extends cds.ApplicationService {
             draftadministrativedata_draftuuid: draft_data.draftuuid
           }));
 
-          await tx.run(INSERT.into('litemdg.storage.loaction.drafts').entries(updatedStorageData));
+          await tx.run(INSERT.into('litemdg.storage.location.drafts').entries(updatedStorageData));
         }
         await tx.commit()
         return `Material ${ip_NewMatnr} successfully inserted into drafts.`;
@@ -1222,7 +1271,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
             {
               Product: reqData.MATNR,
               BaseUnit: reqData.MEINS || "",
-              VolumeUnit: reqData.VOLEH_unit || "",
+              VolumeUnit: reqData.VOLEH || "",
               WeightUnit: reqData.GEWEI || "",
               GrossWeight: reqData.BRGEW ? reqData.BRGEW.toString() : "0.000",
               MaterialVolume: reqData.BRGEW
@@ -1386,259 +1435,268 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
 }
 
 async function Rules_validation(req, srv) {
-  const { RuleHeader, RuleLineItems } = srv.entities
+  const { RulesHeader, RuleLineItems } = srv.entities
   const { ID } = req.data;
   let modifiedCondition = "";
   let error_msg, default_value;
   let error_array = ['1st errror', '2nd error']
 
-  const ruleHeaders = await SELECT.from(RuleHeader).where({ tableEntity: "Material", ruleType: "Validation" });
+  const ruleHeaders = await SELECT.from(RulesHeader).where({ tableEntity: "Material", ruleType: "Validation" });
+  if (ruleHeaders.length > 0) {
+    for (const ruleHeader of ruleHeaders) {
 
-  for (const ruleHeader of ruleHeaders) {
+      const ruleLineItems = await SELECT.from(RuleLineItems).where({
+        ruleHeader_ID: ruleHeader.ID
+      });
 
-    const ruleLineItems = await SELECT.from(RuleLineItems).where({
-      ruleHeader_ID: ruleHeader.ID
-    });
+      let conditions = [];
+      if (ruleLineItems.length > 0) {
+        for (const rule of ruleLineItems) {
 
-    let conditions = [];
+          const { modelTable, modelTableField, operator, modelTableFieldValue, errorMessage, defaultValue } = rule;
+          let fieldValue;
+          error_msg = errorMessage;
+          default_value = defaultValue;
 
-    for (const rule of ruleLineItems) {
+          if (modelTable === "MARA") {
+            const query = await SELECT.from("litemdg.mara.drafts")
+              .columns(modelTableField)
+              .where({ id: ID });
 
-      const { modelTable, modelTableField, operator, modelTableFieldValue, errorMessage, defaultValue } = rule;
-      let fieldValue;
-      error_msg = errorMessage;
-      default_value = defaultValue;
+            const fieldKey = modelTableField.toLowerCase();
+            fieldValue = query[0] ? query[0][fieldKey] : null;
+          } else if (modelTable === "MARC") {
+            const query = await SELECT.from("litemdg.Plant.drafts")
+              .columns(modelTableField)
+              .where({ mat_Plant_ID: ID });
 
-      if (modelTable === "MARA") {
-        const query = await SELECT.from("litemdg.mara.drafts")
-          .columns(modelTableField)
-          .where({ id: ID });
-
-        const fieldKey = modelTableField.toLowerCase();
-        fieldValue = query[0] ? query[0][fieldKey] : null;
-      } else if (modelTable === "MARC") {
-        const query = await SELECT.from("litemdg.plant.drafts")
-          .columns(modelTableField)
-          .where({ mat_Plant_ID: ID });
-
-        const fieldKey = modelTableField.toLowerCase();
-        fieldValue = query[0] ? query[0][fieldKey] : null;
-      }
+            const fieldKey = modelTableField.toLowerCase();
+            fieldValue = query[0] ? query[0][fieldKey] : null;
+          }
 
 
-      if (fieldValue !== undefined && fieldValue !== null) {
-        let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
-        conditions.push(condition);
-        if (conditions.length > 0) {
-          if (operator && (operator === "OR" || operator === "AND")) {
-            conditions[conditions.length - 1] += ` ${operator}`;
+          if (fieldValue !== undefined && fieldValue !== null) {
+            let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
+            conditions.push(condition);
+            if (conditions.length > 0) {
+              if (operator && (operator === "OR" || operator === "AND")) {
+                conditions[conditions.length - 1] += ` ${operator}`;
+              }
+            }
           }
         }
       }
-    }
 
 
-    modifiedCondition = conditions.join(" ").replace(/ OR /g, " || ").replace(/ AND /g, " && ").replace();
+      modifiedCondition = conditions.join(" ").replace(/ OR /g, " || ").replace(/ AND /g, " && ").replace();
 
 
-    const conditionMet = evaluateCondition(modifiedCondition);
+      const conditionMet = evaluateCondition(modifiedCondition);
 
-    function evaluateCondition(condition) {
-      try {
-        return eval(condition);
-      } catch (error) {
-        console.error("Error evaluating condition:", error);
-        return false;
-      }
-    }
-
-
-    if (conditionMet && ruleHeader.isMandatory === false) {
-
-      let defaultValues = [];
-
-      if (typeof default_value === 'string' && default_value.includes(',')) {
-        defaultValues = default_value.split(',').map(val => val.trim());
-      } else {
-        defaultValues = [default_value];
-      }
-
-      function normalizeValue(value, type) {
-        if (type === "number") {
-          return parseFloat(value);
-        } else if (type === "string") {
-          return String(value).replace(/^0+/, "");
+      function evaluateCondition(condition) {
+        try {
+          return eval(condition);
+        } catch (error) {
+          console.error("Error evaluating condition:", error);
+          return false;
         }
-        return value;
       }
 
-      const targetValue = req.data[ruleHeader.targetField];
-      const targetType = typeof targetValue;
 
-      const normalizedDefaults = defaultValues.map(val => normalizeValue(val, targetType));
+      if (conditionMet && ruleHeader.isMandatory === false) {
+
+        let defaultValues = [];
+
+        if (typeof default_value === 'string' && default_value.includes(',')) {
+          defaultValues = default_value.split(',').map(val => val.trim());
+        } else {
+          defaultValues = [default_value];
+        }
+
+        function normalizeValue(value, type) {
+          if (type === "number") {
+            return parseFloat(value);
+          } else if (type === "string") {
+            return String(value).replace(/^0+/, "");
+          }
+          return value;
+        }
+
+        const targetValue = req.data[ruleHeader.targetField];
+        const targetType = typeof targetValue;
+
+        const normalizedDefaults = defaultValues.map(val => normalizeValue(val, targetType));
 
 
-      if (!normalizedDefaults.includes(normalizeValue(targetValue, targetType))) {
-        req.error({
-          code: 'Validation Error',
-          message: error_msg,
-          status: 418
-        })
+        if (!normalizedDefaults.includes(normalizeValue(targetValue, targetType))) {
+          req.error({
+            code: 'Validation Error',
+            message: error_msg,
+            status: 418
+          })
 
+        }
+
+        // if (!defaultValues.includes(req.data[ruleHeader.targetField])) {
+        //     req.error(500, error_msg);
+        // }
+      } else if (conditionMet && ruleHeader.isMandatory === true) {
+        if (req.data[ruleHeader.targetField] === null || req.data[ruleHeader.targetField] === undefined) { // Corrected equality checks
+          req.error(500, error_msg);
+        }
       }
 
-      // if (!defaultValues.includes(req.data[ruleHeader.targetField])) {
-      //     req.error(500, error_msg);
-      // }
-    } else if (conditionMet && ruleHeader.isMandatory === true) {
-      if (req.data[ruleHeader.targetField] === null || req.data[ruleHeader.targetField] === undefined) { // Corrected equality checks
-        req.error(500, error_msg);
-      }
     }
-
   }
 
 }
 
 async function Rules_Derivation(req, srv, entity, ID) {
-  const { RuleHeader, RuleLineItems } = srv.entities
+  const { RulesHeader, RuleLineItems } = srv.entities
   const mat_ID = ID;
   let modifiedCondition = "";
   let default_value;
 
-  const ruleHeaders = await SELECT.from(RuleHeader).where({ tableEntity: entity, ruleType: "Derivation" });
+  const ruleHeaders = await SELECT.from(RulesHeader).where({ tableEntity: entity, ruleType: "Derivation" });
+  if (ruleHeaders.length > 0) {
+    for (const ruleHeader of ruleHeaders) {
 
-  for (const ruleHeader of ruleHeaders) {
+      const ruleLineItems = await SELECT.from(RuleLineItems).where({
+        ruleHeader_ID: ruleHeader.ID
+      });
 
-    const ruleLineItems = await SELECT.from(RuleLineItems).where({
-      ruleHeader_ID: ruleHeader.ID
-    });
+      let conditions = [];
+      if (ruleLineItems.length > 0) {
+        for (const rule of ruleLineItems) {
 
-    let conditions = [];
+          const { modelTable, modelTableField, operator, modelTableFieldValue, defaultValue } = rule;
+          let fieldValue;
+          default_value = defaultValue;
 
-    for (const rule of ruleLineItems) {
+          if (entity === "Plant") {
+            if (modelTable === "MARA") {
+              const query = await SELECT.from("litemdg.mara.drafts")
+                .columns(modelTableField)
+                .where({ id: mat_ID });
 
-      const { modelTable, modelTableField, operator, modelTableFieldValue, defaultValue } = rule;
-      let fieldValue;
-      default_value = defaultValue;
+              const fieldKey = modelTableField.toLowerCase();
+              fieldValue = query[0] ? query[0][fieldKey] : null;
+            } else if (modelTable === "MARC") {
+              fieldValue = req.data[modelTableField];
+            }
+          } else if (entity === "Material") {
+            if (modelTable === "MARA") {
+              fieldValue = req.data[modelTableField];
+            }
+          } else if (entity === "Sales") {
+            if (modelTable === "MARA") {
+              const query = await SELECT.from("litemdg.mara.drafts")
+                .columns(modelTableField)
+                .where({ id: mat_ID });
 
-      if (entity === "Plant") {
-        if (modelTable === "MARA") {
-          const query = await SELECT.from("litemdg.mara.drafts")
-            .columns(modelTableField)
-            .where({ id: mat_ID });
+              const fieldKey = modelTableField.toLowerCase();
+              fieldValue = query[0] ? query[0][fieldKey] : null;
+            } else if (modelTable === "Sales") {
+              fieldValue = req.data[modelTableField];
+            }
+          } else if (entity === "Valuation") {
+            if (modelTable === "MARA") {
+              const query = await SELECT.from("litemdg.mara.drafts")
+                .columns(modelTableField)
+                .where({ id: mat_ID });
 
-          const fieldKey = modelTableField.toLowerCase();
-          fieldValue = query[0] ? query[0][fieldKey] : null;
-        } else if (modelTable === "MARC") {
-          fieldValue = req.data[modelTableField];
-        }
-      } else if (entity === "Material") {
-        if (modelTable === "MARA") {
-          fieldValue = req.data[modelTableField];
-        }
-      } else if (entity === "Sales") {
-        if (modelTable === "MARA") {
-          const query = await SELECT.from("litemdg.mara.drafts")
-            .columns(modelTableField)
-            .where({ id: mat_ID });
+              const fieldKey = modelTableField.toLowerCase();
+              fieldValue = query[0] ? query[0][fieldKey] : null;
+            } else if (modelTable === "Valuation") {
+              fieldValue = req.data[modelTableField];
+            }
+          } else if (entity === "StorageLocation") {
+            if (modelTable === "MARA") {
+              const query = await SELECT.from("litemdg.mara.drafts")
+                .columns(modelTableField)
+                .where({ id: mat_ID });
 
-          const fieldKey = modelTableField.toLowerCase();
-          fieldValue = query[0] ? query[0][fieldKey] : null;
-        } else if (modelTable === "Sales") {
-          fieldValue = req.data[modelTableField];
-        }
-      } else if (entity === "Valuation") {
-        if (modelTable === "MARA") {
-          const query = await SELECT.from("litemdg.mara.drafts")
-            .columns(modelTableField)
-            .where({ id: mat_ID });
+              const fieldKey = modelTableField.toLowerCase();
+              fieldValue = query[0] ? query[0][fieldKey] : null;
+            } else if (modelTable === "MARC") {
+              const query = await SELECT.from("litemdg.Plant.drafts")
+                .columns(modelTableField)
+                .where({ mat_plant_ID: mat_ID });
 
-          const fieldKey = modelTableField.toLowerCase();
-          fieldValue = query[0] ? query[0][fieldKey] : null;
-        } else if (modelTable === "Valuation") {
-          fieldValue = req.data[modelTableField];
-        }
-      } else if (entity === "StorageLocation") {
-        if (modelTable === "MARA") {
-          const query = await SELECT.from("litemdg.mara.drafts")
-            .columns(modelTableField)
-            .where({ id: mat_ID });
+              const fieldKey = modelTableField.toLowerCase();
+              fieldValue = query[0] ? query[0][fieldKey] : null;
+            } else if (modelTable === "StorageLocation") {
+              fieldValue = req.data[modelTableField];
+            }
 
-          const fieldKey = modelTableField.toLowerCase();
-          fieldValue = query[0] ? query[0][fieldKey] : null;
-        } else if (modelTable === "MARC") {
-          const query = await SELECT.from("litemdg.Plant.drafts")
-            .columns(modelTableField)
-            .where({ mat_plant_ID: mat_ID });
-
-          const fieldKey = modelTableField.toLowerCase();
-          fieldValue = query[0] ? query[0][fieldKey] : null;
-        } else if (modelTable === "StorageLocation") {
-          fieldValue = req.data[modelTableField];
-        }
-
-      }
+          }
 
 
-      if (fieldValue !== undefined && fieldValue !== null) {
-        let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
-        conditions.push(condition);
-        if (conditions.length > 0) {
-          if (operator && (operator === "OR" || operator === "AND")) {
-            conditions[conditions.length - 1] += ` ${operator}`;
+          if (fieldValue !== undefined && fieldValue !== null) {
+            let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
+            conditions.push(condition);
+            if (conditions.length > 0) {
+              if (operator && (operator === "OR" || operator === "AND")) {
+                conditions[conditions.length - 1] += ` ${operator}`;
+              }
+            }
           }
         }
       }
-    }
 
 
-    modifiedCondition = conditions.join(" ").replace(/ OR /g, " || ").replace(/ AND /g, " && ").replace();
+      modifiedCondition = conditions.join(" ").replace(/ OR /g, " || ").replace(/ AND /g, " && ").replace();
 
 
-    const conditionMet = evaluateCondition(modifiedCondition);
+      const conditionMet = evaluateCondition(modifiedCondition);
 
-    function evaluateCondition(condition) {
-      try {
-        return eval(condition);
-      } catch (error) {
-        console.error("Error evaluating condition:", error);
-        return false;
+      function evaluateCondition(condition) {
+        try {
+          return eval(condition);
+        } catch (error) {
+          console.error("Error evaluating condition:", error);
+          return false;
+        }
       }
-    }
 
-    // Update ProfitCenter if condition is met
-    if (conditionMet) {
-      req.data[ruleHeader.targetField] = default_value
-      req.info({
-        code: "REFRESH",
-        message: "Data has been updated, please refresh.",
-        numericSeverity: 1, // Info level
-        target: "/plant",
-      });
+      // Update ProfitCenter if condition is met
+      if (conditionMet) {
+        req.data[ruleHeader.targetField] = default_value
+        req.info({
+          code: "REFRESH",
+          message: "Data has been updated, please refresh.",
+          numericSeverity: 1, // Info level
+          target: "/plant",
+        });
+      }
     }
   }
 
 }
 
-async function Rules_default(req,srv,entity,ID){
-  const { RuleHeader,RuleLineItems} = srv.entities
-  const ruleHeaders = await SELECT.from(RuleHeader).where({tableEntity: entity, ruleType: "Default"});
-    
+async function Rules_default(req,srv,entity,ID) {
+  const { RulesHeader, RuleLineItems } = srv.entities
+  
+  console.log("1."+ RulesHeader);
+  console.log("2"+req.data);
+  console.log("3"+RuleLineItems)
+  const ruleHeaders = await SELECT.from(RulesHeader).where({ tableEntity: entity, ruleType: "Default" });
+  if (ruleHeaders.length > 0) {
+    for (const ruleHeader of ruleHeaders) {
+      var default_value;
 
-  for (const ruleHeader of ruleHeaders) {
-    var default_value;
-
-    const ruleLineItems = await SELECT.from(RuleLineItems).where({
-      ruleHeader_ID: ruleHeader.ID
-    });
-
-      for (const rule of ruleLineItems) {
+      const ruleLineItems = await SELECT.from(RuleLineItems).where({
+        ruleHeader_ID: ruleHeader.ID
+      });
+      if (ruleLineItems.length > 0) {
+        for (const rule of ruleLineItems) {
           const { defaultValue } = rule;
-          default_value = defaultValue; 
+          default_value = defaultValue;
+        }
       }
-    req.data[ruleHeader.targetField] = default_value
+      req.data[ruleHeader.targetField] = default_value
 
+    }
   }
 
   console.log("Updated Data:", req.data);

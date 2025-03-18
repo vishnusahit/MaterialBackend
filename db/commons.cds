@@ -8,11 +8,11 @@ type t_Mara  {
    MATKL           : String(9);    // Material Group
    MBRSH           : String(1);    // Industry Sector
    MEINS          : String(3);    // Base Unit of Measure
-   MEINS_UOM       : String(3);
+  //  MEINS_UOM       : String(3);
    MSTAE : String(2);   // Cross-Plant Material Status
    MSTDE : Date;        // Date from which the Cross-Plant Material Status is Valid
    MTART           : String(4);    // Material Type
-   MTART_Material_type  : String(4);
+  //  MTART_Material_type  : String(4);
    SPART : String(2);    // Division
    EXTWG : String(18);   // External Material Group
    MAGRV : String(4);    // Material Group: Packaging Materials
@@ -20,7 +20,7 @@ type t_Mara  {
    PRDHA : String(18);   // Product Hierarchy
    WRKST           : String(48);   // Basic Material
    EAN11 : String(18);   // International Article Number (EAN/UPC)
-   VOLEH_unit: String(3); // Volume Unit
+   VOLEH: String(3); // Volume Unit
    VOLUM           : Decimal(13, 3); // Volume
    LAENG:Integer;
    BREIT:Integer;
@@ -42,10 +42,10 @@ type t_Mara  {
 type t_plant{
   mat_plant_MATNR : String(40);
   WERKS : String;
-  WERKS_WERKS: String ;
+  // WERKS_WERKS: String ;
   MMSTA: String(2);	//Plant-Specific Material Status
   PRCTR: String(10); //Profit Center
-  PRCTR_PRCTR: String(10);
+  // PRCTR_PRCTR: String(10);
   XCHPF_marc:Boolean;//Batch Management Requirement Indicator
   DISMM:String(2);//MRP Type
   MAABC:String(1);//ABC Indicator
@@ -70,7 +70,7 @@ type t_plant{
 
 type t_Storage_Location{
    plant_mat_plant_MATNR : String(40);
-   plant_WERKS_WERKS: String;
+   plant_WERKS: String;
    LGORT:String(4);//Storage Location
    LGPBE:String;//Storage Bin
 }

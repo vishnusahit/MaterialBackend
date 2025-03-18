@@ -6,4 +6,4 @@ applications:
   buildpack: python_buildpack
   command: python py_mat_dup_chk.py
   services:
-   - pg_litemdg_db
+   - POS_SQL1
