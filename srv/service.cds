@@ -13,10 +13,8 @@ service litemdg {
     entity Plant_dummy as projection on db.Dummy.Plant_dummy;
     entity Storage_dummy as projection on db.Dummy.Storage_Location_dummy;
     entity Description_dummy as projection on db.Dummy.Description_dummy;
-    @odata.draft.enabled
+
     entity RulesHeader as projection on db.Rules.RuleHeader;
-    @cds.redirection.target
-    entity RuleHeader as projection on db.Rules.RuleHeader;
     entity RuleLineItems as projection on db.Rules.RuleLineItems;
     @odata.singleton
     entity ExcelUpload as projection on db.ExcelUpload;
@@ -45,4 +43,5 @@ service litemdg {
     action SaveToDB(ip_req_no: Integer) returns String;
     action FieldStatus(ip_type: String) returns many common.FieldStatus;
     action InsertMaterial(ip_MaterialID:String,ip_NewMaterial:String) returns String;
+    function Rule_validation(ip_ID:String) returns many String;
 }

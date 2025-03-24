@@ -189,6 +189,7 @@ context REQUEST_NUMBER {
             Object_CUID         : String;
             Replication_status  : String;
             Overall_status     : String;
+            Material_type     : String(4);
             to_Change_Documents : Composition of many Change_Documents
                                       on to_Change_Documents.Request_details = $self;
     }

@@ -92,3 +92,24 @@ annotate service.Storage_Location with {
    LGPBE  @title: 'Storage Bin';
 };
 
+annotate service.plant with{
+   WERKS   @Common.ValueList: {
+      CollectionPath: 'Value_List',
+      Parameters    : [
+         {
+            $Type            : 'Common.ValueListParameterInOut',
+            LocalDataProperty: 'WERKS',
+            ValueListProperty: 'Value'
+         },
+         {
+            $Type            : 'Common.ValueListParameterDisplayOnly',
+            ValueListProperty: 'Description'
+         },
+         {
+            $Type: 'Common.ValueListParameterConstant',
+            ValueListProperty: 'Fixed_Type',
+            Constant: 'Plant'
+         }
+      ]
+   };
+}

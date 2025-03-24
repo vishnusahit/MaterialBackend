@@ -1137,7 +1137,7 @@ Content-Type: application/json
 
 ### Change_Request
 # @name Change_Request_GET
-GET {{server}}/odata/v4/litemdg/Change_Request
+GET {{server}}/odata/v2/litemdg/Change_Request
 
 
 
@@ -1235,93 +1235,11 @@ Content-Type: application/json
 
 ### Change_Request
 # @name Change_Request_PATCH
-PATCH {{server}}/odata/v4/litemdg/Change_Request/24102733
+PATCH {{server}}/odata/v4/litemdg/Change_Request(REQUEST_NUMBER=1)
 Content-Type: application/json
 
 {
-  "REQUEST_NUMBER": 24102733,
-  "InstanceID": "InstanceID-24102733",
-  "REQUEST_TYPE": "REQUEST_TYPE-24102733",
-  "Overall_status": "Overall_status-24102733",
-  "Model": "Model-24102733",
-  "Requested_By": "Requested_By-24102733",
-  "Requested_Date": "2018-06-29",
-  "Requested_Time": "22:59:53",
-  "Requested_on": "Requested_on-24102733",
-  "Approved_By": "Approved_By-24102733",
-  "Aprroved_date": "2007-11-19",
-  "Aprroved_Time": "22:59:53",
-  "Completed_On": "Completed_On-24102733",
-  "Notes": "Notes-24102733",
-  "Replication_status": "Replication_status-24102733",
-  "Details": [
-    {
-      "Object_ID": "Change_Request_Details-31695431",
-      "Description": "Description-31695431",
-      "Object_CUID": "Object_CUID-31695431",
-      "Replication_status": "Replication_status-31695431",
-      "to_Change_Documents": [
-        {
-          "Table": "Change_Documents-4074418",
-          "Field_Name": "Change_Documents-4074418",
-          "Old_Value": "Old_Value-4074418",
-          "New_Value": "New_Value-4074418",
-          "Processor": "Processor-4074418",
-          "timestamp": "timestamp-4074418",
-          "Object_Description": "Object_Description-4074418"
-        },
-        {
-          "Table": "Change_Documents-4074419",
-          "Field_Name": "Change_Documents-4074419",
-          "Old_Value": "Old_Value-4074419",
-          "New_Value": "New_Value-4074419",
-          "Processor": "Processor-4074419",
-          "timestamp": "timestamp-4074419",
-          "Object_Description": "Object_Description-4074419"
-        }
-      ]
-    },
-    {
-      "Object_ID": "Change_Request_Details-31695432",
-      "Description": "Description-31695432",
-      "Object_CUID": "Object_CUID-31695432",
-      "Replication_status": "Replication_status-31695432",
-      "to_Change_Documents": [
-        {
-          "Table": "Change_Documents-19905031",
-          "Field_Name": "Change_Documents-19905031",
-          "Old_Value": "Old_Value-19905031",
-          "New_Value": "New_Value-19905031",
-          "Processor": "Processor-19905031",
-          "timestamp": "timestamp-19905031",
-          "Object_Description": "Object_Description-19905031"
-        },
-        {
-          "Table": "Change_Documents-19905032",
-          "Field_Name": "Change_Documents-19905032",
-          "Old_Value": "Old_Value-19905032",
-          "New_Value": "New_Value-19905032",
-          "Processor": "Processor-19905032",
-          "timestamp": "timestamp-19905032",
-          "Object_Description": "Object_Description-19905032"
-        }
-      ]
-    }
-  ],
-  "to_Action_Details": [
-    {
-      "User_Step": "Change_Request_User_Actions_Details-3862501",
-      "Processer": "Processer-3862501",
-      "Action": "Action-3862501",
-      "Time_Stamp": "Time_Stamp-3862501"
-    },
-    {
-      "User_Step": "Change_Request_User_Actions_Details-3862502",
-      "Processer": "Processer-3862502",
-      "Action": "Action-3862502",
-      "Time_Stamp": "Time_Stamp-3862502"
-    }
-  ]
+  "Overall_status": "Approved"
 }
 
 
@@ -2128,4 +2046,14 @@ Content-Type: application/json
 {
   "ip_MaterialID": "0ee466c6-3653-4883-ae9c-772a9199307f",
   "ip_NewMaterial": "5652"
+}
+
+### InsertMaterial
+# @name Rules_Validation
+
+GET  {{server}}/odata/v4/litemdg/Rule_validation
+Content-Type: application/json
+
+{
+  "ip_ID": "80cb157e-7c85-49cb-95ec-0cb551d90b0d"
 }
