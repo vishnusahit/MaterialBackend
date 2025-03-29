@@ -283,20 +283,25 @@ context Field_Properties {
 context Rules {
     entity RuleHeader : cuid, managed {
         model         : String(15);
-        ruleType      : String;
-        tableEntity   : String;
-        targetField   : String;
-        onChangeField : String;
-        isMandatory   : Boolean;
-        ruleLineItem  : Composition of many RuleLineItems
-                            on ruleLineItem.ruleHeader = $self;
+        ruleType          : String;
+        tableEntity       : String;
+        tableEntityDesc   : String;
+        targetField       : String;
+        targetFieldDesc   : String;
+        onChangeField     : String;
+        onChangeFieldDesc : String;
+        isMandatory       : Boolean;
+        ruleLineItem      : Composition of many RuleLineItems
+                                on ruleLineItem.ruleHeader = $self;
     }
 
 
     entity RuleLineItems : cuid, managed {
         ruleID               : String(15);
         modelTable           : String;
+        modelTableDesc       : String;
         modelTableField      : String;
+        modelTableFieldDesc  : String;
         operator             : String;
         modelTableFieldValue : String;
         defaultValue         : String;
