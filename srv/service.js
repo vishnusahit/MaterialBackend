@@ -49,7 +49,7 @@ module.exports = class Service extends cds.ApplicationService {
       const existingRecord = await SELECT.one.from(Mara).where({ MATNR : MATNR });
       const existingRecord_dummy = await SELECT.one.from("litemdg.mara.drafts").where({ MATNR : MATNR });
       if (!existingRecord && !existingRecord_dummy) {
-      const entity = "Material";
+      const entity = "MARA";
       console.log("request data: "+ req);
       await Rules_default(req,srv,entity,ID)
       }
@@ -95,19 +95,19 @@ module.exports = class Service extends cds.ApplicationService {
         }
       }
     });
-    srv.after(['DELETE'],Mara, async(req) => {
-      const { ID } =  req
-      await DELETE.from(mara_dummy).where({ ID: ID });
-      await DELETE.from(Plant_dummy).where({ mat_plant_ID: ID });
-      await DELETE.from(Storage_dummy).where({ plant_mat_plant_ID : ID  });
-      await DELETE.from(Sales_dummy).where({ Material_ID: { in: ID } });
-      await DELETE.from(Valuation_dummy).where({  Material_ID: { in: ID } });
-      await DELETE.from(Description_dummy).where({  Material_ID: { in: ID } });
-    })
+    // srv.after(['DELETE'],Mara, async(req) => {
+    //   const { ID } =  req
+    //   await DELETE.from(mara_dummy).where({ ID: ID });
+    //   await DELETE.from(Plant_dummy).where({ mat_plant_ID: ID });
+    //   await DELETE.from(Storage_dummy).where({ plant_mat_plant_ID : ID  });
+    //   await DELETE.from(Sales_dummy).where({ Material_ID: { in: ID } });
+    //   await DELETE.from(Valuation_dummy).where({  Material_ID: { in: ID } });
+    //   await DELETE.from(Description_dummy).where({  Material_ID: { in: ID } });
+    // })
     srv.before(["CREATE"], "plant.drafts", async (req) => {
       const { mat_plant_ID } = req.data;
       const ID = mat_plant_ID;
-      const entity = "Plant" 
+      const entity = "MARC" 
       await Rules_default(req,srv,entity,ID)
     });
     srv.before(["CREATE"], "Sales_Delivery.drafts", async (req) => {
@@ -132,13 +132,13 @@ module.exports = class Service extends cds.ApplicationService {
     srv.before(["UPDATE"], "plant.drafts", async (req) => {
       const { mat_plant_ID } = req.data;
       const ID = mat_plant_ID;
-      const entity = "Plant" 
+      const entity = "MARC" 
       await Rules_Derivation(req,srv,entity,ID)
     });
     srv.before(["UPDATE"], "Mara.drafts", async (req) => {
       const { ID } = req.data;
       // const ID = mat_plant_ID;
-      const entity = "Material" 
+      const entity = "MARA" 
       await Rules_Derivation(req,srv,entity,ID)
     });
     srv.before(["UPDATE"], "Sales_Delivery.drafts", async (req) => {
@@ -160,76 +160,76 @@ module.exports = class Service extends cds.ApplicationService {
       await Rules_Derivation(req,srv,entity,ID)
     });
 
-    // srv.after(["EDIT"], Mara, async (req) => {
+    srv.after(["EDIT"], Mara, async (req) => {
 
-    //   const { ID } = req;
-    //   // await DELETE.from("litemdg.mara_dummy").where({ ID: ID });
-    //   const tx = cds.transaction(req);
+      const { ID } = req;
+      // await DELETE.from("litemdg.mara_dummy").where({ ID: ID });
+      const tx = cds.transaction(req);
 
-    //   try {
+      try {
 
-    //     const maraData = await tx.run(
-    //       SELECT.one.from(Mara).where({ ID })
-    //     );
+        const maraData = await tx.run(
+          SELECT.one.from(Mara).where({ ID })
+        );
 
-    //     if (!maraData) {
-    //       return;
-    //     }
+        if (!maraData) {
+          return;
+        }
 
 
-    //     await tx.run(INSERT.into(mara_dummy).entries(maraData));
+        await tx.run(INSERT.into(mara_dummy).entries(maraData));
 
-    //     // Fetch and copy Plant details
-    //     const plantData = await tx.run(
-    //       SELECT.from(plant).where({ mat_plant_ID: ID })
-    //     );
+        // Fetch and copy Plant details
+        const plantData = await tx.run(
+          SELECT.from(plant).where({ mat_plant_ID: ID })
+        );
 
-    //     if (plantData.length) {
-    //       await tx.run(INSERT.into(Plant_dummy).entries(plantData));
-    //     }
-    //     var storageData = []
+        if (plantData.length) {
+          await tx.run(INSERT.into(Plant_dummy).entries(plantData));
+        }
+        var storageData = []
 
-    //     for (const entry of plantData) {
-    //       var LocationData = await tx.run(SELECT.from(Storage_Location).where({ plant_mat_plant_ID: entry.mat_plant_ID, plant_WERKS: entry.WERKS }));
-    //       storageData.push(...LocationData)
-    //     }
-    //     if (storageData.length) {
-    //       await tx.run(INSERT.into(Storage_dummy).entries(storageData));
-    //     }
+        for (const entry of plantData) {
+          var LocationData = await tx.run(SELECT.from(Storage_Location).where({ plant_mat_plant_ID: entry.mat_plant_ID, plant_WERKS: entry.WERKS }));
+          storageData.push(...LocationData)
+        }
+        if (storageData.length) {
+          await tx.run(INSERT.into(Storage_dummy).entries(storageData));
+        }
 
-    //     const salesDeliveryData = await tx.run(
-    //       SELECT.from(Sales_Delivery).where({ Material_ID: ID })
-    //     );
+        const salesDeliveryData = await tx.run(
+          SELECT.from(Sales_Delivery).where({ Material_ID: ID })
+        );
 
-    //     if (salesDeliveryData.length) {
-    //       await tx.run(INSERT.into(Sales_dummy).entries(salesDeliveryData));
-    //     }
+        if (salesDeliveryData.length) {
+          await tx.run(INSERT.into(Sales_dummy).entries(salesDeliveryData));
+        }
 
-    //     // Fetch and copy Valuation details
-    //     const valuationData = await tx.run(
-    //       SELECT.from(Valuation).where({ Material_ID: ID })
-    //     );
+        // Fetch and copy Valuation details
+        const valuationData = await tx.run(
+          SELECT.from(Valuation).where({ Material_ID: ID })
+        );
 
-    //     if (valuationData.length) {
-    //       await tx.run(INSERT.into(Valuation_dummy).entries(valuationData));
-    //     }
+        if (valuationData.length) {
+          await tx.run(INSERT.into(Valuation_dummy).entries(valuationData));
+        }
 
-    //     // Fetch and copy Description details
-    //     const descriptionData = await tx.run(
-    //       SELECT.from(Description).where({ Material_ID: ID })
-    //     );
+        // Fetch and copy Description details
+        const descriptionData = await tx.run(
+          SELECT.from(Description).where({ Material_ID: ID })
+        );
 
-    //     if (descriptionData.length) {
-    //       await tx.run(INSERT.into(Description_dummy).entries(descriptionData));
-    //     }
-    //     await tx.commit();
-    //     console.log(`Successfully copied data for Material ID: ${ID}`);
-    //   } catch (error) {
-    //     await tx.rollback();  // Rollback the transaction
-    //     console.error("Error while copying data:", error);
-    //     throw new Error(`Data copy failed: ${error.message}`);
-    //   }
-    // });
+        if (descriptionData.length) {
+          await tx.run(INSERT.into(Description_dummy).entries(descriptionData));
+        }
+        await tx.commit();
+        console.log(`Successfully copied data for Material ID: ${ID}`);
+      } catch (error) {
+        await tx.rollback();  // Rollback the transaction
+        console.error("Error while copying data:", error);
+        throw new Error(`Data copy failed: ${error.message}`);
+      }
+    });
 
     srv.before(["SAVE"], Mara, async (req) => {
 
@@ -265,8 +265,10 @@ module.exports = class Service extends cds.ApplicationService {
       if (req.event === "CREATE") {
         if (flag.CREATION_TYPE == "SINGLE") {
           await Rules_validation(req,srv);
+          if (req.errors) throw req.reject()
 
           await DELETE.from("litemdg.mara_dummy").where({ ID: req.data.ID });
+          // await Move_To_Dummy(req,srv);
           var Type_Request = 'CREATE'
           const result = await createWorkflowInstance(
             req.data,
@@ -301,13 +303,16 @@ module.exports = class Service extends cds.ApplicationService {
               });
 
               req.notify(`Request Number#${req_no} submitted for approval`);
-              await Move_To_Dummy(req,srv);
+              
             }
         }
       }
       if (req.event === "UPDATE") {
         await Rules_validation(req,srv)
+        if (req.errors) throw req.reject()
+        req.data.Status = 'Inactive'
         var Type_Request = 'CHANGE'
+        // await Move_To_Dummy(req,srv);
         const result = await createWorkflowInstance(req.data, req.user.attr.email, creationTime, creationDate, req_no, Type_Request);
 
         if (result.rootInstanceId) {
@@ -334,7 +339,7 @@ module.exports = class Service extends cds.ApplicationService {
             Overall_status: "Open",
           });
           req.notify(`Request Number#${req_no} submitted for approval`);
-          await Move_To_Dummy(req,srv);
+          
         }
       }
 
@@ -358,6 +363,18 @@ module.exports = class Service extends cds.ApplicationService {
           .from(Change_Request_Details)
           .where({ Change_REQUEST_NUMBER: changeRequestData.REQUEST_NUMBER });
 
+        const timestamp = new Date(req.timestamp);
+
+        const creationDate =
+            timestamp.getFullYear() +
+            String(timestamp.getMonth() + 1).padStart(2, "0") +
+            String(timestamp.getDate()).padStart(2, "0");
+    
+        const creationTime =
+            String(timestamp.getHours()).padStart(2, "0") +
+            String(timestamp.getMinutes()).padStart(2, "0") +
+            String(timestamp.getSeconds()).padStart(2, "0");
+
         // if (!materialData || !materialData.Object_ID) return;
 
         const materialNumbers = materialData.map((entry) => entry.Object_ID);
@@ -373,8 +390,19 @@ module.exports = class Service extends cds.ApplicationService {
             .where({ Change_REQUEST_NUMBER: changeRequestData.REQUEST_NUMBER });
 
           await UPDATE(Change_Request)
-            .set({ Overall_status: "Approved" })
+            .set({ Overall_status: "Approved",
+                   Completed_On  : timestamp,
+                   Approved_date : creationDate,
+                   Approved_Time : creationTime
+                })
             .where({ REQUEST_NUMBER: REQUEST_NUMBER });
+
+          // await DELETE.from(mara_dummy).where({ MATNR: { in: materialNumbers } });
+          // await DELETE.from(Plant_dummy).where({ mat_plant_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Storage_dummy).where({ plant_mat_plant_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Sales_dummy).where({ Material_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Valuation_dummy).where({ Material_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Description_dummy).where({ Material_MATNR: { in: materialNumbers } });
 
           console.log(
             `Updated Mara status to Active for Material Number: ${materialNumbers.join(', ')}`
@@ -388,6 +416,13 @@ module.exports = class Service extends cds.ApplicationService {
           await DELETE.from(Valuation).where({ Material_MATNR: { in: materialNumbers } });
           await DELETE.from(Description).where({ Material_MATNR: { in: materialNumbers } });
 
+          // await DELETE.from(mara_dummy).where({ MATNR: { in: materialNumbers } });
+          // await DELETE.from(Plant_dummy).where({ mat_plant_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Storage_dummy).where({ plant_mat_plant_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Sales_dummy).where({ Material_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Valuation_dummy).where({ Material_MATNR: { in: materialNumbers } });
+          // await DELETE.from(Description_dummy).where({ Material_MATNR: { in: materialNumbers } });
+
           await UPDATE(Change_Request_Details)
             .set({ Overall_status: "Rejected" })
             .where({ Change_REQUEST_NUMBER: REQUEST_NUMBER })
@@ -400,7 +435,7 @@ module.exports = class Service extends cds.ApplicationService {
             `Deleted entry from mara_staging for Material Number: ${materialNumbers.join(', ')}`
           );
         }
-        else if (req.data.Overall_status === "Approved" && changeRequestData.REQUEST_TYPE === "CHANGE") {
+        else if (req.data.Overall_status === "Approved" && changeRequestData.REQUEST_TYPE === "CHANGE")  {
 
           await UPDATE(Mara)
             .set({ Status: "Active" })
@@ -437,7 +472,15 @@ module.exports = class Service extends cds.ApplicationService {
 
 
           const maraData = await SELECT.from(mara_dummy).where({ MATNR: { in: materialNumbers } });
-          if (maraData.length) await INSERT.into(Mara).entries(maraData);
+
+          // if (maraData.length) await INSERT.into(Mara).entries(maraData);
+          if (maraData.length) {
+            const filteredMaraData = maraData.map(({ REQUEST_NUMBER,MAX_NO,CREATION_TYPE, ...rest }) => ({
+              ...rest,
+              Status: "Inactive"
+          }));
+            await INSERT.into(Mara).entries(filteredMaraData);
+        }
 
           const plantData = await SELECT.from(Plant_dummy).where({ mat_plant_MATNR: { in: materialNumbers } });
           if (plantData.length) await INSERT.into(plant).entries(plantData);
@@ -823,11 +866,11 @@ module.exports = class Service extends cds.ApplicationService {
       ip_plant.forEach(function (item) {
         payload.context.material.to_Plant.push({
           Product: replaceNull(item.mat_plant_MATNR),
-          Plant: replaceNull(item.WERKS1_WERKS),
+          Plant: replaceNull(item.WERKS),
           MRPType: replaceNull(item.DISMM),
           ProfileCode: replaceNull(item.MMSTA),
           ABCIndicator: replaceNull(item.MAABC),
-          ProfitCenter: replaceNull(item.PRCTR1_PRCTR),
+          ProfitCenter: replaceNull(item.PRCTR),
           MRPResponsible: replaceNull(item.DISPO),
           ProcurementType: replaceNull(item.BESKZ),
           PurchasingGroup: replaceNull(item.EKGRP),
@@ -1093,6 +1136,29 @@ module.exports = class Service extends cds.ApplicationService {
       const ip_Matnr = ip_MaterialID;
       const ip_NewMatnr = ip_NewMaterial;
 
+      const  materialdata = await SELECT.from(Mara).where({ MATNR: ip_NewMatnr});
+
+      const draft_material = await SELECT.from("litemdg.mara.drafts").where({ MATNR: ip_NewMatnr})
+
+      if (materialdata.length > 0 || draft_material.length > 0 ){
+        if (draft_material.length > 0){
+        var msg = "Material number : " + ip_NewMatnr + " is drafted by user: " + draft_material[0].createdby
+        req.error({
+          code: 'Validation error',
+          message: msg,
+          status: 418
+        })
+        }
+        else{
+          req.error({
+            code: 'Validation error',
+            message: "Entity already Exists",
+            status: 418
+          })
+        }
+        return
+      }
+
       const tx = cds.transaction(req);
 
       try {
@@ -1125,6 +1191,7 @@ module.exports = class Service extends cds.ApplicationService {
         await tx.run(INSERT.into("draft_draftadministrativedata").entries(draft_data));
 
         materialData.draftadministrativedata_draftuuid = draft_data.draftuuid
+        materialData.Status = 'Inactive'
 
         await tx.run(
           INSERT.into("litemdg.mara.drafts").entries(materialData)
@@ -1213,15 +1280,14 @@ module.exports = class Service extends cds.ApplicationService {
 
     });
     this.on("Rule_validation", async (req) => {
-      const { RuleHeader, RuleLineItems } = srv.entities;
+      const { RulesHeader, RuleLineItems } = srv.entities;
       const { ip_ID } = req.data;
       const ID = ip_ID
       let modifiedCondition = "";
       let error_msg, default_value;
       let error_array = [];
 
-      const ruleHeaders = await SELECT.from(RuleHeader).where({
-        tableEntity: "Material",
+      const ruleHeaders = await SELECT.from(RulesHeader).where({
         ruleType: "Validation",
       });
 

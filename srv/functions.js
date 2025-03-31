@@ -16,7 +16,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
             Request_Status: "To Be Approved",
             Multiple_Materials: "",
             Type_Request: Type_Request,
-            Description: "",
+            Description: reqData.Request_Desc,
           },
           Material: {
             Product: reqData.MATNR || "",
@@ -232,7 +232,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
     let error_msg, default_value;
     let error_array = ['1st errror', '2nd error']
   
-    const ruleHeaders = await SELECT.from(RulesHeader).where({ tableEntity: "Material", ruleType: "Validation" });
+    const ruleHeaders = await SELECT.from(RulesHeader).where({ ruleType: "Validation" });
     if (ruleHeaders.length > 0) {
       for (const ruleHeader of ruleHeaders) {
   
@@ -334,6 +334,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
         } else if (conditionMet && ruleHeader.isMandatory === true) {
           if (req.data[ruleHeader.targetField] === null || req.data[ruleHeader.targetField] === undefined) { // Corrected equality checks
             req.error(500, error_msg);
+
           }
         }
   
@@ -364,7 +365,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
             let fieldValue;
             default_value = defaultValue;
   
-            if (entity === "Plant") {
+            if (entity === "MARC") {
               if (modelTable === "MARA") {
                 const query = await SELECT.from("litemdg.mara.drafts")
                   .columns(modelTableField)
@@ -375,7 +376,7 @@ async function createWorkflowInstance(reqData, userEmail, creationTime, creation
               } else if (modelTable === "MARC") {
                 fieldValue = req.data[modelTableField];
               }
-            } else if (entity === "Material") {
+            } else if (entity === "MARA") {
               if (modelTable === "MARA") {
                 fieldValue = req.data[modelTableField];
               }

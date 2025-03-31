@@ -76,7 +76,7 @@ annotate service.Sales_Delivery with {
 }
 
 annotate service.Valuation with {
-  BWKEY         @title: 'Valuation Area';
+   BWKEY         @title: 'Valuation Area';
    STPRS         @title: 'Standard Price';
    BWTAR         @title: 'Valuation Type';
    BWTTY         @title: 'Valuation Category';
