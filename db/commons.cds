@@ -38,6 +38,7 @@ type t_Mara  {
    TRAGR:String(4);//Transportation Group
    EKWSL:String(4);//Purchasing Value Key
    QMPUR:Boolean;//QM in Procurement Is Active
+   Request_Desc      : String;
 } 
 type t_plant{
   mat_plant_MATNR : String(40);

@@ -1279,18 +1279,295 @@ module.exports = class Service extends cds.ApplicationService {
       }
 
     });
-    this.on("Rule_validation", async (req) => {
+    // this.on("Rule_validation", async (req) => {
+    //   const { RulesHeader, RuleLineItems } = srv.entities;
+    //   const { ip_ID } = req.data;
+    //   const ID = ip_ID
+    //   let modifiedCondition = "";
+    //   let error_msg, default_value;
+    //   let error_array = [];
+
+    //   const ruleHeaders = await SELECT.from(RulesHeader).where({
+    //     ruleType: "Validation",
+    //   });
+
+    //   for (const ruleHeader of ruleHeaders) {
+    //     const ruleLineItems = await SELECT.from(RuleLineItems).where({
+    //       ruleHeader_ID: ruleHeader.ID,
+    //     });
+
+    //     let conditions = [];
+
+    //     for (const rule of ruleLineItems) {
+    //       const {
+    //         modelTable,
+    //         modelTableField,
+    //         operator,
+    //         modelTableFieldValue,
+    //         errorMessage,
+    //         defaultValue,
+    //       } = rule;
+    //       let fieldValue;
+    //       error_msg = errorMessage;
+    //       default_value = defaultValue;
+
+    //       if (modelTable === "MARA") {
+    //         const query = await SELECT.from("litemdg.mara.drafts")
+    //           .columns(modelTableField)
+    //           .where({ id: ID });
+
+    //         const fieldKey = modelTableField.toLowerCase();
+    //         fieldValue = query[0] ? query[0][fieldKey] : null;
+    //       } else if (modelTable === "MARC") {
+    //         const query = await SELECT.from("litemdg.plant.drafts")
+    //           .columns(modelTableField)
+    //           .where({ mat_Plant_ID: ID });
+
+    //         const fieldKey = modelTableField.toLowerCase();
+    //         fieldValue = query[0] ? query[0][fieldKey] : null;
+    //       }
+
+    //       if (fieldValue !== undefined && fieldValue !== null) {
+    //         let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
+    //         conditions.push(condition);
+    //         if (conditions.length > 0) {
+    //           if (operator && (operator === "OR" || operator === "AND")) {
+    //             conditions[conditions.length - 1] += ` ${operator}`;
+    //           }
+    //         }
+    //       }
+    //     }
+
+    //     modifiedCondition = conditions
+    //       .join(" ")
+    //       .replace(/ OR /g, " || ")
+    //       .replace(/ AND /g, " && ")
+    //       .replace();
+
+    //     const conditionMet = evaluateCondition(modifiedCondition);
+
+    //     function evaluateCondition(condition) {
+    //       try {
+    //         return eval(condition);
+    //       } catch (error) {
+    //         console.error("Error evaluating condition:", error);
+    //         return false;
+    //       }
+    //     }
+
+    //     // if (conditionMet) {
+    //     //   let defaultValues = [];
+
+    //     //   if (
+    //     //     typeof default_value === "string" &&
+    //     //     default_value.includes(",")
+    //     //   ) {
+    //     //     defaultValues = default_value.split(",").map((val) => val.trim());
+    //     //   } else {
+    //     //     defaultValues = [default_value];
+    //     //   }
+
+    //     //   function normalizeValue(value, type) {
+    //     //     if (type === "number") {
+    //     //       return parseFloat(value);
+    //     //     } else if (type === "string") {
+    //     //       return String(value).replace(/^0+/, "");
+    //     //     }
+    //     //     return value;
+    //     //   }
+
+    //     //   const targetValue = req.data[ruleHeader.targetField];
+    //     //   const targetType = typeof targetValue;
+
+    //     //   const normalizedDefaults = defaultValues.map((val) =>
+    //     //     normalizeValue(val, targetType)
+    //     //   );
+
+    //     //   if (
+    //     //     !normalizedDefaults.includes(
+    //     //       normalizeValue(targetValue, targetType)
+    //     //     )
+    //     //   ) {
+    //     //     error_array.push(error_msg);
+    //     //     req.error({
+    //     //       code: "Validation Error",
+    //     //       message: error_msg,
+    //     //       status: 418,
+    //     //     });
+
+    //     //   }
+
+
+    //     //   // if (!defaultValues.includes(req.data[ruleHeader.targetField])) {
+    //     //   //     req.error(500, error_msg);
+    //     //   // }
+    //     //   // } else if (conditionMet && ruleHeader.isMandatory === true) {
+    //     //   //     if (req.data[ruleHeader.targetField] === null || req.data[ruleHeader.targetField] === undefined) { // Corrected equality checks
+    //     //   //         req.error(500, error_msg);
+    //     //   //     }
+    //     // }
+
+
+
+    //   }
+    //   return error_array
+
+    // });
+
+    this.on("Rule_validation", async(req) => {
       const { RulesHeader, RuleLineItems } = srv.entities;
       const { ip_ID } = req.data;
       const ID = ip_ID
       let modifiedCondition = "";
       let error_msg, default_value;
       let error_array = [];
+      var data;
 
       const ruleHeaders = await SELECT.from(RulesHeader).where({
         ruleType: "Validation",
       });
 
+      if (ruleHeaders.length>0)
+      {
+
+      for (const ruleHeader of ruleHeaders) {
+        const ruleLineItems = await SELECT.from(RuleLineItems).where({
+          ruleHeader_ID: ruleHeader.ID,
+        });
+
+        let conditions = [];
+        if (ruleLineItems.length >0 ){
+        for (const rule of ruleLineItems) {
+          const {
+            modelTable,
+            modelTableField,
+            operator,
+            modelTableFieldValue,
+            errorMessage,
+            defaultValue,
+          } = rule;
+          let fieldValue;
+          error_msg = errorMessage;
+          default_value = defaultValue;
+
+          if (modelTable === "MARA") {
+
+            const query = await SELECT.from("litemdg.mara.drafts")
+              .columns(modelTableField)
+              .where({ id: ID });
+            data =  await SELECT.from("litemdg.mara.drafts")
+            .where({ id: ID });
+
+            const fieldKey = modelTableField.toLowerCase();
+            fieldValue = query[0] ? query[0][fieldKey] : null;
+          } else if (modelTable === "MARC") {
+            const query = await SELECT.from("litemdg.plant.drafts")
+              .columns(modelTableField)
+              .where({ mat_Plant_ID: ID });
+
+            data = await SELECT.from("litemdg.plant.drafts")
+              .where({ mat_Plant_ID: ID });
+            
+
+            const fieldKey = modelTableField.toLowerCase();
+            fieldValue = query[0] ? query[0][fieldKey] : null;
+          }
+
+          if (fieldValue !== undefined && fieldValue !== null) {
+            let condition = `('${fieldValue}' == '${modelTableFieldValue}')`;
+            conditions.push(condition);
+            if (conditions.length > 0) {
+              if (operator && (operator === "OR" || operator === "AND")) {
+                conditions[conditions.length - 1] += ` ${operator}`;
+              }
+            }
+          }
+        }
+        }
+
+        modifiedCondition = conditions
+          .join(" ")
+          .replace(/ OR /g, " || ")
+          .replace(/ AND /g, " && ")
+          .replace();
+
+        const conditionMet = evaluateCondition(modifiedCondition);
+
+        function evaluateCondition(condition) {
+          try {
+            return eval(condition);
+          } catch (error) {
+            console.error("Error evaluating condition:", error);
+            return false;
+          }
+        }
+        if (conditionMet && ruleHeader.isMandatory === false) {
+  
+          let defaultValues = [];
+  
+          if (typeof default_value === 'string' && default_value.includes(',')) {
+            defaultValues = default_value.split(',').map(val => val.trim());
+          } else {
+            defaultValues = [default_value];
+          }
+  
+          function normalizeValue(value, type) {
+            if (type === "number") {
+              return parseFloat(value);
+            } else if (type === "string") {
+              return String(value).replace(/^0+/, "");
+            }
+            return value;
+          }
+  
+          const targetValue = data[0][ruleHeader.targetField.toLowerCase()];
+          const targetType = typeof targetValue;
+  
+          const normalizedDefaults = defaultValues.map(val => normalizeValue(val, targetType));
+  
+  
+          if (!normalizedDefaults.includes(normalizeValue(targetValue, targetType))) {
+            req.error({
+              code: 'Validation Error',
+              message: error_msg,
+              status: 418
+            })
+  
+          }
+  
+          // if (!defaultValues.includes(req.data[ruleHeader.targetField])) {
+          //     req.error(500, error_msg);
+          // }
+        } else if (conditionMet && ruleHeader.isMandatory === true) {
+          if (data[0][ruleHeader.targetField.toLowerCase()] === null || data[0][ruleHeader.targetField.toLowerCase()] === undefined) { // Corrected equality checks
+            req.error({
+              code: 'Validation Error',
+              message: error_msg,
+              status: 418
+            })
+
+          }
+        }
+      }
+      return error_array
+    }
+
+    });
+    this.on("Mass_Rule_validation", async (req) => {
+      const { RulesHeader, RuleLineItems, } = srv.entities;
+      const { ip_ID } = req.data;
+
+      // const ID = ip_ID
+      let modifiedCondition = "";
+      let error_msg, default_value;
+      const validateErrors = [];
+      var data;
+
+      const ruleHeaders = await SELECT.from(RulesHeader).where({
+        ruleType: "Validation",
+      });
+
+      for(const ID of ip_ID){
       for (const ruleHeader of ruleHeaders) {
         const ruleLineItems = await SELECT.from(RuleLineItems).where({
           ruleHeader_ID: ruleHeader.ID,
@@ -1312,18 +1589,24 @@ module.exports = class Service extends cds.ApplicationService {
           default_value = defaultValue;
 
           if (modelTable === "MARA") {
-            const query = await SELECT.from("litemdg.mara.drafts")
+            const query = await SELECT.from(mara_dummy)
               .columns(modelTableField)
-              .where({ id: ID });
+              .where({ MATNR: ID });
+            data = await SELECT.from(mara_dummy)
+            .where({ MATNR: ID });
 
-            const fieldKey = modelTableField.toLowerCase();
+            const fieldKey = modelTableField;
             fieldValue = query[0] ? query[0][fieldKey] : null;
           } else if (modelTable === "MARC") {
-            const query = await SELECT.from("litemdg.plant.drafts")
+            const query = await SELECT.from(Plant_dummy)
               .columns(modelTableField)
-              .where({ mat_Plant_ID: ID });
+              .where({ mat_Plant_MATNR: ID });
 
-            const fieldKey = modelTableField.toLowerCase();
+            data = await SELECT.from(Plant_dummy)
+              .columns(modelTableField)
+              .where({ mat_Plant_MATNR: ID });
+      
+            const fieldKey = modelTableField;
             fieldValue = query[0] ? query[0][fieldKey] : null;
           }
 
@@ -1354,19 +1637,17 @@ module.exports = class Service extends cds.ApplicationService {
             return false;
           }
         }
-
-        if (conditionMet) {
+        var error_msg_temp = data[0].MATNR +": " + error_msg
+        if (conditionMet && ruleHeader.isMandatory === false) {
+  
           let defaultValues = [];
-
-          if (
-            typeof default_value === "string" &&
-            default_value.includes(",")
-          ) {
-            defaultValues = default_value.split(",").map((val) => val.trim());
+  
+          if (typeof default_value === 'string' && default_value.includes(',')) {
+            defaultValues = default_value.split(',').map(val => val.trim());
           } else {
             defaultValues = [default_value];
           }
-
+  
           function normalizeValue(value, type) {
             if (type === "number") {
               return parseFloat(value);
@@ -1375,42 +1656,46 @@ module.exports = class Service extends cds.ApplicationService {
             }
             return value;
           }
-
-          const targetValue = req.data[ruleHeader.targetField];
+  
+          const targetValue = data[0][ruleHeader.targetField];
           const targetType = typeof targetValue;
-
-          const normalizedDefaults = defaultValues.map((val) =>
-            normalizeValue(val, targetType)
-          );
-
-          if (
-            !normalizedDefaults.includes(
-              normalizeValue(targetValue, targetType)
-            )
-          ) {
-            error_array.push(error_msg);
-            req.error({
-              code: "Validation Error",
-              message: error_msg,
-              status: 418,
+  
+          const normalizedDefaults = defaultValues.map(val => normalizeValue(val, targetType));
+  
+  
+          if (!normalizedDefaults.includes(normalizeValue(targetValue, targetType))) {
+            validateErrors.push({
+              matnr: data[0].MATNR,
+              errors: [
+                {
+                  message: error_msg,
+                },
+              ],
             });
-
+  
           }
-
-
+  
           // if (!defaultValues.includes(req.data[ruleHeader.targetField])) {
           //     req.error(500, error_msg);
           // }
-          // } else if (conditionMet && ruleHeader.isMandatory === true) {
-          //     if (req.data[ruleHeader.targetField] === null || req.data[ruleHeader.targetField] === undefined) { // Corrected equality checks
-          //         req.error(500, error_msg);
-          //     }
+        } else if (conditionMet && ruleHeader.isMandatory === true) {
+          if ( data[0][ruleHeader.targetField]=== '' || data[0][ruleHeader.targetField] === "0.000" || data[0][ruleHeader.targetField] === null) { // Corrected equality checks
+            validateErrors.push({
+              matnr: data[0].MATNR,
+              errors: [
+                {
+                  message: error_msg,
+                },
+              ],
+            });
+
+          }
         }
       }
-      return error_array
+      }
+      req.reply({ validation_errors: validateErrors });
 
     });
-
     return super.init();
   }
 };
