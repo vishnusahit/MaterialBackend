@@ -767,6 +767,8 @@ module.exports = class Service extends cds.ApplicationService {
           ? maxRequest.REQUEST_NUMBER + 1
           : 1;
 
+      
+      var desc = ip_mara[0].Request_Desc
       var payload = {
         definitionId:
           "eu10.bgsw-sdsc-coe-at1drpz8.changerequesttrigger.material_Governance_Process",
@@ -780,7 +782,7 @@ module.exports = class Service extends cds.ApplicationService {
               Request_Status: "To Be Approved",
               Multiple_Materials: "X",
               Type_Request: "MASS_CREATE",
-              Description : "",
+              Description : desc,
             },
             Material: [],
             to_Description: [],
