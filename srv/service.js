@@ -291,6 +291,7 @@ module.exports = class Service extends cds.ApplicationService {
                 Requested_Date: creationDate,
                 Requested_Time: creationTime,
                 Requested_on: timestamp,
+                Description : req.data.Request_Desc
               });
 
               await INSERT.into("litemdg.Change_Request_details").entries({
