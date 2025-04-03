@@ -299,6 +299,7 @@ module.exports = class Service extends cds.ApplicationService {
                 Object_ID: req.data.MATNR,
                 Description: req.data.MAKT_MAKTX,
                 Object_CUID: req.data.ID,
+                Material_type: req.data.MTART,
                 Overall_status: "Open",
 
               });
@@ -932,6 +933,7 @@ module.exports = class Service extends cds.ApplicationService {
           Description: item.MAKT_MAKTX,
           Object_CUID: "",
           Overall_status: "Open",
+          Material_type: item.MTART,
         });
       }
       number = req_no;

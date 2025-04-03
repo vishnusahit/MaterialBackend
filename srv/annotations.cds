@@ -112,4 +112,23 @@ annotate service.plant with{
          }
       ]
    };
+   
 }
+
+annotate service.plant @(Common : {
+    SideEffects: {
+        $Type : 'Common.SideEffectsType',
+        SourceProperties : [WERKS,DISPO,BESKZ,EKGRP,BEARZ,DISMM],
+        TargetProperties   : [PRCTR,DISPO,BESKZ,EKGRP,DISMM]
+    }
+});
+
+annotate service.Mara with @(Common :{
+   SideEffects  : {
+       $Type : 'Common.SideEffectsType',
+       SourceProperties: [MAKT_MAKTX],
+       TargetEntities: [to_Description]
+       
+   },
+});
+
