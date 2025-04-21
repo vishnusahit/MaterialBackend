@@ -94,3 +94,7 @@ type FieldStatus {
     Visble   : Boolean;
     Editable : Boolean;
 }
+
+type changeRequestCount {
+  number : Integer
+}

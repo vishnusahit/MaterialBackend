@@ -1,7 +1,7 @@
 const cds = require("@sap/cds");
 const { v4: uuidv4 } = require('uuid');
 const { CallEntity,Move_To_Dummy,Rules_Derivation,Rules_default,Rules_validation,createWorkflowInstance,generateCUID} = require('./functions')
-
+const {fnOpenChangeRequestCount,fnMyInboxCount} = require("./tileCountFuncionHandler");
 module.exports = class Service extends cds.ApplicationService {
   init() {
     //
@@ -25,6 +25,14 @@ module.exports = class Service extends cds.ApplicationService {
     console.log(Object.keys(this.entities));
     const srv = this;
 
+    //Anupam : For Open Change Requests
+  this.on('getOpenChangeRequestCount', async (req) => {
+      return fnOpenChangeRequestCount(req);
+  });
+  this.on('getInboxPendingRequestcount', async (req) => {
+    return fnMyInboxCount(req);
+});
+  
     srv.after(["CREATE"], "Mara.drafts", async (req) => {
 
       const { ID, MATNR } = req;

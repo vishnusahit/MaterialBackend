@@ -45,4 +45,8 @@ service litemdg {
     action InsertMaterial(ip_MaterialID:String,ip_NewMaterial:String) returns String;
     function Rule_validation(ip_ID:String) returns many String;
     action Mass_Rule_validation(ip_ID:many String)  returns many common.ValidationError;
+
+      // Action to get count of open change requests for current user
+    function getOpenChangeRequestCount() returns common.changeRequestCount; //: Anupam
+    function getInboxPendingRequestcount() returns common.changeRequestCount;
 }
