@@ -1,0 +1,24 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+<edmx:DataServices m:DataServiceVersion="2.0">
+<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZSRV_LITEMDG_VALUEHELP_API_SRV" xml:lang="en" sap:schema-version="1">
+<Annotation xmlns="http://docs.oasis-open.org/odata/ns/edm" Term="Core.SchemaVersion" String="1.0.0"/>
+<EntityType Name="ValueHelp" sap:content-version="1">
+<Key>
+<PropertyRef Name="Key"/>
+<PropertyRef Name="Value"/>
+</Key>
+<Property Name="Datamodel" Type="Edm.String" Nullable="false" MaxLength="32" sap:unicode="false" sap:label="Data Model" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+<Property Name="Key" Type="Edm.String" Nullable="false" MaxLength="32" sap:unicode="false" sap:label="Key" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+<Property Name="Value" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Value of entry" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+<Property Name="Description" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Description of entry" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+<Property Name="Timestamp" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="timestamp" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+<Property Name="Intialload" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="flag to check whether it is intial load or not" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+</EntityType>
+<EntityContainer Name="ZSRV_LITEMDG_VALUEHELP_API_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+<EntitySet Name="ValueHelpSet" EntityType="ZSRV_LITEMDG_VALUEHELP_API_SRV.ValueHelp" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+</EntityContainer>
+<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="http://BMHE1154319.apac.bosch.com:8001/sap/opu/odata/sap/ZSRV_LITEMDG_VALUEHELP_API_SRV/$metadata"/>
+<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="http://BMHE1154319.apac.bosch.com:8001/sap/opu/odata/sap/ZSRV_LITEMDG_VALUEHELP_API_SRV/$metadata"/>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

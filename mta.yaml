@@ -10,6 +10,7 @@ modules:
       - name: POS_SQL1
       - name: LiteMDG-auth
       - name: LiteMDG-destination-service
+      - name: LiteMDG-connectivity
     provides:
       - name: srv-api
         properties:
@@ -96,6 +97,11 @@ resources:
       config:
         xsappname: LiteMDG
         tenant-mode: dedicated
+  - name: LiteMDG-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
+      service-plan: lite
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

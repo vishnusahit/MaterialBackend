@@ -1,6 +1,6 @@
 using { mdg as db } from '../db/schema';
 using { mdg.commons as common } from '../db/commons';
-
+using {ZSRV_LITEMDG_VALUEHELP_API_SRV as API} from './external/ZSRV_LITEMDG_VALUEHELP_API_SRV';
 
 service litemdg {    
     @odata.draft.enabled
@@ -36,6 +36,8 @@ service litemdg {
     entity EntityItems as projection on db.Field_Properties.EntityItems;
     entity FieldAtribute as projection on db.Field_Properties.FieldAtribute;
 
+    entity Value_ListAPI as projection on API.ValueHelpSet;
+
     action ProcessExcel(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;
     action Uplod_to_Dummy(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;
     action Validate(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns many common.ValidationError;
@@ -46,7 +48,11 @@ service litemdg {
     function Rule_validation(ip_ID:String) returns many String;
     action Mass_Rule_validation(ip_ID:many String)  returns many common.ValidationError;
 
-      // Action to get count of open change requests for current user
+     // Action to get count of open change requests for current user
     function getOpenChangeRequestCount() returns common.changeRequestCount; //: Anupam
     function getInboxPendingRequestcount() returns common.changeRequestCount;
+
+    action get_ValueList(Key:String) returns String;
+
+
 }

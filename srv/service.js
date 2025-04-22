@@ -20,7 +20,9 @@ module.exports = class Service extends cds.ApplicationService {
       Valuation_dummy,
       Valuation,
       Sales_Delivery,
-      Sales_dummy
+      Sales_dummy,
+      Value_ListAPI,
+      Value_List
     } = this.entities;
     console.log(Object.keys(this.entities));
     const srv = this;
@@ -522,6 +524,82 @@ module.exports = class Service extends cds.ApplicationService {
         }
       } 
     });
+
+    srv.on(["READ"], Value_ListAPI, async (req) =>{
+
+      const conn = await cds.connect.to('ZSRV_LITEMDG_VALUEHELP_API_SRV');
+
+      const result = await conn.run(
+        SELECT.from(Value_ListAPI)
+          .columns(['Value', 'Description', 'Key', 'Datamodel'])
+           .where({Key:req.data.Key}) 
+      );
+      console.log(result);
+      
+
+      if (result.length > 0) {
+        for (const entry of result) {
+          
+          const exists = await SELECT.one.from(Value_List).where({
+            Value: entry.Value,
+            Fixed_Type: entry.Key 
+          });
+
+          if (!exists) {
+            await INSERT.into(Value_List).entries({
+              Value: entry.Value,
+              Description: entry.Description,
+              Fixed_Type: entry.Key
+            });
+          }
+        }
+      }
+    })
+
+    this.on('get_ValueList',async(req) => {
+      const { Key } = req.data;
+      var response = 'Inserted' ;
+      const conn = await cds.connect.to('ZSRV_LITEMDG_VALUEHELP_API_SRV');
+      
+      const result = await conn.run(
+        SELECT.from(Value_ListAPI)
+          .columns(['Value', 'Description', 'Key', 'Datamodel'])
+           .where({Key: Key}) 
+      );
+      console.log(result);
+      
+      
+
+      if (result.length > 0) {
+        for (const entry of result) {
+          
+          const exists = await SELECT.one.from(Value_List).where({
+            Value: entry.Value,
+            Fixed_Type: entry.Key 
+          });
+
+          if (!exists) {
+            await INSERT.into(Value_List).entries({
+              Value: entry.Value,
+              Description: entry.Description,
+              Fixed_Type: entry.Key
+            });
+          }
+        }
+    
+
+      }
+      if (req.errors){
+        if(result.length > 0){
+        response = "Insertion Failed";
+       }
+      }
+      else if(result.length === 0){
+        response = "Data not found"
+      }
+     return response;
+
+    })
    
     this.on("Validate", async (req) => {
       const { ip_mara, ip_plant, ip_storage } = req.data;

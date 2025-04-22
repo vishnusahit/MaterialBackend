@@ -60,7 +60,27 @@
           "destination": "sap_process_automation_service_user_access_New"
         }
       },
-      "auth": "xsuaa"
+      "ZTEST_API_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/ZTEST_API_SRV",
+        "credentials": {
+          "destination": "W46",
+          "path": "/sap/opu/odata/sap/ZTEST_API_SRV"
+        }
+      },
+      "auth": "xsuaa",
+      "connectivity": true,
+      "ZSRV_LITEMDG_VALUEHELP_API_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/ZSRV_LITEMDG_VALUEHELP_API_SRV",
+        "credentials": {
+          "destination": "W46",
+          "path": "/sap/opu/odata/sap/ZSRV_LITEMDG_VALUEHELP_API_SRV",
+          "requestTimeout": 1200000
+        },
+        "csrf": true,
+        "csrfInBatch": true
+      }
     },
     "server": {
       "body_parser": {

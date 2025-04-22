@@ -1,0 +1,91 @@
+{
+ "meta": {
+  "creator": "cds-dk 8.7.1"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "ZSRV_LITEMDG_VALUEHELP_API_SRV": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true",
+   "@sap.supported.formats": "atom json xlsx"
+  },
+  "ZSRV_LITEMDG_VALUEHELP_API_SRV.ValueHelpSet": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.deletable": "false",
+   "@sap.pageable": "false",
+   "@sap.content.version": "1",
+   "elements": {
+    "Key": {
+     "key": true,
+     "type": "cds.String",
+     "length": 32,
+     "@sap.unicode": "false",
+     "@sap.label": "Key",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "notNull": true
+    },
+    "Value": {
+     "key": true,
+     "type": "cds.LargeString",
+     "@sap.unicode": "false",
+     "@sap.label": "Value of entry",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "notNull": true
+    },
+    "Datamodel": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.unicode": "false",
+     "@sap.label": "Data Model",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "notNull": true
+    },
+    "Description": {
+     "type": "cds.LargeString",
+     "@sap.unicode": "false",
+     "@sap.label": "Description of entry",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "notNull": true
+    },
+    "Timestamp": {
+     "type": "cds.LargeString",
+     "@sap.unicode": "false",
+     "@sap.label": "timestamp",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "notNull": true
+    },
+    "Intialload": {
+     "type": "cds.String",
+     "length": 1,
+     "@sap.unicode": "false",
+     "@sap.label": "flag to check whether it is intial load or not",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "notNull": true
+    }
+   }
+  }
+ }
+}
