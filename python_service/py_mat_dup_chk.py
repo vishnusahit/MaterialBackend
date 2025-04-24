@@ -24,10 +24,10 @@ env = AppEnv()
 
 def fetch_data(creation_type,ID):
     
-    conn = psycopg2.connect(database="MdVKYuOXRgcg",
-                        host="postgres-fbf38ca8-ff94-472c-a9b4-d2311f22682a.ce4jcviyvogb.eu-central-1.rds.amazonaws.com",
-                        user="a0fad52ec8e6",
-                        password="b00eaa277678d9a79f8921f5529d35",
+    conn = psycopg2.connect(database="pQcpyrCJMSCZ",
+                        host="postgres-4be2238a-0b4c-4a2d-81c7-de333896e5af.ce4jcviyvogb.eu-central-1.rds.amazonaws.com",
+                        user="617a727d92ba",
+                        password="bf2e926e0ec17095a7f558a1fdc872e9",
                         port="7785")
     
       
@@ -209,9 +209,21 @@ def fetch_data(creation_type,ID):
      # duplicates = duplicates.groupby('Cluster').filter(lambda x: len(x) > 1)
      # overall_max_request_number = duplicates['requestnumber'].max()
      # final_duplicates = duplicates[duplicates['requestnumber'] == overall_max_request_number]
-     final_duplicates = duplicates.groupby('Cluster').filter(
-     lambda x: len(x) > 1 and overall_max_request_number in x['requestnumber'].values
-     and latest_record_max_no in x['max_no'].values)
+
+     #  final_duplicates = duplicates.groupby('Cluster').filter(
+     #  lambda x: len(x) > 1 and overall_max_request_number in x['requestnumber'].values
+     #  and latest_record_max_no in x['max_no'].values)
+
+     #  final_duplicates = duplicates.groupby('Cluster').filter(lambda x: len(x) > 1 
+     #   and any((x['requestnumber'] == overall_max_request_number) & (x['max_no'] == latest_record_max_no))
+     #  )
+
+     valid_clusters = duplicates.groupby('Cluster').filter(
+     lambda x: any((x['requestnumber'] == overall_max_request_number) & (x['max_no'] == latest_record_max_no)))['Cluster'].unique()  # Get unique cluster IDs
+
+     # Step 2: Keep all records from the identified clusters
+     final_duplicates = duplicates[duplicates['Cluster'].isin(valid_clusters)]
+
 
      # overall_max_no = final_duplicates['max_no'].max()
 
@@ -222,19 +234,25 @@ def fetch_data(creation_type,ID):
      print(duplicates) 
 
     elif creation_type == 'SINGLE':
-        
-     final_duplicates = duplicates.groupby('Cluster').filter(lambda x: ID in x['id'].values)
+    # Get the cluster where the given ID is present
+     cluster_data = duplicates.groupby('Cluster').filter(lambda x: ID in x['id'].values)
+    # Check if the cluster contains only one record (i.e., the given ID itself)
+     if len(cluster_data) == 1:
+        final_duplicates = pd.DataFrame()  # Return an empty DataFrame
+     else:
+        cluster_data = cluster_data.drop_duplicates(subset=['id', 'matnr', 'Cluster'])
+        final_duplicates = cluster_data
+    #  final_duplicates = duplicates.groupby('Cluster').filter(lambda x: ID in x['id'].values)
       
-
     conn.close()
     return(final_duplicates)
 def test():
   
-    conn = psycopg2.connect(database="hOdGtSHCVhyc",
-                        host="postgres-c96a63a3-9cc4-4b13-82fc-c73dd26fcc37.ce4jcviyvogb.eu-central-1.rds.amazonaws.com",
-                        user="6af286503a9f",
-                        password="b42f2f1cd52af13e915f0",
-                        port="7836")
+    conn = psycopg2.connect(database="pQcpyrCJMSCZ",
+                        host="postgres-4be2238a-0b4c-4a2d-81c7-de333896e5af.ce4jcviyvogb.eu-central-1.rds.amazonaws.com",
+                        user="617a727d92ba",
+                        password="bf2e926e0ec17095a7f558a1fdc872e9",
+                        port="7785")
     
 
     query = """
