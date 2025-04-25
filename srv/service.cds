@@ -27,6 +27,7 @@ service litemdg {
     entity Valuation as projection on db.Valuation;
     entity Valuation_dummy as projection on db.Dummy.Valuation_dummy;
     entity Change_Request_Details as projection on db.REQUEST_NUMBER.Change_Request_details;
+    
     @odata.draft.enabled
     entity Fixed_Values as projection on db.Value_help.Fixed_Values;
     entity Value_List as projection on db.Value_help.Value_List;
@@ -55,4 +56,121 @@ service litemdg {
     action get_ValueList(Key:String) returns String;
 
 
+  //entity Exposed for Dashboard
+  entity RequestStats           as
+    select from Change_Request {
+      key REQUEST_NUMBER,
+          REQUEST_TYPE,
+          Overall_status,
+          Requested_Date,
+          Aprroved_date,
+          Requested_By,
+          count( * ) as requestCount : Integer
+    }
+    group by
+      REQUEST_NUMBER,
+      REQUEST_TYPE,
+      Overall_status,
+      Requested_Date,
+      Aprroved_date,
+      Requested_By;
+
+  // entity ObjectStats @(cds.redirection.target: 'Change_Request_Details') as  select from Change_Request_Details
+  //     {
+  //       key Change,
+  //       key Object_ID,
+  //       Material_type,
+  //       Overall_status,
+  //       count(*) as ObjectStatsCount : Integer
+  //     }
+  //     group by
+  //       Change,
+  //       Object_ID,
+  //       Material_type,
+  //       Overall_status;
+  // other fields
+
+  entity ObjectStats            as
+    select from Change_Request_Details {
+      key Change.REQUEST_NUMBER,
+      key Object_ID,
+          Material_type,
+          Overall_status,
+          count( * ) as ObjectStatsCount : Integer
+    }
+    group by
+      Change.REQUEST_NUMBER,
+      Object_ID,
+      Material_type,
+      Overall_status;
+
+  entity MaraStagType           as
+    select from Mara {
+      key ID,
+      key MATNR,
+          MTART,
+          count( * ) as maraTypeCount : Integer
+    }
+    group by
+      ID,
+      MATNR,
+      MTART;
+
+
+  entity MaraType               as
+    select from Mara {
+
+      MATNR,
+      MTART,
+      count( * ) as maraTypeCount : Integer
+    }
+    group by
+
+      MATNR,
+      MTART;
 }
+
+
+annotate litemdg.MaraType with {
+  @Analytics.Dimension: true
+  MTART;
+
+  @Analytics.Measure  : true
+  @Aggregation.default: #COUNTDISTINCT
+  @Core.Computed
+  maraTypeCount @title: 'Counts';
+
+};
+
+annotate litemdg.MaraStagType with {
+  @Analytics.Dimension: true
+  MTART;
+
+  @Analytics.Measure  : true
+  @Aggregation.default: #COUNTDISTINCT
+  @Core.Computed
+  maraTypeCount @title: 'Counts';
+
+};
+
+annotate litemdg.RequestStats with {
+  @Analytics.Dimension: true
+  REQUEST_TYPE;
+
+  @Analytics.Measure  : true
+  @Aggregation.default: #COUNTDISTINCT
+  @Core.Computed
+  requestCount @title: 'Counts';
+
+};
+
+annotate litemdg.ObjectStats with {
+  @Analytics.Dimension: true
+  Material_type;
+
+  @Analytics.Measure  : true
+  @Aggregation.default: #COUNTDISTINCT
+  @Core.Computed
+  ObjectStatsCount @title: 'Counts';
+
+};
