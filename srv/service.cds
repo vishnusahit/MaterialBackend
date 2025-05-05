@@ -37,6 +37,9 @@ service litemdg {
     entity EntityItems as projection on db.Field_Properties.EntityItems;
     entity FieldAtribute as projection on db.Field_Properties.FieldAtribute;
 
+    entity ChangeLog as projection on db.Change_tracking.ChangeLog;
+   
+
     entity Value_ListAPI as projection on API.ValueHelpSet;
 
     action ProcessExcel(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;

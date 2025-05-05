@@ -249,6 +249,21 @@ context Value_help {
 
 }
 
+context Change_tracking {
+    entity ChangeLog : managed {
+        key id         : UUID;
+            operation  : String(10); // 'CREATE', 'UPDATE', 'DELETE'
+            entityName : String(255); // Name of the changed entity
+            entityKey  : String(4000); // String representation of the entity's key(s)
+            changedAt  : String; // Timestamp of the change
+            changedBy  : String(255); // User who made the change
+            fieldName  : String(255); // Name of the changed field
+            oldValue   : LargeString; // Previous value
+            newValue   : LargeString; // New value
+            notes      : String;
+    }
+}
+
 
 context Field_Properties {
     entity ModelHeader : managed {
@@ -261,6 +276,9 @@ context Field_Properties {
     entity EntityItems : managed {
         key entity        : String;
             description   : String;
+            parent_entity      : String;   
+            child_element      : String;   
+            child_entity       : String; 
 
 
             fieldAtribute : Composition of many FieldAtribute

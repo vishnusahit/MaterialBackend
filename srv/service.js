@@ -1,6 +1,10 @@
 const cds = require("@sap/cds");
 const { v4: uuidv4 } = require('uuid');
 const { CallEntity,Move_To_Dummy,Rules_Derivation,Rules_default,Rules_validation,createWorkflowInstance,generateCUID} = require('./functions')
+const { getKeyPredicateDynamic,
+  logChange,
+  processComposedEntities,
+  fetchBeforeChildren } = require('./ChangeTrackingHandler')
 const {fnOpenChangeRequestCount,fnMyInboxCount} = require("./tileCountFuncionHandler");
 module.exports = class Service extends cds.ApplicationService {
   init() {
@@ -22,7 +26,9 @@ module.exports = class Service extends cds.ApplicationService {
       Sales_Delivery,
       Sales_dummy,
       Value_ListAPI,
-      Value_List
+      Value_List,
+      ChangeLog,
+      EntityItems
     } = this.entities;
     console.log(Object.keys(this.entities));
     const srv = this;
@@ -274,6 +280,11 @@ module.exports = class Service extends cds.ApplicationService {
           : 1;
       if (req.event === "CREATE") {
         if (flag.CREATION_TYPE == "SINGLE") {
+          const data = req.data
+          const parentEntity = req.target;
+          const parentKey = getKeyPredicateDynamic(parentEntity.name, req.data);
+          const changedBy = req.user.id;
+          const changedAt = new Date();
           await Rules_validation(req,srv);
           if (req.errors) throw req.reject()
 
@@ -315,6 +326,30 @@ module.exports = class Service extends cds.ApplicationService {
                 Material_type : req.data.MTART
 
               });
+              await logChange(
+                "CREATE",
+                parentEntity.name,
+                parentKey,
+                changedAt,
+                changedBy,
+                null,
+                null,
+                parentKey,
+                req_no,
+                ChangeLog
+              );
+    
+              await processComposedEntities(
+                parentEntity.name,
+                data,
+                parentKey,
+                "CREATE",
+                changedAt,
+                changedBy,
+                EntityItems,
+                ChangeLog,
+                req_no
+              );
 
               req.notify(`Request Number#${req_no} submitted for approval`);
               
@@ -323,6 +358,32 @@ module.exports = class Service extends cds.ApplicationService {
       }
       if (req.event === "UPDATE") {
         await Rules_validation(req,srv)
+       
+        const parentEntity = req.target;
+
+        let beforeDataPromise;
+
+        const whereClause = {};
+        let hasKeys = false;
+        if (parentEntity.keys) {
+          for (const key of Object.keys(parentEntity.keys)) {
+            if (req.data[key] !== undefined) {
+              whereClause[key] = req.data[key];
+              hasKeys = true;
+            }
+          }
+        }
+        if (hasKeys) {
+          beforeDataPromise = SELECT.one(parentEntity.name).where(whereClause); //  Use whereClause
+        } else {
+          beforeDataPromise = SELECT.one(parentEntity.name).where(req.data);
+        }
+        const changedBy = req.user.id;
+        const changedAt = new Date();
+
+        const beforeData = await beforeDataPromise;
+        req._beforeData = beforeData;
+        
         if (req.errors) throw req.reject()
         req.data.Status = 'Inactive'
         var Type_Request = 'CHANGE'
@@ -353,6 +414,42 @@ module.exports = class Service extends cds.ApplicationService {
             Material_type : req.data.MTART,
             Overall_status: "Open",
           });
+
+          
+          if (beforeData) {
+            for (const field in req.data) {
+              if (
+                parentEntity.elements[field] &&
+                !parentEntity.elements[field].isAssociation &&
+                !parentEntity.elements[field].isComposition &&
+                beforeData[field] !== req.data[field]
+              ) {
+                await logChange(
+                  "UPDATE",
+                  parentEntity.name,
+                  getKeyPredicateDynamic(parentEntity.name, req.data),
+                  changedAt,
+                  changedBy,
+                  field,
+                  beforeData[field],
+                  req.data[field],
+                  req_no,
+                  ChangeLog
+                );
+              }
+            }
+          }
+          await processComposedEntities(
+            parentEntity.name,
+            req.data,
+            getKeyPredicateDynamic(parentEntity.name, req.data),
+            "UPDATE",
+            changedAt,
+            changedBy,
+            EntityItems,
+            ChangeLog,
+            req_no
+          );
           req.notify(`Request Number#${req_no} submitted for approval`);
           
         }
