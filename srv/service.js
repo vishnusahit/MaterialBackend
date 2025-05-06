@@ -334,7 +334,7 @@ module.exports = class Service extends cds.ApplicationService {
                 changedBy,
                 null,
                 null,
-                parentKey,
+                null,
                 req_no,
                 ChangeLog
               );

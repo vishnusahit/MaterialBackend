@@ -1,34 +1,76 @@
-const getKeyPredicateDynamic = (entityName, data, config) => {
-    const entity = cds.model.definitions[entityName];
-    if (!entity) return "";
+const getKeyPredicateDynamic = (entityName, data, config, skipSlice = false) => {
+  const entity = cds.model.definitions[entityName];
+  if (!entity) return "";
 
-    // let keys = entity.keys.map(k => k.name);
-    let keys = Object.keys(entity.keys);
-    if (config && config.key_fields) {
-      keys = config.key_fields.split(',').map(k => k.trim());
-      if (config.foreign_key_fields) {
-        keys = [...config.foreign_key_fields.split(',').map(k => k.trim()), ...keys];
-      }
+  // let keys = entity.keys.map(k => k.name);
+  let keys = Object.keys(entity.keys);
+  if (config && config.key_fields) {
+    keys = config.key_fields.split(',').map(k => k.trim());
+    if (config.foreign_key_fields) {
+      keys = [...config.foreign_key_fields.split(',').map(k => k.trim()), ...keys];
     }
+  }
 
-    const keyValues = keys.map(key => data[key]);
-    return keyValues.filter(v => v !== undefined).join('|');
-  };
+  let keyValues = keys.map((key) => data[key]).filter((v) => v !== undefined);
+
+if (!skipSlice) {
+  keyValues = keyValues.slice(1); 
+}
+
+return keyValues.join("|");
+};
 
   // Function to log change
-  const logChange = async (operation, entityName, entityKey, changedAt, changedBy, fieldName, oldValue, newValue, note, ChangeLog) => {
-    await INSERT.into(ChangeLog).entries({
-      operation,
-      entityName,
-      entityKey,
-      changedAt,
-      changedBy,
-      fieldName,
-      oldValue: oldValue !== null && typeof oldValue === 'object' ? JSON.stringify(oldValue) : oldValue?.toString(),
-      newValue: newValue !== null && typeof newValue === 'object' ? JSON.stringify(newValue) : newValue?.toString(),
-      notes: note
-    });
-  };
+const logChange = async (operation, entityName, entityKey, changedAt, changedBy, fieldName, oldValue, newValue, note, ChangeLog) => {
+  const entityDef = cds.model.definitions[entityName];
+  let uiSection;
+  let fieldDesc = fieldName
+  if (entityDef && entityDef.elements && entityDef.elements[fieldName]) {
+    const element = entityDef.elements[fieldName];
+    const annotations = entityDef['$flatAnnotations'] || {};
+    // Try fetching label or @Common.Label annotation
+    // fieldDesc = element['@Common.Label'] || element['@title'] || fieldName;
+    // fieldDesc = `${fieldDesc} (${fieldName})`; // Final formatted field label
+    var label = element['@Common.Label'] || element['@title'];
+    fieldDesc = label && label !== fieldName ? `${label} (${fieldName})` : fieldName;
+    for (const [annoKey, value] of Object.entries(annotations)) {
+      if (
+        annoKey.startsWith('@UI.FieldGroup#') &&
+        annoKey.endsWith('.Data') &&
+        Array.isArray(value)
+      ) {
+        const found = value.find(
+          item => item?.Value === fieldName || item?.Value?.['='] === fieldName
+        );
+
+        if (found) {
+          // Extract group name
+          const rawGroupName = annoKey.split('#')[1].split('.')[0];
+          const groupName = rawGroupName.replace(/\d+$/, '');
+          uiSection = groupName;
+          break;
+        }
+      }
+    }
+  }
+  fieldName = fieldDesc;
+  const entity = entityName.split('.')[1];
+  const section = entity + '(' + uiSection + ')';
+  entityName = section || entityName;
+
+
+  await INSERT.into(ChangeLog).entries({
+    operation,
+    entityName,
+    entityKey,
+    changedAt,
+    changedBy,
+    fieldName,
+    oldValue: oldValue !== null && typeof oldValue === 'object' ? JSON.stringify(oldValue) : oldValue?.toString(),
+    newValue: newValue !== null && typeof newValue === 'object' ? JSON.stringify(newValue) : newValue?.toString(),
+    notes: note
+  });
+};
 
   // Recursive function to process child entities
   // const processComposedEntities = async (parentEntityName, parentData, parentKey, operation, changedAt, changedBy) => {
@@ -80,7 +122,7 @@ const getKeyPredicateDynamic = (entityName, data, config) => {
   //   }
   // };
   const processComposedEntities = async (parentEntityName, parentData, parentKey, operation, changedAt, changedBy, EntityItems, ChangeLog, req_no) => {
-    const childConfigs = await SELECT.from(EntityItems).where({ entity: parentEntityName });
+    const childConfigs = await SELECT.from(EntityItems).where({ parent_entity: parentEntityName });
   
     for (const config of childConfigs) {
       const childElementNames = config.child_element ? config.child_element.split(',').map(s => s.trim()) : [];
@@ -174,7 +216,7 @@ const getKeyPredicateDynamic = (entityName, data, config) => {
   
               // Recursive call for the current child entity
               // await processComposedEntities(childEntityName, child, childKeyPart, operation, changedAt, changedBy);
-              await processComposedEntities(childEntityName, child, combinedKey, operation, changedAt, changedBy,EntityItems, ChangeLog,req_no);
+              await processComposedEntities(childEntityName, child, combinedKey, operation, changedAt, changedBy,EntityItems,ChangeLog,req_no);
             }
           }
         }
@@ -232,7 +274,7 @@ const getKeyPredicateDynamic = (entityName, data, config) => {
       const whereClause = {};
       let hasKeys = false;
   
-      const childKeyPredicate = getKeyPredicateDynamic(childEntityName, child, config);
+      const childKeyPredicate = getKeyPredicateDynamic(childEntityName, child, config, true);
       let keyValues;
       if (childKeyPredicate.includes('=')) {
         keyValues = childKeyPredicate.split(',');
