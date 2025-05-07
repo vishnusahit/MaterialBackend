@@ -22,6 +22,7 @@ return keyValues.join("|");
 
   // Function to log change
 const logChange = async (operation, entityName, entityKey, changedAt, changedBy, fieldName, oldValue, newValue, note, ChangeLog,EntityItems,parentKey) => {
+  console.log("inside log change");
   const entityDef = cds.model.definitions[entityName];
   let uiSection;
   let fieldDesc = fieldName
@@ -57,8 +58,8 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
   const entity = entityName.split('.')[1];
   const section = entity + '(' + uiSection + ')';
   // entityName = section || entityName;
-  const childConfigs = await SELECT.from(EntityItems).where({ entity: entityName });
-  entityName = childConfigs[0].description;
+  const childConfigs = await SELECT.from(EntityItems).where({  parent_entity: entityName });
+  entityName = childConfigs[0].description || entity;
 
 
 
@@ -126,6 +127,7 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
   //   }
   // };
   const processComposedEntities = async (parentEntityName, parentData, parentKey, operation, changedAt, changedBy, EntityItems, ChangeLog, req_no,key) => {
+    console.log("inside child entites")
     const childConfigs = await SELECT.from(EntityItems).where({ parent_entity: parentEntityName });
   
     for (const config of childConfigs) {

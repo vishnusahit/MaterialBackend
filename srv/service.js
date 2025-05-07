@@ -431,10 +431,11 @@ module.exports = class Service extends cds.ApplicationService {
                 !parentEntity.elements[field].isComposition &&
                 beforeData[field] !== req.data[field]
               ) {
+                console.log("comparing in update");
                 await logChange(
                   "UPDATE",
                   parentEntity.name,
-                  getKeyPredicateDynamic(parentEntity.name, req.data),
+                  parentKey,
                   changedAt,
                   changedBy,
                   field,
@@ -448,6 +449,7 @@ module.exports = class Service extends cds.ApplicationService {
               }
             }
           }
+          console.log("after logging in");
           await processComposedEntities(
             parentEntity.name,
             req.data,
