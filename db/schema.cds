@@ -261,6 +261,7 @@ context Change_tracking {
             oldValue   : LargeString; // Previous value
             newValue   : LargeString; // New value
             notes      : String;
+            parentKey:String;
     }
 }
 

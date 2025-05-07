@@ -21,7 +21,7 @@ return keyValues.join("|");
 };
 
   // Function to log change
-const logChange = async (operation, entityName, entityKey, changedAt, changedBy, fieldName, oldValue, newValue, note, ChangeLog) => {
+const logChange = async (operation, entityName, entityKey, changedAt, changedBy, fieldName, oldValue, newValue, note, ChangeLog,EntityItems,parentKey) => {
   const entityDef = cds.model.definitions[entityName];
   let uiSection;
   let fieldDesc = fieldName
@@ -33,30 +33,33 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
     // fieldDesc = `${fieldDesc} (${fieldName})`; // Final formatted field label
     var label = element['@Common.Label'] || element['@title'];
     fieldDesc = label && label !== fieldName ? `${label} (${fieldName})` : fieldName;
-    for (const [annoKey, value] of Object.entries(annotations)) {
-      if (
-        annoKey.startsWith('@UI.FieldGroup#') &&
-        annoKey.endsWith('.Data') &&
-        Array.isArray(value)
-      ) {
-        const found = value.find(
-          item => item?.Value === fieldName || item?.Value?.['='] === fieldName
-        );
+    // for (const [annoKey, value] of Object.entries(annotations)) {
+    //   if (
+    //     annoKey.startsWith('@UI.FieldGroup#') &&
+    //     annoKey.endsWith('.Data') &&
+    //     Array.isArray(value)
+    //   ) {
+    //     const found = value.find(
+    //       item => item?.Value === fieldName || item?.Value?.['='] === fieldName
+    //     );
 
-        if (found) {
-          // Extract group name
-          const rawGroupName = annoKey.split('#')[1].split('.')[0];
-          const groupName = rawGroupName.replace(/\d+$/, '');
-          uiSection = groupName;
-          break;
-        }
-      }
-    }
+    //     if (found) {
+    //       // Extract group name
+    //       const rawGroupName = annoKey.split('#')[1].split('.')[0];
+    //       const groupName = rawGroupName.replace(/\d+$/, '');
+    //       uiSection = groupName;
+    //       break;
+    //     }
+    //   }
+    // }
   }
   fieldName = fieldDesc;
   const entity = entityName.split('.')[1];
   const section = entity + '(' + uiSection + ')';
-  entityName = section || entityName;
+  // entityName = section || entityName;
+  const childConfigs = await SELECT.from(EntityItems).where({ entity: entityName });
+  entityName = childConfigs[0].description;
+
 
 
   await INSERT.into(ChangeLog).entries({
@@ -68,7 +71,8 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
     fieldName,
     oldValue: oldValue !== null && typeof oldValue === 'object' ? JSON.stringify(oldValue) : oldValue?.toString(),
     newValue: newValue !== null && typeof newValue === 'object' ? JSON.stringify(newValue) : newValue?.toString(),
-    notes: note
+    notes: note,
+    parentKey
   });
 };
 
@@ -121,7 +125,7 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
   //     }
   //   }
   // };
-  const processComposedEntities = async (parentEntityName, parentData, parentKey, operation, changedAt, changedBy, EntityItems, ChangeLog, req_no) => {
+  const processComposedEntities = async (parentEntityName, parentData, parentKey, operation, changedAt, changedBy, EntityItems, ChangeLog, req_no,key) => {
     const childConfigs = await SELECT.from(EntityItems).where({ parent_entity: parentEntityName });
   
     for (const config of childConfigs) {
@@ -155,7 +159,7 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
                 //   }
                 // }
                 const childId = child[ChildEntity.keys[0]];
-                await logChange(operation, ChildEntity.name, childKeyPart, changedAt, changedBy, null, null, childId, req_no,ChangeLog);
+                await logChange(operation, ChildEntity.name, childKeyPart, changedAt, changedBy, null, null, childId, req_no,ChangeLog,EntityItems,key);
               } else if (operation === 'DELETE') {
                 const beforeChildren = Array.isArray(parentData._beforeData[childCollectionName]) ? parentData._beforeData[childCollectionName] : [parentData._beforeData[childCollectionName]];
                 const matchingBeforeChild = beforeChildren.find(before => getKeyPredicateDynamic(childEntityName, before, config) === childKeyPart);
@@ -192,7 +196,9 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
                         matchingBeforeChild[field],
                         child[field],
                         req_no,
-                        ChangeLog
+                        ChangeLog,
+                        EntityItems,
+                        key
                       );
                     }
                   }
@@ -209,14 +215,16 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
                     null,
                     childKeyPart,
                     req_no,
-                    ChangeLog
+                    ChangeLog,
+                    EntityItems,
+                    key
                   );
                 }
               }
   
               // Recursive call for the current child entity
               // await processComposedEntities(childEntityName, child, childKeyPart, operation, changedAt, changedBy);
-              await processComposedEntities(childEntityName, child, combinedKey, operation, changedAt, changedBy,EntityItems,ChangeLog,req_no);
+              await processComposedEntities(childEntityName, child, combinedKey, operation, changedAt, changedBy,EntityItems,ChangeLog,req_no,key);
             }
           }
         }

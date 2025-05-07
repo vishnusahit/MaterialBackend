@@ -283,6 +283,7 @@ module.exports = class Service extends cds.ApplicationService {
           const data = req.data
           const parentEntity = req.target;
           const parentKey = getKeyPredicateDynamic(parentEntity.name, req.data);
+          const formattedKey = parentKey.replaceAll('|', ',');
           const changedBy = req.user.id;
           const changedAt = new Date();
           await Rules_validation(req,srv);
@@ -336,7 +337,9 @@ module.exports = class Service extends cds.ApplicationService {
                 null,
                 null,
                 req_no,
-                ChangeLog
+                ChangeLog,
+                EntityItems,
+                formattedKey
               );
     
               await processComposedEntities(
@@ -348,7 +351,8 @@ module.exports = class Service extends cds.ApplicationService {
                 changedBy,
                 EntityItems,
                 ChangeLog,
-                req_no
+                req_no,
+                formattedKey
               );
 
               req.notify(`Request Number#${req_no} submitted for approval`);
@@ -360,6 +364,9 @@ module.exports = class Service extends cds.ApplicationService {
         await Rules_validation(req,srv)
        
         const parentEntity = req.target;
+        const parentKey = getKeyPredicateDynamic(parentEntity.name, req.data);
+
+        const formattedKey = parentKey.replaceAll('|', ',');
 
         let beforeDataPromise;
 
@@ -434,7 +441,9 @@ module.exports = class Service extends cds.ApplicationService {
                   beforeData[field],
                   req.data[field],
                   req_no,
-                  ChangeLog
+                  ChangeLog,
+                  EntityItems,
+                  formattedKey
                 );
               }
             }
@@ -448,7 +457,8 @@ module.exports = class Service extends cds.ApplicationService {
             changedBy,
             EntityItems,
             ChangeLog,
-            req_no
+            req_no,
+            formattedKey
           );
           req.notify(`Request Number#${req_no} submitted for approval`);
           
