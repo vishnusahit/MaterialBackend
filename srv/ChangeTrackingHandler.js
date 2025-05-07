@@ -59,7 +59,13 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
   const section = entity + '(' + uiSection + ')';
   // entityName = section || entityName;
   const childConfigs = await SELECT.from(EntityItems).where({  parent_entity: entityName });
-  entityName = childConfigs[0].description || entity;
+  // entityName = childConfigs[0].description || entity;
+  if (childConfigs?.length > 0 && childConfigs[0].description) {
+    entityName = childConfigs[0].description;
+  }
+  else{
+    entityName = entity;
+  }
 
 
 
@@ -161,7 +167,7 @@ const logChange = async (operation, entityName, entityKey, changedAt, changedBy,
                 //   }
                 // }
                 const childId = child[ChildEntity.keys[0]];
-                await logChange(operation, ChildEntity.name, childKeyPart, changedAt, changedBy, null, null, childId, req_no,ChangeLog,EntityItems,key);
+                await logChange(operation, ChildEntity.name, childKeyPart, changedAt, changedBy, null, null, null, req_no,ChangeLog,EntityItems,key);
               } else if (operation === 'DELETE') {
                 const beforeChildren = Array.isArray(parentData._beforeData[childCollectionName]) ? parentData._beforeData[childCollectionName] : [parentData._beforeData[childCollectionName]];
                 const matchingBeforeChild = beforeChildren.find(before => getKeyPredicateDynamic(childEntityName, before, config) === childKeyPart);
