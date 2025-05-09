@@ -23,6 +23,10 @@ service litemdg {
     entity Change_Request as projection on db.REQUEST_NUMBER.Change_Request;
     entity Storage_Location as projection on db.Storage_Location;
     entity Sales_Delivery as projection on db.Sales_Delivery;
+    entity Warehouse as projection on db.Warehouse;
+    entity Storage_type as projection on db.Storage_type;
+    entity Sales_tax as projection on db.Sales_tax;
+    entity Alternate_UOM as projection on db.Alternate_UOM;
     entity Sales_dummy as projection on db.Dummy.Sales_Delivery_dummy;
     entity Valuation as projection on db.Valuation;
     entity Valuation_dummy as projection on db.Dummy.Valuation_dummy;
