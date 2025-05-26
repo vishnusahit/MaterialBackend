@@ -167,6 +167,17 @@ annotate service.Storage_Location with {
    LGPBE @title: 'Storage Bin';
 };
 
+annotate ApproverMatrix with {
+    Model            @title: 'Model';
+    Entity           @title: 'Entity';
+    ControlField     @title: 'Control Field';
+    ControlFieldName @title: 'Control Field Name';
+    Value            @title: 'Value';
+    Approver_L1      @title: 'Approver L1';
+    Approver_L2      @title: 'Approver L2';
+    Approver_L3      @title: 'Approver L3';
+}
+
 annotate service.plant with {
    WERKS @Common.ValueList: {
       CollectionPath: 'Value_List',

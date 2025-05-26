@@ -253,6 +253,17 @@ entity CAPM_Field_Mapping {
         Field_Description : String;
 }
 
+entity ApproverMatrix {
+    key Model            : String;
+    key Entity           : String;
+    key ControlField     : String;
+    key ControlFieldName : String;
+    key Value            : String;
+        Approver_L1      : String;
+        Approver_L2      : String;
+        Approver_L3      : String;
+}
+
 
 context REQUEST_NUMBER {
 

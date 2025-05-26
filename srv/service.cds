@@ -45,6 +45,8 @@ service litemdg {
    
 
     entity Value_ListAPI as projection on API.ValueHelpSet;
+    @odata.draft.enabled
+    entity ApproverMatrix as projection on db.ApproverMatrix;
 
     action ProcessExcel(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;
     action Uplod_to_Dummy(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;
