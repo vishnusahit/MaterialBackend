@@ -839,6 +839,7 @@ module.exports = class Service extends cds.ApplicationService {
         for (const entry of ip_mara) {
           entry.REQUEST_NUMBER = req_no;
           entry.MAX_NO = max_no;
+          entry.CREATION_TYPE = 'MASS';
           entry.Status = "Inactive";
         }
 
