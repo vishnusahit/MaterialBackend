@@ -167,7 +167,7 @@ annotate service.Storage_Location with {
    LGPBE @title: 'Storage Bin';
 };
 
-annotate ApproverMatrix with {
+annotate service.ApproverMatrix with {
     Model            @title: 'Model';
     Entity           @title: 'Entity';
     ControlField     @title: 'Control Field';
