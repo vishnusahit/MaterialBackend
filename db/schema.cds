@@ -102,15 +102,15 @@ entity Warehouse {
 entity Storage_type {
         @UI.Hidden
     key Warehouse : Association to Warehouse; // Material Number
-    key LGTYP    : String(3); // Storage Type
+    key LGTYP     : String(3); // Storage Type
 
-        LVORM    : Boolean; // Deletion flag for all material data of a storage type
-        LGPLA    : String(10); // Storage Bin
-        LPMAX    : Decimal(13, 3); // Maximum storage bin quantity
-        LPMIN    : Decimal(13, 3); // Minimum storage bin quantity
-        MAMNG    : Decimal(13, 3); // Control quantity
-        NSMNG    : Decimal(13, 3); // Replenishment quantity
-        KOBER    : String(3); // Picking Area
+        LVORM     : Boolean; // Deletion flag for all material data of a storage type
+        LGPLA     : String(10); // Storage Bin
+        LPMAX     : Decimal(13, 3); // Maximum storage bin quantity
+        LPMIN     : Decimal(13, 3); // Minimum storage bin quantity
+        MAMNG     : Decimal(13, 3); // Control quantity
+        NSMNG     : Decimal(13, 3); // Replenishment quantity
+        KOBER     : String(3); // Picking Area
 }
 
 entity Alternate_UOM {
@@ -254,14 +254,21 @@ entity CAPM_Field_Mapping {
 }
 
 entity ApproverMatrix {
-    key Model            : String;
-    key Entity           : String;
-    key ControlField     : String;
-    key ControlFieldName : String;
-    key Value            : String;
-        Approver_L1      : String;
-        Approver_L2      : String;
-        Approver_L3      : String;
+    key Model               : String;
+    key Entity              : String;
+    key ControlField        : String;
+    key ControlFieldName    : String;
+    key Value               : String;
+
+        @mandatory
+        Approver_L1_User_ID : String;
+
+        @mandatory
+        Approver_L1         : String;
+        Approver_L2_User_ID : String;
+        Approver_L2         : String;
+        Approver_L3_User_ID : String;
+        Approver_L3         : String;
 }
 
 
