@@ -254,10 +254,10 @@ entity CAPM_Field_Mapping {
 }
 
 entity ApproverMatrix {
-    key Model               : String;
-    key Entity              : String;
-    key ControlField        : String;
-    key ControlFieldName    : String;
+    key Model               : String default 'Material';
+    key Entity              : String default 'MARA';
+    key ControlField        : String default 'MTART';
+    key ControlFieldName    : String default 'Material Type';
     key Value               : String;
 
         @mandatory

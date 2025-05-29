@@ -201,6 +201,30 @@ annotate service.plant with {
 
 }
 
+annotate service.ApproverMatrix with {
+   Value @Common.ValueList: {
+      CollectionPath: 'Value_List',
+      Parameters    : [
+         {
+            $Type            : 'Common.ValueListParameterInOut',
+            LocalDataProperty: 'Value',
+            ValueListProperty: 'Value'
+         },
+         {
+            $Type            : 'Common.ValueListParameterDisplayOnly',
+            ValueListProperty: 'Description'
+         },
+         {
+            $Type            : 'Common.ValueListParameterConstant',
+            ValueListProperty: 'Fixed_Type',
+            Constant         : 'MaterialType'
+         }
+      ]
+   };
+   Value @Common.ValueListWithFixedValues: true;
+
+}
+
 annotate service.plant @(Common: {SideEffects: {
    $Type           : 'Common.SideEffectsType',
    SourceProperties: [
