@@ -711,10 +711,11 @@ module.exports = class Service extends cds.ApplicationService {
     })
    
     this.on("Validate", async (req) => {
-      const { ip_mara, ip_plant, ip_storage } = req.data;
+      const { ip_mara, ip_plant, ip_storage, ip_type, ip_Entity } = req.data;
       const validateErrors = [];
       const tx = cds.transaction(req);
       try {
+        if (ip_type === 'CREATE'){
         for (const entry of ip_mara) {
           const existingMaterialInMara = await tx.run(
             SELECT.one.from(Mara).where({ MATNR: entry.MATNR })
@@ -759,6 +760,67 @@ module.exports = class Service extends cds.ApplicationService {
             });
           }
         }
+      }
+      else if(ip_type === 'UPDATE'){
+        switch (ip_Entity) {
+          case 'Material':
+            for (const entry of ip_mara) {
+              const existingMaterialInMara = await tx.run(
+                SELECT.one.from(Mara).where({ MATNR: entry.MATNR })
+              );
+              if (!existingMaterialInMara) {
+                validateErrors.push({
+                  matnr: entry.MATNR,
+                  errors: [
+                    {
+                      message: `Material doesn't exists`,
+                    },
+                  ],
+                });
+                continue;
+              }
+            }
+            break;
+          case 'Plant':
+            for (const entry of ip_plant) {
+              const plantExists = await tx.run(
+                SELECT.one.from(plant).where({ mat_plant_MATNR: entry.mat_plant_MATNR , WERKS : entry.WERKS })
+              );
+              if (!plantExists) {
+                validateErrors.push({
+                  matnr: entry.mat_plant_MATNR+'|'+entry.WERKS,
+                  errors: [
+                    {
+                      message: `Plant doesn't exists`,
+                    },
+                  ],
+                });
+                continue;
+              }
+            }
+
+            break;
+          case 'Storage Location':
+            for (const entry of ip_storage) {
+              const LocationExists = await tx.run(
+                SELECT.one.from(Storage_Location).where({ plant_mat_plant_MATNR: entry.plant_mat_plant_MATNR , plant_WERKS : entry.plant_WERKS, LGORT : entry.LGORT })
+              );
+              if (!LocationExists) {
+                validateErrors.push({
+                  matnr: entry.entry.plant_mat_plant_MATNR+'|'+entry.plant_WERKS+'|'+entry.LGORT,
+                  errors: [
+                    {
+                      message: `Storage Location doesn't exists`,
+                    },
+                  ],
+                });
+                continue;
+              }
+            }
+
+            break;
+        }
+      }
         await tx.commit();
       } catch (error) {
         await tx.rollback();
@@ -811,7 +873,10 @@ module.exports = class Service extends cds.ApplicationService {
     // });
 
     this.on("ProcessExcel", async (req) => {
-      const { ip_mara, ip_plant, ip_storage, ip_description } = req.data;
+      const { ip_mara, ip_plant, ip_storage, ip_description, ip_type, ip_Entity } = req.data;
+      var insertedMaraEntries;
+      const seen = new Set();
+      const parentRecords = [];
       const tx = cds.transaction(req);
       try {
         const maxRequest = await tx.run(
@@ -835,86 +900,231 @@ module.exports = class Service extends cds.ApplicationService {
 
         let max_no =
           result && result.MAX_NO !== undefined ? result.MAX_NO + 1 : 1;
+        if (ip_type === 'CREATE') {
+          for (const entry of ip_mara) {
+            entry.REQUEST_NUMBER = req_no;
+            entry.MAX_NO = max_no;
+            entry.CREATION_TYPE = 'MASS';
+            entry.Status = "Open";
+          }
 
-        for (const entry of ip_mara) {
-          entry.REQUEST_NUMBER = req_no;
-          entry.MAX_NO = max_no;
-          entry.CREATION_TYPE = 'MASS';
-          entry.Status = "Inactive";
+          await Promise.all(
+            ip_mara.map((entry) => tx.run(INSERT.into(mara_dummy).entries(entry)))
+          );
+
+          insertedMaraEntries = await tx.run(
+            SELECT.from(mara_dummy).where({
+              REQUEST_NUMBER: req_no,
+              MAX_NO: max_no,
+            })
+          );
+
+          await Promise.all(
+            ip_plant.map(async (entry) => {
+              const material = await tx.run(
+                SELECT.one
+                  .from(mara_dummy)
+                  .where({ MATNR: entry.mat_plant_MATNR })
+              );
+              // const { mat_plant_MATNR, ...entryWithoutMATNR } = entry;
+              if (material) {
+                await tx.run(
+                  INSERT.into(Plant_dummy).entries({
+                    ...entry,
+                    mat_plant_ID: material.ID,
+                  })
+                );
+              }
+            })
+          );
+
+          await Promise.all(
+            ip_storage.map(async (entry) => {
+              const plant = await tx.run(
+                SELECT.one
+                  .from(Plant_dummy)
+                  .where({
+                    WERKS: entry.plant_WERKS,
+                    mat_plant_MATNR: entry.plant_mat_plant_MATNR,
+                  })
+              );
+              if (plant) {
+                await tx.run(
+                  INSERT.into(Storage_dummy).entries({
+                    ...entry,
+                    plant_mat_plant_ID: plant.mat_plant_ID,
+                  })
+                );
+              } else {
+                await tx.run(
+                  INSERT.into(Storage_dummy).entries({
+                    ...entry,
+                  })
+                );
+              }
+            })
+          );
+
+          await Promise.all(
+            ip_description.map(async (entry) => {
+              const material = await tx.run(
+                SELECT.one.from(mara_dummy).where({ MATNR: entry.Material_MATNR })
+              );
+              if (material) {
+                await tx.run(
+                  INSERT.into(Description_dummy).entries({
+                    ...entry,
+                    Material_ID: material.ID,
+                  })
+                );
+              }
+            })
+          );
         }
-
-        await Promise.all(
-          ip_mara.map((entry) => tx.run(INSERT.into(mara_dummy).entries(entry)))
-        );
-
-        const insertedMaraEntries = await tx.run(
-          SELECT.from(mara_dummy).where({
-            REQUEST_NUMBER: req_no,
-            MAX_NO: max_no,
-          })
-        );
-
-        await Promise.all(
-          ip_plant.map(async (entry) => {
-            const material = await tx.run(
-              SELECT.one
-                .from(mara_dummy)
-                .where({ MATNR: entry.mat_plant_MATNR })
-            );
-            // const { mat_plant_MATNR, ...entryWithoutMATNR } = entry;
-            if (material) {
-              await tx.run(
-                INSERT.into(Plant_dummy).entries({
-                  ...entry,
-                  mat_plant_ID: material.ID,
+        else if (ip_type === 'UPDATE') {
+          switch (ip_Entity) {
+            case 'Material':
+              for (const entry of ip_mara) {
+                const original = await tx.run(
+                  SELECT.one.from(Mara).where({ MATNR: entry.MATNR })
+                );
+                if (original) {
+                  original.REQUEST_NUMBER = req_no;
+                  original.MAX_NO = max_no;
+                  original.CREATION_TYPE = 'MASS UPDATE';
+                  original.status = 'Open';
+                  await tx.run(
+                    INSERT.into(mara_dummy).entries(original)
+                  );
+                }
+                await tx.run(
+                  UPDATE(mara_dummy)
+                    .set(entry)
+                    .where({
+                      REQUEST_NUMBER: req_no,
+                      MAX_NO: max_no,
+                      MATNR: entry.MATNR,
+                    })
+                );
+              }
+              insertedMaraEntries = await tx.run(
+                SELECT.from(mara_dummy).where({
+                  REQUEST_NUMBER: req_no,
+                  MAX_NO: max_no,
                 })
               );
-            }
-          })
-        );
+              break;
+            case 'Plant':
+              for (const entry of ip_plant) {
+                const original = await tx.run(
+                  SELECT.one.from(plant).where({
+                    mat_plant_MATNR: entry.mat_plant_MATNR,
+                    WERKS: entry.WERKS,
+                  })
+                );
+                if (original) {
+                  await tx.run(
+                    INSERT.into(Plant_dummy).entries(original)
+                  );
+                }
+                await tx.run(
+                  UPDATE(Plant_dummy)
+                    .set(entry)
+                    .where({
+                      mat_plant_MATNR: entry.mat_plant_MATNR,
+                      WERKS: entry.WERKS,
+                    })
+                );
+                const parent = await tx.run(
+                  SELECT.one.from(mara_dummy).where({
+                    MATNR: entry.mat_plant_MATNR
+                  })
+                );
 
-        await Promise.all(
-          ip_storage.map(async (entry) => {
-            const plant = await tx.run(
-              SELECT.one
-                .from(Plant_dummy)
-                .where({
-                  WERKS: entry.plant_WERKS,
-                  mat_plant_MATNR: entry.plant_mat_plant_MATNR,
-                })
-            );
-            if (plant) {
-              await tx.run(
-                INSERT.into(Storage_dummy).entries({
-                  ...entry,
-                  plant_mat_plant_ID: plant.mat_plant_ID,
-                })
-              );
-            } else {
-              await tx.run(
-                INSERT.into(Storage_dummy).entries({
-                  ...entry,
-                })
-              );
-            }
-          })
-        );
+                if (parent && !seen.has(parent.MATNR)) {
+                  parentRecords.push(parent);
+                  seen.add(parent.MATNR);
+                }
 
-        await Promise.all(
-          ip_description.map(async (entry) => {
-            const material = await tx.run(
-              SELECT.one.from(mara_dummy).where({ MATNR: entry.Material_MATNR })
-            );
-            if (material) {
-              await tx.run(
-                INSERT.into(Description_dummy).entries({
-                  ...entry,
-                  Material_ID: material.ID,
-                })
-              );
-            }
-          })
-        );
+              }
+              insertedMaraEntries = parentRecords;
+              break;
+            case 'Storage Location':
+
+              for (const entry of ip_storage) {
+                const original = await tx.run(
+                  SELECT.one.from(Storage_Location).where({
+                    LGORT: entry.LGORT,
+                    plant_mat_plant_MATNR: entry.plant_mat_plant_MATNR,
+                    plant_WERKS: entry.plant_WERKS,
+                  })
+                );
+                if (original) {
+                  await tx.run(
+                    INSERT.into(Storage_dummy).entries(original)
+                  );
+                }
+                await tx.run(
+                  UPDATE(Storage_dummy)
+                    .set(entry)
+                    .where({
+                      LGORT: entry.LGORT,
+                      plant_mat_plant_MATNR: entry.plant_mat_plant_MATNR,
+                      plant_WERKS: entry.plant_WERKS,
+                    })
+                );
+                const parent = await tx.run(
+                  SELECT.one.from(mara_dummy).where({
+                    MATNR: entry.plant_mat_plant_MATNR
+                  })
+                );
+
+                if (parent && !seen.has(parent.MATNR)) {
+                  parentRecords.push(parent);
+                  seen.add(parent.MATNR);
+                }
+
+              }
+              insertedMaraEntries = parentRecords;
+              break;
+            case 'Description':
+              for (const entry of ip_description) {
+                const original = await tx.run(
+                  SELECT.one.from(Description).where({
+                    Material_MATNR: entry.Materaial_MATNR,
+                    code: entry.code,
+                  })
+                );
+                if (original) {
+                  await tx.run(
+                    INSERT.into(Description_dummy).entries(original)
+                  );
+                }
+
+                await tx.run(
+                  UPDATE(Description_dummy)
+                    .set(entry)
+                    .where({
+                      Material_MATNR: entry.Materaial_MATNR,
+                      code: entry.code,
+                    })
+                );
+                const parent = await tx.run(
+                  SELECT.one.from(mara_dummy).where({
+                    MATNR: entry.Materaial_MATNR
+                  })
+                );
+
+                if (parent && !seen.has(parent.MATNR)) {
+                  parentRecords.push(parent);
+                  seen.add(parent.MATNR);
+                }
+
+              }
+              insertedMaraEntries = parentRecords;
+              break;
+          }
+        }
         await tx.commit();
         req.reply({
           message: "Data uploaded successfully!",
@@ -1142,7 +1352,7 @@ module.exports = class Service extends cds.ApplicationService {
       return number;
     });
     this.on("SaveToDB", async (req) => {
-      const { ip_req_no } = req.data;
+      const { ip_req_no,ip_type,ip_Entity } = req.data;
       const tx = cds.transaction(req);
       let output = "Data saved to DB successfully!";
 
@@ -1152,7 +1362,7 @@ module.exports = class Service extends cds.ApplicationService {
             Change_REQUEST_NUMBER: ip_req_no,
           })
         );
-
+        if(ip_type === 'CREATE'){
         if (changeRequestDetails.length > 0) {
           for (const detail of changeRequestDetails) {
             const { object_id } = detail;
@@ -1282,7 +1492,191 @@ module.exports = class Service extends cds.ApplicationService {
             }
           }
         }
+       }
+       else if(ip_type === 'UPDATE'){
+          switch (ip_Entity) {
+            case "Material":
+              output = "Material Data updated successfully!";
+              const changeRequestDetails = await tx.run(
+                SELECT.from("litemdg.Change_Request_details").where({
+                  Change_REQUEST_NUMBER: ip_req_no,
+                })
+              );
 
+              if (changeRequestDetails.length > 0) {
+                for (const detail of changeRequestDetails) {
+                  const { object_id } = detail;
+                  const maraDummyData = await tx.run(
+                    SELECT.from(mara_dummy).where({ MATNR: object_id })
+                  );
+                  const originalMara = await tx.run(SELECT.from(Mara).where({ MATNR: object_id }));
+                  if (maraDummyData.length > 0) {
+                    for (const entry of maraDummyData) {
+                      const { MAX_NO, REQUEST_NUMBER, CREATION_TYPE, ...cleanedEntry } = entry;
+                      await tx.run(UPDATE(Mara).set(cleanedEntry).where({ MATNR: entry.MATNR }));
+                    }
+                  }
+                  if (originalMara.length > 0) {
+                    await tx.run(
+                      UPDATE(mara_dummy).set(originalMara[0]).where({ MATNR: object_id })
+                    );
+                  }
+                }
+
+              }
+              await tx.commit();
+              break;
+            case "Plant":
+              output = "Plant Data updated successfully!";
+              changeRequestDetails = await tx.run(
+                SELECT.from("litemdg.Change_Request_details").where({
+                  Change_REQUEST_NUMBER: ip_req_no,
+                })
+              );
+
+              if (changeRequestDetails.length > 0) {
+                for (const detail of changeRequestDetails) {
+                  const { object_id } = detail;
+                  const IDs = object_id.split('|');
+                  const plantDummyData = await tx.run(
+                    SELECT.from(Plant_dummy).where({
+                      mat_plant_MATNR: IDs[0],
+                      WERKS: IDs[1]
+                    })
+                  );
+                  const originalPlant = await tx.run(SELECT.from(plant).where({
+                    mat_plant_MATNR: IDs[0],
+                    WERKS: IDs[1]
+                  }));
+
+                  if (plantDummyData.length > 0) {
+                    for (const entry of plantDummyData) {
+                      await tx.run(
+                        UPDATE(plant).set(entry).where({
+                          mat_plant_ID: entry.mat_plant_ID,
+                          mat_plant_MATNR: entry.mat_plant_MATNR,
+                          WERKS: entry.WERKS,
+                        })
+                      );
+                    }
+                  }
+                  for (const p of originalPlant) {
+                    await tx.run(
+                      UPDATE(Plant_dummy).set(p).where({
+                        mat_plant_ID: p.mat_plant_ID,
+                        mat_plant_MATNR: p.mat_plant_MATNR,
+                        WERKS: p.WERKS,
+                      })
+                    );
+                  }
+                }
+              }
+              break;
+            case "Storage Location":
+              output = "Storage Location Data updated successfully!";
+              changeRequestDetails = await tx.run(
+                SELECT.from("litemdg.Change_Request_details").where({
+                  Change_REQUEST_NUMBER: ip_req_no,
+                })
+              );
+
+              if (changeRequestDetails.length > 0) {
+                for (const detail of changeRequestDetails) {
+                  const { object_id } = detail;
+                  const IDs = object_id.split('|'); // [MATNR, WERKS, LGORT]
+
+                  const storageDummyData = await tx.run(
+                    SELECT.from(Storage_dummy).where({
+                      plant_mat_plant_MATNR: IDs[0],
+                      plant_WERKS: IDs[1],
+                      LGORT: IDs[2]
+                    })
+                  );
+
+                  const originalStorage = await tx.run(
+                    SELECT.from(Storage_Location).where({
+                      plant_mat_plant_MATNR: IDs[0],
+                      plant_WERKS: IDs[1],
+                      LGORT: IDs[2]
+                    })
+                  );
+
+                  if (storageDummyData.length > 0) {
+                    for (const entry of storageDummyData) {
+                      await tx.run(
+                        UPDATE(Storage_Location).set(entry).where({
+                          plant_mat_plant_MATNR: entry.plant_mat_plant_MATNR,
+                          plant_WERKS: entry.plant_WERKS,
+                          LGORT: entry.LGORT,
+                        })
+                      );
+                    }
+                  }
+
+                  for (const s of originalStorage) {
+                    await tx.run(
+                      UPDATE(Storage_dummy).set(s).where({
+                        plant_mat_plant_MATNR: s.plant_mat_plant_MATNR,
+                        plant_WERKS: s.plant_WERKS,
+                        LGORT: s.LGORT,
+                      })
+                    );
+                  }
+                }
+              }
+              break;
+            case "Description":
+              output = "Material Description Data updated successfully!";
+              changeRequestDetails = await tx.run(
+                SELECT.from("litemdg.Change_Request_details").where({
+                  Change_REQUEST_NUMBER: ip_req_no,
+                })
+              );
+
+              if (changeRequestDetails.length > 0) {
+                for (const detail of changeRequestDetails) {
+                  const { object_id } = detail;
+                  const IDs = object_id.split('|'); // [MATNR, SPRAS]
+
+                  const descDummyData = await tx.run(
+                    SELECT.from(Description_dummy).where({
+                      Material_MATNR: IDs[0],
+                      code: IDs[1],
+                    })
+                  );
+
+                  const originalDesc = await tx.run(
+                    SELECT.from(Description).where({
+                      Material_MATNR: IDs[0],
+                      code: IDs[1],
+                    })
+                  );
+
+                  if (descDummyData.length > 0) {
+                    for (const entry of descDummyData) {
+                      await tx.run(
+                        UPDATE(Description).set(entry).where({
+                          Material_MATNR: entry.Materaial_MATNR,
+                          code: entry.code,
+                        })
+                      );
+                    }
+                  }
+
+                  for (const d of originalDesc) {
+                    await tx.run(
+                      UPDATE(Description_dummy).set(d).where({
+                        Material_MATNR: d.Materaial_MATNR,
+                        code: d.code,
+                      })
+                    );
+                  }
+                }
+              }
+              break;
+
+          }
+        }
         await tx.commit();
       } catch (error) {
         await tx.rollback();

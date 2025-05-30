@@ -48,11 +48,11 @@ service litemdg {
     @odata.draft.enabled
     entity ApproverMatrix as projection on db.ApproverMatrix;
 
-    action ProcessExcel(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;
+    action ProcessExcel(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description,ip_type: String,ip_Entity: String) returns String;
     action Uplod_to_Dummy(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;
-    action Validate(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns many common.ValidationError;
+    action Validate(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description,ip_type: String,ip_Entity: String) returns many common.ValidationError;
     action Trigger_workflow(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns Integer;
-    action SaveToDB(ip_req_no: Integer) returns String;
+    action SaveToDB(ip_req_no: Integer,ip_type: String,ip_Entity: String) returns String;
     action FieldStatus(ip_type: String) returns many common.FieldStatus;
     action InsertMaterial(ip_MaterialID:String,ip_NewMaterial:String) returns String;
     function Rule_validation(ip_ID:String) returns many String;
