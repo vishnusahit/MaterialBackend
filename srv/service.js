@@ -779,6 +779,17 @@ module.exports = class Service extends cds.ApplicationService {
                 });
                 continue;
               }
+              if (existingMaterialInMara.Status === 'Inactive') {
+                validateErrors.push({
+                  matnr: entry.MATNR,
+                  errors: [
+                    {
+                      message: `Material is Inactive`,
+                    },
+                  ],
+                });
+                continue;
+              }
             }
             break;
           case 'Plant':
@@ -796,6 +807,22 @@ module.exports = class Service extends cds.ApplicationService {
                   ],
                 });
                 continue;
+              }
+              else if(plantExists){
+                const existingMaterialInMara = await tx.run(
+                SELECT.one.from(Mara).where({ MATNR: entry.mat_plant_MATNR })
+                );
+                if (existingMaterialInMara.Status === 'Inactive') {
+                  validateErrors.push({
+                    matnr:entry.mat_plant_MATNR+'|'+entry.WERKS ,
+                    errors: [
+                      {
+                        message: `Material is Inactive`,
+                      },
+                    ],
+                  });
+                  continue;
+                }
               }
             }
 
@@ -815,6 +842,22 @@ module.exports = class Service extends cds.ApplicationService {
                   ],
                 });
                 continue;
+              }
+              else if(LocationExists){
+                const existingMaterialInMara = await tx.run(
+                SELECT.one.from(Mara).where({ MATNR: entry.plant_mat_plant_MATNR })
+                );
+                if (existingMaterialInMara.Status === 'Inactive') {
+                  validateErrors.push({
+                    matnr:entry.entry.plant_mat_plant_MATNR+'|'+entry.plant_WERKS+'|'+entry.LGORT,
+                    errors: [
+                      {
+                        message: `Material is Inactive`,
+                      },
+                    ],
+                  });
+                  continue;
+                }
               }
             }
 
@@ -982,6 +1025,7 @@ module.exports = class Service extends cds.ApplicationService {
           );
         }
         else if (ip_type === 'UPDATE') {
+          const insertedMatnrs = new Set();
           switch (ip_Entity) {
             case 'Material':
               for (const entry of ip_mara) {
@@ -992,7 +1036,7 @@ module.exports = class Service extends cds.ApplicationService {
                   original.REQUEST_NUMBER = req_no;
                   original.MAX_NO = max_no;
                   original.CREATION_TYPE = 'MASS UPDATE';
-                  original.status = 'Open';
+                  original.Status = 'Open';
                   await tx.run(
                     INSERT.into(mara_dummy).entries(original)
                   );
@@ -1016,6 +1060,21 @@ module.exports = class Service extends cds.ApplicationService {
               break;
             case 'Plant':
               for (const entry of ip_plant) {
+                if (!insertedMatnrs.has(entry.mat_plant_MATNR)) {
+                  const original_mara = await tx.run(
+                    SELECT.one.from(Mara).where({ MATNR: entry.mat_plant_MATNR })
+                  );
+                  if (original_mara) {
+                    original_mara.REQUEST_NUMBER = req_no;
+                    original_mara.MAX_NO = max_no;
+                    original_mara.CREATION_TYPE = 'MASS UPDATE';
+                    original_mara.Status = 'Open';
+                    await tx.run(
+                      INSERT.into(mara_dummy).entries(original_mara)
+                    );
+                    insertedMatnrs.add(entry.mat_plant_MATNR);
+                  }
+                }
                 const original = await tx.run(
                   SELECT.one.from(plant).where({
                     mat_plant_MATNR: entry.mat_plant_MATNR,
@@ -1050,8 +1109,22 @@ module.exports = class Service extends cds.ApplicationService {
               insertedMaraEntries = parentRecords;
               break;
             case 'Storage Location':
-
               for (const entry of ip_storage) {
+                if (!insertedMatnrs.has(entry.plant_mat_plant_MATNR)) {
+                  const original_mara = await tx.run(
+                    SELECT.one.from(Mara).where({ MATNR: entry.plant_mat_plant_MATNR })
+                  );
+                  if (original_mara) {
+                    original_mara.REQUEST_NUMBER = req_no;
+                    original_mara.MAX_NO = max_no;
+                    original_mara.CREATION_TYPE = 'MASS UPDATE';
+                    original_mara.Status = 'Open';
+                    await tx.run(
+                      INSERT.into(mara_dummy).entries(original_mara)
+                    );
+                    insertedMatnrs.add(entry.plant_mat_plant_MATNR); 
+                  }
+                 }
                 const original = await tx.run(
                   SELECT.one.from(Storage_Location).where({
                     LGORT: entry.LGORT,
@@ -1089,9 +1162,24 @@ module.exports = class Service extends cds.ApplicationService {
               break;
             case 'Description':
               for (const entry of ip_description) {
+                if (!insertedMatnrs.has(entry.Material_MATNR)) {
+                  const original_mara = await tx.run(
+                    SELECT.one.from(Mara).where({ MATNR: entry.Material_MATNR })
+                  );
+                  if (original_mara) {
+                    original_mara.REQUEST_NUMBER = req_no;
+                    original_mara.MAX_NO = max_no;
+                    original_mara.CREATION_TYPE = 'MASS UPDATE';
+                    original_mara.status = 'Open';
+                    await tx.run(
+                      INSERT.into(mara_dummy).entries(original_mara)
+                    );
+                    insertedMatnrs.add(entry.Material_MATNR); 
+                  }
+                 }
                 const original = await tx.run(
                   SELECT.one.from(Description).where({
-                    Material_MATNR: entry.Materaial_MATNR,
+                    Material_MATNR: entry.Material_MATNR,
                     code: entry.code,
                   })
                 );
@@ -1105,13 +1193,13 @@ module.exports = class Service extends cds.ApplicationService {
                   UPDATE(Description_dummy)
                     .set(entry)
                     .where({
-                      Material_MATNR: entry.Materaial_MATNR,
+                      Material_MATNR: entry.Material_MATNR,
                       code: entry.code,
                     })
                 );
                 const parent = await tx.run(
                   SELECT.one.from(mara_dummy).where({
-                    MATNR: entry.Materaial_MATNR
+                    MATNR: entry.Material_MATNR
                   })
                 );
 
@@ -1140,7 +1228,7 @@ module.exports = class Service extends cds.ApplicationService {
     this.on("Trigger_workflow", async (req) => {
       let number = 0;
 
-      const { ip_mara, ip_plant, ip_storage, ip_description } = req.data;
+      const { ip_mara, ip_plant, ip_storage, ip_description, ip_Entity, ip_type } = req.data;
       function replaceNull(value) {
         return value === null || value === undefined ? "" : value;
       }
@@ -1180,6 +1268,7 @@ module.exports = class Service extends cds.ApplicationService {
 
       
       var desc = ip_mara[0].Request_Desc
+      if (ip_type === 'CREATE'){
       var payload = {
         definitionId:
           "eu10.bgsw-sdsc-coe-at1drpz8.changerequesttrigger.material_Governance_Process",
@@ -1306,7 +1395,7 @@ module.exports = class Service extends cds.ApplicationService {
 
       ip_storage.forEach(function (item) {
         payload.context.material.to_Storage_Location.push({
-          Product: replaceNull(item.Materaial_MATNR),
+          Product: replaceNull(item.Material_MATNR),
           Plant: replaceNull(item.WERKS),
           StorageLocation: replaceNull(item.LGORT),
           StorageBin: replaceNull(item.LGPBE),
@@ -1348,7 +1437,92 @@ module.exports = class Service extends cds.ApplicationService {
       }
       number = req_no;
       }
+    }
+    else if(ip_type === "UPDATE"){
+      await INSERT.into("litemdg.Change_Request").entries({
+        REQUEST_NUMBER: req_no,
+        InstanceID: "",
+        REQUEST_TYPE: "MASS_UPDATE",
+        Overall_status: "Open",
+        Model: "Material",
+        Requested_By: req.user.attr.email,
+        Requested_Date: creationDate,
+        Requested_Time: creationTime,
+        Requested_on: timestamp,
+        Description : req.data.Request_Desc,
+      });
+      const materialIds = new Set();
+      switch(ip_Entity){
+        case 'Material':
+          for (const item of ip_mara) {
+            await INSERT.into("litemdg.Change_Request_details").entries({
+              Change_REQUEST_NUMBER: req_no,
+              Object_ID: item.MATNR,
+              Description: item.MAKT_MAKTX,
+              Object_CUID: item.MATNR,
+              Overall_status: "Open",
+              Material_type: item.MTART,
+            });
+          }
+          number = req_no;
+        break;
+        case 'Plant':
+          for (const item of ip_plant) {
+            if(!materialIds.has(item.mat_plant_MATNR)){
+            const matdata = await SELECT.from(Mara).where({ MATNR: item.mat_plant_MATNR });
+            const objectId = `${item.mat_plant_MATNR}|${item.WERKS}`;
+            await INSERT.into("litemdg.Change_Request_details").entries({
+              Change_REQUEST_NUMBER: req_no,
+              Object_ID: item.mat_plant_MATNR,
+              Description: matdata[0].MAKT_MAKTX,
+              Object_CUID: objectId,
+              Overall_status: "Open",
+              Material_type: matdata[0].MTART,
+            });
+            materialIds.add(item.mat_plant_MATNR);
+           }
+          }
+          number = req_no;
+        break;
+        case 'Description':
+          for (const item of ip_desc) {
+            if (!materialIds.has(item.Material_MATNR)) {
+            const matdata = await SELECT.from(Mara).where({ MATNR: item.Material_MATNR });
+            const objectId = item.Material_MATNR+'|'+item.code;
+            await INSERT.into("litemdg.Change_Request_details").entries({
+              Change_REQUEST_NUMBER: req_no,
+              Object_ID: item.Material_MATNR,
+              Description: matdata[0].MAKT_MAKTX,
+              Object_CUID: objectId,
+              Overall_status: "Open",
+              Material_type: matdata[0].MTART, 
+            });
+           materialIds.add(item.Material_MATNR);
+           }
+          }
+          number = req_no;
+        break;
+        case 'Storage Location':
+          for (const item of ip_storage) {
+            if(!materialIds.has(item.plant_mat_plant_MATNR)){
+            const matdata = await SELECT.from(Mara).where({ MATNR: item.plant_mat_plant_MATNR });
+            const objectId = `${item.plant_mat_plant_MATNR}|${item.plant_WERKS}|${item.LGORT}`;
+            await INSERT.into("litemdg.Change_Request_details").entries({
+              Change_REQUEST_NUMBER: req_no,
+              Object_ID: item.plant_mat_plant_MATNR,
+              Description: matdata[0].MAKT_MAKTX,
+              Object_CUID: objectId,
+              Overall_status: "Open",
+              Material_type: matdata[0].MTART, // Optional, only if present in Storage
+            });
+            materialIds.add(item.plant_mat_plant_MATNR);
+          }
+          }
+          number = req_no;
 
+        break;
+      }
+    }
       return number;
     });
     this.on("SaveToDB", async (req) => {
@@ -1418,6 +1592,7 @@ module.exports = class Service extends cds.ApplicationService {
                   CREATION_TYPE,
                   ...cleanedEntry
                 } = entry;
+                cleanedEntry.Status = "Inactive";
                 const result = await tx.run(
                   INSERT.into(Mara).entries(cleanedEntry)
                 );
@@ -1494,10 +1669,11 @@ module.exports = class Service extends cds.ApplicationService {
         }
        }
        else if(ip_type === 'UPDATE'){
+        let changeRequestDetails; 
           switch (ip_Entity) {
             case "Material":
               output = "Material Data updated successfully!";
-              const changeRequestDetails = await tx.run(
+              changeRequestDetails = await tx.run(
                 SELECT.from("litemdg.Change_Request_details").where({
                   Change_REQUEST_NUMBER: ip_req_no,
                 })
@@ -1513,10 +1689,12 @@ module.exports = class Service extends cds.ApplicationService {
                   if (maraDummyData.length > 0) {
                     for (const entry of maraDummyData) {
                       const { MAX_NO, REQUEST_NUMBER, CREATION_TYPE, ...cleanedEntry } = entry;
+                      cleanedEntry.Status = "Inactive";
                       await tx.run(UPDATE(Mara).set(cleanedEntry).where({ MATNR: entry.MATNR }));
                     }
                   }
                   if (originalMara.length > 0) {
+                    originalMara[0].Status = "Inactive"
                     await tx.run(
                       UPDATE(mara_dummy).set(originalMara[0]).where({ MATNR: object_id })
                     );
@@ -1536,8 +1714,8 @@ module.exports = class Service extends cds.ApplicationService {
 
               if (changeRequestDetails.length > 0) {
                 for (const detail of changeRequestDetails) {
-                  const { object_id } = detail;
-                  const IDs = object_id.split('|');
+                  const { object_cuid } = detail;
+                  const IDs = object_cuid.split('|');
                   const plantDummyData = await tx.run(
                     SELECT.from(Plant_dummy).where({
                       mat_plant_MATNR: IDs[0],
@@ -1568,6 +1746,12 @@ module.exports = class Service extends cds.ApplicationService {
                         WERKS: p.WERKS,
                       })
                     );
+                    await tx.run(
+                      UPDATE(mara_dummy).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
+                    );
+                    await tx.run(
+                      UPDATE(Mara).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
+                    );
                   }
                 }
               }
@@ -1582,8 +1766,8 @@ module.exports = class Service extends cds.ApplicationService {
 
               if (changeRequestDetails.length > 0) {
                 for (const detail of changeRequestDetails) {
-                  const { object_id } = detail;
-                  const IDs = object_id.split('|'); // [MATNR, WERKS, LGORT]
+                  const { object_cuid } = detail;
+                  const IDs = object_cuid.split('|'); // [MATNR, WERKS, LGORT]
 
                   const storageDummyData = await tx.run(
                     SELECT.from(Storage_dummy).where({
@@ -1621,6 +1805,12 @@ module.exports = class Service extends cds.ApplicationService {
                         LGORT: s.LGORT,
                       })
                     );
+                    await tx.run(
+                      UPDATE(mara_dummy).set({ Status: 'Inactive' }).where({ MATNR:s.plant_mat_plant_MATNR })
+                    );
+                    await tx.run(
+                      UPDATE(Mara).set({ Status: 'Inactive' }).where({ MATNR:s.plant_mat_plant_MATNR })
+                    );
                   }
                 }
               }
@@ -1635,8 +1825,8 @@ module.exports = class Service extends cds.ApplicationService {
 
               if (changeRequestDetails.length > 0) {
                 for (const detail of changeRequestDetails) {
-                  const { object_id } = detail;
-                  const IDs = object_id.split('|'); // [MATNR, SPRAS]
+                  const {object_cuid } = detail;
+                  const IDs = object_cuid.split('|'); // [MATNR, SPRAS]
 
                   const descDummyData = await tx.run(
                     SELECT.from(Description_dummy).where({
@@ -1656,7 +1846,7 @@ module.exports = class Service extends cds.ApplicationService {
                     for (const entry of descDummyData) {
                       await tx.run(
                         UPDATE(Description).set(entry).where({
-                          Material_MATNR: entry.Materaial_MATNR,
+                          Material_MATNR: entry.Material_MATNR,
                           code: entry.code,
                         })
                       );
@@ -1666,9 +1856,15 @@ module.exports = class Service extends cds.ApplicationService {
                   for (const d of originalDesc) {
                     await tx.run(
                       UPDATE(Description_dummy).set(d).where({
-                        Material_MATNR: d.Materaial_MATNR,
+                        Material_MATNR: d.Material_MATNR,
                         code: d.code,
                       })
+                    );
+                    await tx.run(
+                      UPDATE(mara_dummy).set({ Status: 'Inactive' }).where({ MATNR:d.Material_MATNR })
+                    );
+                    await tx.run(
+                      UPDATE(Mara).set({ Status: 'Inactive' }).where({ MATNR:d.Material_MATNR })
                     );
                   }
                 }
