@@ -1267,8 +1267,8 @@ module.exports = class Service extends cds.ApplicationService {
           : 1;
 
       
-      var desc = ip_mara[0].Request_Desc
       if (ip_type === 'CREATE'){
+        var desc = ip_mara[0].Request_Desc
       var payload = {
         definitionId:
           "eu10.bgsw-sdsc-coe-at1drpz8.changerequesttrigger.material_Governance_Process",
