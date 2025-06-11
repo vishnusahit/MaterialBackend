@@ -98,3 +98,14 @@ type FieldStatus {
 type changeRequestCount {
   number : Integer
 }
+
+type tyReplicationResult {
+
+  MATNR     : String(40);
+  STATUS :  String(15);
+  REPLICATION_MODE  : String(15);
+  REQUEST_NUMBER : Integer;
+  Message       : String(500);
+  Timestamp          : Timestamp;
+  REPLICATED_BY : String;
+}

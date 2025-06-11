@@ -6,6 +6,7 @@ const { getKeyPredicateDynamic,
   processComposedEntities,
   fetchBeforeChildren } = require('./ChangeTrackingHandler')
 const {fnOpenChangeRequestCount,fnMyInboxCount} = require("./tileCountFuncionHandler");
+const {callS4Destination} = require("./ReplicationHandler");
 module.exports = class Service extends cds.ApplicationService {
   init() {
     //
@@ -41,6 +42,10 @@ module.exports = class Service extends cds.ApplicationService {
     return fnMyInboxCount(req);
 });
   
+this.on('replicateToS4Hana', async (req) => {
+   const aReplicatedData =  await callS4Destination(req,srv);
+   return aReplicatedData;
+});
     srv.after(["CREATE"], "Mara.drafts", async (req) => {
 
       const { ID, MATNR } = req;

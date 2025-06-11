@@ -47,6 +47,7 @@
                     </Select> -->
                     <!-- <Button id="idExcelUploadBtn" text="Excel Upload" press=".onOk" type="Emphasized" enabled="true"/> -->
                     <Button id="idExcelUploadBtn" text="Excel Upload" press=".onExcelUploadBtnPress" type="Emphasized" enabled="true"/>
+                    <Button id="replicate" text="Replicate" press="onReplicate"></Button>
                 </HBox>
                
              

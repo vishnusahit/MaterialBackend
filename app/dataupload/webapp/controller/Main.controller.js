@@ -16,7 +16,25 @@ function (Controller, MessageBox, MessageToast,xlsxjs,XLSXF,jszip,Dialog,TextAre
     "use strict";
     //  var XLSX = require('xlsx');
     return Controller.extend("dataupload.controller.Main", { 
-        // var oUploadDialog;    
+        // var oUploadDialog;   
+        async onReplicate(){
+        var oModel = this.getOwnerComponent().getModel('odataV2');
+            var payload = {"ipMatnrs": ["300.FIN.0009.215", "MATNR002", "MATNR003"]};
+          
+            await oModel.create("/replicateToS4Hana", payload, {
+                method: "POST",
+                success: function (oData) {
+                   debugger;
+                   sap.m.MessageToast.show("Data Fetched Kindly Refresh");
+                }, error: function (oError) { // Handle error 
+                    console.error("Error during action call:", oError);
+                    sap.m.MessageToast.show("Action execution failed."); // Additional logging for better debugging 
+                    if (oError.responseText) {
+                        console.error("Response text:", oError.responseText);
+                    }
+                    if (oError.message) { console.error("Error message:", oError.message); }
+                }
+            })}, 
         onInit: function () {
           
             // this.oFileUploader = this.byId("uploader");

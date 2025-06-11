@@ -271,6 +271,16 @@ entity ApproverMatrix {
         Approver_L3         : String;
 }
 
+entity ReplicationReport : cuid{
+  
+  MATNR     : String(40);
+  STATUS :  String(15);
+  REPLICATION_MODE  : String(15);
+  REQUEST_NUMBER : Integer;
+  Message       : String(500);
+  Timestamp          : Timestamp;
+  REPLICATED_BY : String;
+}
 
 context REQUEST_NUMBER {
 

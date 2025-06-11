@@ -32,6 +32,7 @@ service litemdg {
     entity Valuation_dummy as projection on db.Dummy.Valuation_dummy;
     entity Change_Request_Details as projection on db.REQUEST_NUMBER.Change_Request_details;
     
+    entity ReplicationReport as projection on db.ReplicationReport;
     @odata.draft.enabled
     entity Fixed_Values as projection on db.Value_help.Fixed_Values;
     entity Value_List as projection on db.Value_help.Value_List;
@@ -63,6 +64,7 @@ service litemdg {
     function getInboxPendingRequestcount() returns common.changeRequestCount;
 
     action get_ValueList(Key:String) returns String;
+    action replicateToS4Hana(ipMatnrs:many String) returns array of common.tyReplicationResult;
 
 
   //entity Exposed for Dashboard

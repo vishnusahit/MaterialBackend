@@ -15,7 +15,8 @@
     "cf-nodejs-logging-support": "^7.3.0",
     "express": "^4",
     "uuid": "^11.1.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@sap-cloud-sdk/connectivity": "^3"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.6",
@@ -80,6 +81,15 @@
         },
         "csrf": true,
         "csrfInBatch": true
+      },
+      "API_PRODUCT_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_PRODUCT_SRV",
+        "credentials": {
+        "destination": "W46",
+         "path": "/sap/opu/odata/sap/API_PRODUCT_SRV",
+         "requestTimeout": 1200000
+      }
       }
     },
     "server": {

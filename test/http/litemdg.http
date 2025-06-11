@@ -2057,3 +2057,14 @@ Content-Type: application/json
 {
   "ip_ID": "80cb157e-7c85-49cb-95ec-0cb551d90b0d"
 }
+
+
+### insert### HTTP requests for testing the litemdg service
+POST  {{server}}/odata/v4/litemdg/replicateToS4Hana
+Content-Type: application/json
+
+{
+  "ipMatnrs": ["300.FIN.0009.102", "300.FIN.0009.103"]
+}
+
+
