@@ -43,6 +43,7 @@ type t_Mara  {
 type t_plant{
   mat_plant_MATNR : String(40);
   WERKS : String;
+  New_WERKS : String;
   // WERKS_WERKS: String ;
   MMSTA: String(2);	//Plant-Specific Material Status
   PRCTR: String(10); //Profit Center

@@ -774,7 +774,7 @@ this.on('replicateToS4Hana', async (req) => {
           }
         }
       }
-      else if(ip_type === 'UPDATE'){
+      else if(ip_type === 'UPDATE'|| ip_type === 'EXTENSION'){
         switch (ip_Entity) {
           case 'Material':
             for (const entry of ip_mara) {
@@ -1037,7 +1037,7 @@ this.on('replicateToS4Hana', async (req) => {
             })
           );
         }
-        else if (ip_type === 'UPDATE') {
+        else if (ip_type === 'UPDATE'|| ip_type === 'EXTENSION') {
           const insertedMatnrs = new Set();
           switch (ip_Entity) {
             case 'Material':
@@ -1099,14 +1099,34 @@ this.on('replicateToS4Hana', async (req) => {
                     INSERT.into(Plant_dummy).entries(original)
                   );
                 }
-                await tx.run(
-                  UPDATE(Plant_dummy)
-                    .set(entry)
-                    .where({
+                if (ip_type === "UPDATE") {
+                  const { New_WERKS, ...entryCleaned } = entry;
+                  await tx.run(
+                    UPDATE(Plant_dummy).set(entryCleaned).where({
                       mat_plant_MATNR: entry.mat_plant_MATNR,
                       WERKS: entry.WERKS,
                     })
-                );
+                  );
+                } else if (ip_type === "EXTENSION") {
+                  const oldWERKS = entry.WERKS;
+                  const existing = await tx.run(SELECT.one.from(Plant_dummy).where({
+                    mat_plant_MATNR: entry.mat_plant_MATNR,
+                    WERKS: oldWERKS
+                  }));
+
+                  if (existing) {
+
+                    existing.WERKS = entry.New_WERKS;
+
+                    await tx.run(INSERT.into(Plant_dummy).entries(existing));
+
+
+                    await tx.run(DELETE.from(Plant_dummy).where({
+                      mat_plant_MATNR: entry.mat_plant_MATNR,
+                      WERKS: oldWERKS
+                    }))
+                  }
+                }
                 const parent = await tx.run(
                   SELECT.one.from(mara_dummy).where({
                     MATNR: entry.mat_plant_MATNR
@@ -1451,11 +1471,12 @@ this.on('replicateToS4Hana', async (req) => {
       number = req_no;
       }
     }
-    else if(ip_type === "UPDATE"){
+    else if(ip_type === "UPDATE"|| ip_type === "EXTENSION"){
+      const type = "MASS_"+ip_type;
       await INSERT.into("litemdg.Change_Request").entries({
         REQUEST_NUMBER: req_no,
         InstanceID: "",
-        REQUEST_TYPE: "MASS_UPDATE",
+        REQUEST_TYPE: type,
         Overall_status: "Open",
         Model: "Material",
         Requested_By: req.user.attr.email,
@@ -1481,9 +1502,16 @@ this.on('replicateToS4Hana', async (req) => {
         break;
         case 'Plant':
           for (const item of ip_plant) {
+            var objectId;
             if(!materialIds.has(item.mat_plant_MATNR)){
             const matdata = await SELECT.from(Mara).where({ MATNR: item.mat_plant_MATNR });
-            const objectId = `${item.mat_plant_MATNR}|${item.WERKS}`;
+            if(ip_type === 'UPDATE'){
+              objectId = `${item.mat_plant_MATNR}|${item.WERKS}`;
+           }
+           
+           else if(ip_type === 'EXTENSION'){
+             objectId = `${item.mat_plant_MATNR}|${item.WERKS}|${item.New_WERKS}`;
+           }
             await INSERT.into("litemdg.Change_Request_details").entries({
               Change_REQUEST_NUMBER: req_no,
               Object_ID: item.mat_plant_MATNR,
@@ -1886,6 +1914,57 @@ this.on('replicateToS4Hana', async (req) => {
 
           }
         }
+        else if(ip_type === 'EXTENSION'){
+          switch (ip_Entity) {
+          case "Plant":
+          output = "Plant changed sucessfully";
+          const changeRequestDetails = await tx.run(
+            SELECT.from("litemdg.Change_Request_details").where({
+              Change_REQUEST_NUMBER: ip_req_no,
+            })
+          );
+
+          if (changeRequestDetails.length > 0) {
+            for (const detail of changeRequestDetails) {
+              const { object_cuid } = detail;
+              const IDs = object_cuid.split('|');
+              const plantDummyData = await tx.run(
+                SELECT.from(Plant_dummy).where({
+                  mat_plant_MATNR : IDs[0],
+                  WERKS    :IDs[2]
+                })
+              );
+              const originalPlant = await tx.run(SELECT.from(plant).where({   mat_plant_MATNR : IDs[0],
+                WERKS    :IDs[1] }));
+
+              if (plantDummyData.length > 0) {
+                  for (const entry of plantDummyData) {
+                      await tx.run(INSERT.into(plant).entries(entry));
+                  }
+              }
+              for (const p of originalPlant) {
+                await tx.run( DELETE.from(plant).where({ 
+                  mat_plant_MATNR: p.mat_plant_MATNR, 
+                  WERKS: p.WERKS
+                }));
+                await tx.run(INSERT.into(Plant_dummy).entries(p));
+                await tx.run(
+                  DELETE.from(Plant_dummy).where({
+                    mat_plant_MATNR: p.mat_plant_MATNR,
+                    WERKS: IDs[2],
+                  })
+                );
+                await tx.run(
+                  UPDATE(mara_dummy).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
+                );
+                await tx.run(
+                  UPDATE(Mara).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
+                );
+              }
+            }
+          }
+        }
+      }
         await tx.commit();
       } catch (error) {
         await tx.rollback();
