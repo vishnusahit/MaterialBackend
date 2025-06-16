@@ -29,7 +29,7 @@ async function triggerMaterialreplicationJob(req) {
 // const istTime = new Date(Date.now() + istOffset + 5000).toISOString();
 // console.log(istTime);
 
-  const jobName = `replicate_${istTime.replace(/[-:.TZ]/g, "")}`;
+  const jobName = `MaterialJob_${istTime.replace(/[-:.TZ]/g, "")}`;
   const jobData = {
     name: jobName,
     action: "https://bosch-global-software-technologies-private-limited-bgsw6c82f079.cfapps.eu10-004.hana.ondemand.com/odata/v4/litemdg/replicateToS4Hana", // your background route
