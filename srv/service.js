@@ -7,6 +7,7 @@ const { getKeyPredicateDynamic,
   fetchBeforeChildren } = require('./ChangeTrackingHandler')
 const {fnOpenChangeRequestCount,fnMyInboxCount} = require("./tileCountFuncionHandler");
 const {callS4Destination} = require("./ReplicationHandler");
+const {triggerMaterialreplicationJob} = require("./scheduleReplication");
 module.exports = class Service extends cds.ApplicationService {
   init() {
     //
@@ -43,8 +44,14 @@ module.exports = class Service extends cds.ApplicationService {
 });
   
 this.on('replicateToS4Hana', async (req) => {
+  console.log("Replication triggred");
+  console.log("My request"+ JSON.stringify(req));
    const aReplicatedData =  await callS4Destination(req,srv);
    return aReplicatedData;
+});
+ //jobscheduler
+ srv.on('triggerMaterialJob', async (req) => {
+  return triggerMaterialreplicationJob(req);
 });
     srv.after(["CREATE"], "Mara.drafts", async (req) => {
 
@@ -60,6 +67,7 @@ this.on('replicateToS4Hana', async (req) => {
 
       await INSERT.into("litemdg.mara_dummy").entries(maraDummyData);
 
+      // Update the record in the "litemdg.mara.drafts" table
       await UPDATE("litemdg.mara.drafts")
         .set({ Status: "Inactive" })
         .where({ ID: ID });

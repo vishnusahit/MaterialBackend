@@ -102,6 +102,7 @@ type changeRequestCount {
 type tyReplicationResult {
 
   MATNR     : String(40);
+  JobID : String(50);
   STATUS :  String(15);
   REPLICATION_MODE  : String(15);
   REQUEST_NUMBER : Integer;

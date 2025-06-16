@@ -8,15 +8,17 @@
   "dependencies": {
     "@cap-js-community/odata-v2-adapter": "^1.13.3",
     "@cap-js/postgres": "^1.10.1",
+    "@sap-cloud-sdk/connectivity": "^3",
     "@sap-cloud-sdk/http-client": "^3.24.0",
     "@sap-cloud-sdk/resilience": "^3.24.0",
     "@sap/cds": "^8",
+    "@sap/jobs-client": "^1.8.6",
+    "@sap/xsenv": "^5.6.1",
     "@sap/xssec": "^4",
     "cf-nodejs-logging-support": "^7.3.0",
     "express": "^4",
     "uuid": "^11.1.0",
-    "xlsx": "^0.18.5",
-    "@sap-cloud-sdk/connectivity": "^3"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@cap-js/cds-types": "^0.6",
@@ -43,14 +45,6 @@
           "min": 0,
           "max": 1000,
           "fifo": true
-        },
-        "credentials": {
-          "host": "localhost",
-          "port": 5432,
-          "database": "litemdg",
-          "user": "postgres",
-          "password": "postgres",
-          "requestTimeout": 200000000
         },
         "schema": "public",
         "schema_evolution": "true"
@@ -86,10 +80,10 @@
         "kind": "odata-v2",
         "model": "srv/external/API_PRODUCT_SRV",
         "credentials": {
-        "destination": "W46",
-         "path": "/sap/opu/odata/sap/API_PRODUCT_SRV",
-         "requestTimeout": 1200000
-      }
+          "destination": "W46",
+          "path": "/sap/opu/odata/sap/API_PRODUCT_SRV",
+          "requestTimeout": 1200000
+        }
       }
     },
     "server": {

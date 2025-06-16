@@ -9,6 +9,7 @@ modules:
     requires:
       - name: POS_SQL1
       - name: LiteMDG-auth
+      - name: job_scheduling_inst
       - name: LiteMDG-destination-service
       - name: LiteMDG-connectivity
     provides:
@@ -97,6 +98,13 @@ resources:
       config:
         xsappname: LiteMDG
         tenant-mode: dedicated
+  - name: job_scheduling_inst
+    type: org.cloudfoundry.managed-service
+    requires:
+      - name: LiteMDG-auth
+    parameters:
+      service: jobscheduler
+      service-plan: standard
   - name: LiteMDG-connectivity
     type: org.cloudfoundry.managed-service
     parameters:

@@ -4,7 +4,7 @@ const cds = require("@sap/cds");
 const { executeHttpRequest } = require('@sap-cloud-sdk/http-client');
 const connectivity = require('@sap-cloud-sdk/connectivity');
 
-async function fnReadTables(tx, req, srv) {
+async function fnReadTables(tx, ipJobID, srv) {
   const {
     Mara,
     plant,
@@ -15,12 +15,18 @@ async function fnReadTables(tx, req, srv) {
     Alternate_UOM
 
   } = srv.entities;
-  const { ipMatnrs } = req.data;
+  // console.log('Fetching data for input material numbers: '+JSON.stringify(ipMatnrs));
+  // const { ipMatnrs } = req.data;
+  // const { ipJobID } = req.data;
   // const tx = cds.transaction(req);
 
   const payloads = [];
+  const ipMatnrs = await SELECT.from("litemdg.ReplicationReport").where({
+    JobID: ipJobID,
+  });
 
-  for (const matnr of ipMatnrs) {
+  for (const amatnr of ipMatnrs) {
+    let matnr = amatnr.MATNR;
     const mara = await tx.run(
       SELECT.one.from(Mara).where({ MATNR: matnr })
     );
@@ -204,7 +210,14 @@ async function callS4Destination(req, srv) {
   }
 
   const tx = cds.transaction(req);
-  const payloads = await fnReadTables(tx, req, srv);
+
+  const { ipJobID } = req.data;
+  
+
+  
+  
+
+  const payloads = await fnReadTables(tx, ipJobID, srv);
 
   const errorResults = [];
   for (const payload of payloads) {
@@ -226,16 +239,18 @@ async function callS4Destination(req, srv) {
 
       console.log(`Material ${payload.Product} replicated.`);
       const successEntry = {
-        ID: cds.utils.uuid(),
+        // ID: cds.utils.uuid(),
         MATNR: payload.Product,
+        JobID : ipJobID,
         STATUS: "Success",
         Message: "Replicated Successfully",
         Timestamp: new Date(),
-        REPLICATED_BY: req.user.id
+        REPLICATED_BY: req.user.id,
+
       };
 
       await tx.run(
-        INSERT.into("litemdg.ReplicationReport").entries(successEntry)
+        UPDATE("litemdg.ReplicationReport").set(successEntry).where({ JobID: ipJobID, MATNR :payload.Product})
       );
       errorResults.push(successEntry);
 
@@ -247,15 +262,16 @@ async function callS4Destination(req, srv) {
 
       console.error(`❌ Error posting material ${payload.Product}:`, errMessage);
       const errorEntry = {
-        ID: cds.utils.uuid(),
+        // ID: cds.utils.uuid(),
         MATNR: payload.Product,
+        JobID : ipJobID,
         STATUS: "Failed",
         Message: errMessage,
         Timestamp: new Date(),
         REPLICATED_BY: req.user.id
       };
       await tx.run(
-        INSERT.into("litemdg.ReplicationReport").entries(errorEntry)
+        UPDATE("litemdg.ReplicationReport").set(errorEntry).where({ JobID: ipJobID, MATNR :payload.Product})
       );
       errorResults.push(errorEntry);
 
