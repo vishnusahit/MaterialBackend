@@ -66,7 +66,7 @@ service litemdg {
     action get_ValueList(Key:String) returns String;
     action replicateToS4Hana(ipJobID: String) returns array of common.tyReplicationResult;
     // action replicateToS4Hana(ipMatnrs:many String) returns array of common.tyReplicationResult;
-    action triggerMaterialJob(ipMatnrs:many String) returns array of common.tyReplicationResult;
+    action triggerMaterialJob(ipMatnrs:many String, ipMode : String ) returns array of common.tyReplicationResult;
   // action replicateToS4Hana() returns array of common.tyReplicationResult;
   //entity Exposed for Dashboard
   entity RequestStats           as

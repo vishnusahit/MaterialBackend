@@ -10,7 +10,7 @@ async function triggerMaterialreplicationJob(req) {
     uaa: { tag: 'xsuaa' }
   });
 
-  const { ipMatnrs } = req.data;
+  const { ipMatnrs, ipMode } = req.data;
   console.log("services log : " + JSON.stringify(services));
   const options = {
     baseURL: services.jobscheduler.url, // like https://scheduler-service.cfapps.eu10.hana.ondemand.com
@@ -44,7 +44,7 @@ async function triggerMaterialreplicationJob(req) {
         time : istTime,
         data: {
           // ipMatnrs: ['300.FIN.0009.212','300.FIN.0009.222']
-          ipJobID : jobName
+          ipJobID : jobName     
         }
       }
     ]
@@ -59,6 +59,7 @@ async function triggerMaterialreplicationJob(req) {
           JobID : jobName,
           MATNR: matnr,
           STATUS: "Queued",
+          REPLICATION_MODE : ipMode,
           Message: "Replication in Progress",
           Timestamp: new Date(),
           REPLICATED_BY: req.user.id
@@ -66,7 +67,23 @@ async function triggerMaterialreplicationJob(req) {
 
   await tx.run(
     INSERT.into("litemdg.ReplicationReport").entries(successEntry)
-  );
+        );
+        if (ipMode.includes("Change Req")) {
+
+          const match = ipMode.match(/\d+/);
+          let ipModeInt;
+          if (match) {
+            ipModeInt = parseInt(match[0], 10);
+
+          }
+
+          await tx.run(
+            UPDATE("litemdg.Change_Request").set({
+              Replication_status: "Completed"
+
+            }).where({ REQUEST_NUMBER: ipModeInt })
+          );
+        }
   aResults.push(successEntry);
       }
       
