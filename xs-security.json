@@ -1,7 +1,11 @@
+
 {
   "xsappname": "LiteMDG",
   "tenant-mode": "dedicated",
-  "scopes": [],
-  "attributes": [],
-  "role-templates": []
+ "scopes": [{
+    "name": "$XSAPPNAME.JOBSCHEDULER",
+    "description": "Job Scheduler Scope",
+    "grant-as-authority-to-apps": ["$XSSERVICENAME(job_scheduling_inst)"]
+    }]
 }
+
