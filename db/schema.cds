@@ -528,6 +528,10 @@ context Dummy {
                                     on to_valuation.Material = $self;
             to_Description    : Composition of many Description_dummy
                                     on to_Description.Material = $self;
+            to_Warehouse      : Composition of many Warehouse_dummy
+                                on to_Warehouse.Material = $self;
+            to_Alternate_UOM  : Composition of many Alternate_UOM_dummy
+                                on to_Alternate_UOM.Material = $self;
     }
 
     entity Plant_dummy {
@@ -578,6 +582,16 @@ context Dummy {
             LVORM    : Boolean; // Deletion Indicator
             MTPOS    : String(4); //Item Category Group for Material Master
         key VTWEG    : String(2); //Distribution Channel
+         to_Sales_tax : Composition of many Sales_tax_dummy
+                           on to_Sales_tax.VKORG = $self;
+    }
+
+    entity Sales_tax_dummy {
+            @UI.Hidden
+        key VKORG             : Association to Sales_Delivery_dummy; // Material Number
+        key Country           : String(2); // Country
+            TaxCategory       : String(4); // Tax Category
+            TaxClassification : String(1); // Tax Classification
     }
 
     entity Valuation_dummy {
@@ -592,6 +606,76 @@ context Dummy {
             VERPR        : Decimal(11, 2); //Moving Average Price/Periodic Unit Price
             VPRSV        : String(1); //Price control indicator
     }
+
+    entity Warehouse_dummy {
+            @UI.Hidden
+        key Material        : Association to Mara_staging_dummy; // Material Number
+        key LGNUM           : String(3); // Warehouse Number / Warehouse Complex
+            LVORM           : Boolean; // Deletion flag for all material data of a warehouse number
+            LGBKZ           : String(3); // Storage Section Indicators
+            LTKZE           : String(3); // Storage type indicator for stock placement
+            LTKZA           : String(3); // Storage type indicator for stock removal
+
+            LHMG1           : Decimal(13, 3); // Loading equipment quantity 1
+            LHMG2           : Decimal(13, 3); // Loading equipment quantity 2
+            LHMG3           : Decimal(13, 3); // Loading equipment quantity 3
+
+            LHME1           : String(3); // Unit of measure for loading equipment quantity 1
+            LHME2           : String(3); // Unit of measure for loading equipment quantity 2
+            LHME3           : String(3); // Unit of measure for loading equipment quantity 3
+
+            LETY1           : String(3); // 1st storage unit type
+            LETY2           : String(3); // 2nd storage unit type
+            LETY3           : String(3); // 3rd storage unit type
+
+            LVSME           : String(3); // Warehouse Management Unit of Measure
+            KZZUL           : Boolean; // Indicator: Allow addition to existing stock
+            BLOCK           : String(2); // Bulk Storage Indicators
+            KZMBF           : Boolean; // Indicator: Message to inventory management
+            BSSKZ           : Boolean; // Special movement indicator for warehouse management
+
+            MKAPV           : Decimal(11, 3); // Capacity usage
+            BEZME           : String(3); // Unit of measure for capacity consumption
+            PLKPT           : String(3); // Picking storage type for rough-cut and detailed planning
+            VOMEM           : String(1); // Default for unit of measure from material master record
+            L2SKR           : String(1); // Material relevance for 2-step picking
+            to_Storage_type : Composition of many Storage_type_dummy
+                                  on to_Storage_type.Warehouse = $self
+    }
+
+entity Storage_type_dummy {
+        @UI.Hidden
+    key Warehouse : Association to Warehouse_dummy; // Material Number
+    key LGTYP     : String(3); // Storage Type
+
+        LVORM     : Boolean; // Deletion flag for all material data of a storage type
+        LGPLA     : String(10); // Storage Bin
+        LPMAX     : Decimal(13, 3); // Maximum storage bin quantity
+        LPMIN     : Decimal(13, 3); // Minimum storage bin quantity
+        MAMNG     : Decimal(13, 3); // Control quantity
+        NSMNG     : Decimal(13, 3); // Replenishment quantity
+        KOBER     : String(3); // Picking Area
+}
+
+entity Alternate_UOM_dummy {
+        @UI.Hidden
+    key Material : Association to Mara_staging_dummy; // Material Number
+    key MEINH    : String(3); // Alternative Unit of Measure for Stockkeeping Unit
+
+        UMREZ    : Decimal(5, 0); // Numerator for Conversion to Base Units of Measure
+        UMREN    : Decimal(5, 0); // Denominator for conversion to base units of measure
+        EANNR    : String(13); // International Article Number (EAN/UPC)
+        EAN11    : String(18); // Category of International Article Number (EAN)
+        NUMTP    : String(2); // European Article Number (EAN) - obsolete!!!!!
+        LAENG    : Decimal(13, 3); // Length
+        BREIT    : Decimal(13, 3); // Width
+        HOEHE    : Decimal(13, 3); // Height
+        MEABM    : String(3); // Unit of Dimension for Length/Width/Height
+        VOLUM    : Decimal(13, 3); // Volume
+        VOLEH    : String(3); // Volume Unit
+        BRGEW    : Decimal(13, 3); // Gross Weight
+        GEWEI    : String(3); // Unit of Weight
+}
 
 }
 

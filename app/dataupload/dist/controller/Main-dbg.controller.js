@@ -16,7 +16,58 @@ function (Controller, MessageBox, MessageToast,xlsxjs,XLSXF,jszip,Dialog,TextAre
     "use strict";
     //  var XLSX = require('xlsx');
     return Controller.extend("dataupload.controller.Main", { 
-        // var oUploadDialog;    
+        // var oUploadDialog;   
+        async onReplicate(){
+        var oModel = this.getOwnerComponent().getModel('odataV2');
+            var payload = {
+                "ipMatnrs": [
+                  "300.FIN.0009.212",
+                  "300.FIN.0009.215",
+                  "300.FIN.0009.207",
+                  "300.FIN.0009.219",
+                  "300.FIN.0009.206",
+                  "300.FIN.0009.091",
+                  "300.FIN.0009.106",
+                  "300.FIN.0009.210",
+                  "300.FIN.0009.152",
+                  "300.FIN.0009.155",
+                  "300.FIN.0009.222",
+                  "300.FIN.0009.201",
+                  "300.FIN.0009.186",
+                  "300.FIN.0009.199",
+                  "300.FIN.0009.216",
+                  "300.FIN.0009.146",
+                  "300.FIN.0009.208",
+                  "300.FIN.0009.217",
+                  "300.FIN.0009.200",
+                  "300.FIN.0009.141",
+                  "300.FIN.0009.213",
+                  "300.FIN.0009.150",
+                  "300.FIN.0009.161",
+                  "300.FIN.0009.108",
+                  "300.FIN.0009.197",
+                  "300.FIN.0009.163",
+                  "300.FIN.0009.205",
+                  "300.SME.0009.108",
+                  "300.FIN.0009.159",
+                  "300.FIN.0009.195"
+                ]
+              };
+          
+            await oModel.create("/replicateToS4Hana", payload, {
+                method: "POST",
+                success: function (oData) {
+                   debugger;
+                   sap.m.MessageToast.show("Data Fetched Kindly Refresh");
+                }, error: function (oError) { // Handle error 
+                    console.error("Error during action call:", oError);
+                    sap.m.MessageToast.show("Action execution failed."); // Additional logging for better debugging 
+                    if (oError.responseText) {
+                        console.error("Response text:", oError.responseText);
+                    }
+                    if (oError.message) { console.error("Error message:", oError.message); }
+                }
+            })}, 
         onInit: function () {
           
             // this.oFileUploader = this.byId("uploader");

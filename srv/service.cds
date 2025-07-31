@@ -30,6 +30,10 @@ service litemdg {
     entity Sales_dummy as projection on db.Dummy.Sales_Delivery_dummy;
     entity Valuation as projection on db.Valuation;
     entity Valuation_dummy as projection on db.Dummy.Valuation_dummy;
+    entity Warehouse_dummy as projection on db.Dummy.Warehouse_dummy;
+    entity Storage_type_dummy as projection on db.Dummy.Storage_type_dummy;
+    entity Sales_tax_dummy as projection on db.Dummy.Sales_tax_dummy;
+    entity Alternate_UOM_dummy as projection on db.Dummy.Alternate_UOM_dummy;
     entity Change_Request_Details as projection on db.REQUEST_NUMBER.Change_Request_details;
     
     entity ReplicationReport as projection on db.ReplicationReport;
@@ -49,10 +53,45 @@ service litemdg {
     @odata.draft.enabled
     entity ApproverMatrix as projection on db.ApproverMatrix;
 
-    action ProcessExcel(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description,ip_type: String,ip_Entity: String) returns String;
+    action   ProcessExcel(ip_mara : many common.t_Mara,
+                        ip_plant : many common.t_plant,
+                        ip_storage : many common.t_Storage_Location,
+                        ip_description : many common.t_Description,
+                        ip_warehouse : many common.t_Warehouse,
+                        ip_storage_type : many common.t_Storage_type,
+                        ip_alternate_uom : many common.t_Alternate_UOM,
+                        ip_sales_delivery : many common.t_Sales_Delivery,
+                        ip_valuation : many common.t_Valuation,
+                        ip_sales_tax : many common.t_Sales_tax,
+                        ip_type : String,
+                        ip_Entity : String)               returns String;
     action Uplod_to_Dummy(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description) returns String;
-    action Validate(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description,ip_type: String,ip_Entity: String) returns many common.ValidationError;
-    action Trigger_workflow(ip_mara: many common.t_Mara,ip_plant: many common.t_plant,ip_storage:many common.t_Storage_Location,ip_description:many common.t_Description,ip_type: String,ip_Entity: String) returns Integer;
+
+  action   Validate(ip_mara : many common.t_Mara,
+                    ip_plant : many common.t_plant,
+                    ip_storage : many common.t_Storage_Location,
+                    ip_description : many common.t_Description,
+                    ip_warehouse : many common.t_Warehouse,
+                    ip_storage_type : many common.t_Storage_type,
+                    ip_alternate_uom : many common.t_Alternate_UOM,
+                    ip_sales_delivery : many common.t_Sales_Delivery,
+                    ip_valuation : many common.t_Valuation,
+                    ip_sales_tax : many common.t_Sales_tax,
+                    ip_type : String,
+                    ip_Entity : String)                                                                                                                                          returns many common.ValidationError;
+
+  action   Trigger_workflow(ip_mara : many common.t_Mara,
+                            ip_plant : many common.t_plant,
+                            ip_storage : many common.t_Storage_Location,
+                            ip_description : many common.t_Description,
+                            ip_warehouse : many common.t_Warehouse,
+                            ip_storage_type : many common.t_Storage_type,
+                            ip_alternate_uom : many common.t_Alternate_UOM,
+                            ip_sales_delivery : many common.t_Sales_Delivery,
+                            ip_valuation : many common.t_Valuation,
+                            ip_sales_tax : many common.t_Sales_tax,
+                            ip_type : String,
+                            ip_Entity : String)                                                                                                                                  returns Integer;
     action SaveToDB(ip_req_no: Integer,ip_type: String,ip_Entity: String) returns String;
     action FieldStatus(ip_type: String) returns many common.FieldStatus;
     action InsertMaterial(ip_MaterialID:String,ip_NewMaterial:String) returns String;

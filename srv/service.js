@@ -8,6 +8,8 @@ const { getKeyPredicateDynamic,
 const {fnOpenChangeRequestCount,fnMyInboxCount} = require("./tileCountFuncionHandler");
 const {callS4Destination} = require("./ReplicationHandler");
 const {triggerMaterialreplicationJob} = require("./scheduleReplication");
+const FieldPropertyDataPopulate = require('./Handlers/FieldPropertyDataPopulate');
+
 module.exports = class Service extends cds.ApplicationService {
   init() {
     //
@@ -30,7 +32,14 @@ module.exports = class Service extends cds.ApplicationService {
       Value_ListAPI,
       Value_List,
       ChangeLog,
-      EntityItems
+      EntityItems,
+      Warehouse,
+      Storage_type,
+      Warehouse_dummy,
+      Storage_type_dummy,
+      Sales_tax_dummy,
+      Alternate_UOM_dummy,
+      Alternate_UOM
     } = this.entities;
     console.log(Object.keys(this.entities));
     const srv = this;
@@ -929,7 +938,11 @@ this.on('replicateToS4Hana', async (req) => {
     // });
 
     this.on("ProcessExcel", async (req) => {
-      const { ip_mara, ip_plant, ip_storage, ip_description, ip_type, ip_Entity } = req.data;
+      const { ip_mara, ip_plant, ip_storage, ip_description, ip_warehouse,
+        ip_storage_type,
+        ip_alternate_uom,
+        ip_sales_delivery,
+        ip_valuation,ip_sales_tax, ip_type, ip_Entity } = req.data;
       var insertedMaraEntries;
       const seen = new Set();
       const parentRecords = [];
@@ -1036,6 +1049,119 @@ this.on('replicateToS4Hana', async (req) => {
               }
             })
           );
+
+          // Process Warehouse entries
+          if (ip_warehouse && ip_warehouse.length > 0) {
+            await Promise.all(
+              ip_warehouse.map(async (entry) => {
+                const material = await tx.run(
+                  SELECT.one.from(mara_dummy).where({ MATNR: entry.Material_MATNR })
+                );
+                if (material) {
+                  await tx.run(
+                    INSERT.into(Warehouse_dummy).entries({
+                      ...entry,
+                      Material_ID: material.ID,
+                    })
+                  );
+                }
+              })
+            );
+          }
+          //storage_type
+          if (ip_storage_type && ip_storage_type.length > 0) {
+            await Promise.all(
+              ip_storage_type.map(async (entry) => {
+                const warehouse = await tx.run(
+                  SELECT.one.from(Warehouse_dummy).where({ 
+                    LGNUM: entry.Warehouse_LGNUM,
+                    Material_MATNR: entry.Warehouse_Material_MATNR 
+                  })
+                );
+                if (warehouse) {
+                  await tx.run(
+                    INSERT.into(Storage_type_dummy).entries({
+                      ...entry,
+                      Warehouse_Material_ID: warehouse.Material_ID,
+                    })
+                  );
+                }
+              })
+            );
+          }
+          if (ip_alternate_uom && ip_alternate_uom.length > 0) {
+            await Promise.all(
+              ip_alternate_uom.map(async (entry) => {
+                const material = await tx.run(
+                  SELECT.one.from(mara_dummy).where({ MATNR: entry.Material_MATNR })
+                );
+                if (material) {
+                  await tx.run(
+                    INSERT.into(Alternate_UOM_dummy).entries({
+                      ...entry,
+                      Material_ID: material.ID,
+                    })
+                  );
+                }
+              })
+            );
+          }
+          // Process Sales Delivery entries
+          if (ip_sales_delivery && ip_sales_delivery.length > 0) {
+            await Promise.all(
+              ip_sales_delivery.map(async (entry) => {
+                const material = await tx.run(
+                  SELECT.one.from(mara_dummy).where({ MATNR: entry.Material_MATNR })
+                );
+                if (material) {
+                  await tx.run(
+                    INSERT.into(Sales_dummy).entries({
+                      ...entry,
+                      Material_ID: material.ID,
+                    })
+                  );
+                }
+              })
+            );
+          }
+          if (ip_valuation && ip_valuation.length > 0) {
+            await Promise.all(
+              ip_valuation.map(async (entry) => {
+                const material = await tx.run(
+                  SELECT.one.from(mara_dummy).where({ MATNR: entry.Material_MATNR })
+                );
+                if (material) {
+                  await tx.run(
+                    INSERT.into(Valuation_dummy).entries({
+                      ...entry,
+                      Material_ID: material.ID,
+                    })
+                  );
+                }
+              })
+            );
+          }
+          if (ip_sales_tax && ip_sales_tax.length > 0) {
+            await Promise.all(
+              ip_sales_tax.map(async (entry) => {
+                const salesDelivery = await tx.run(
+                  SELECT.one.from(Sales_dummy).where({ 
+                    Material_MATNR: entry.VKORG_Material_MATNR,
+                    VKORG: entry.VKORG_VKORG,
+                    VTWEG: entry.VKORG_VTWEG
+                  })
+                );
+                if (salesDelivery) {
+                  await tx.run(
+                    INSERT.into(Sales_tax_dummy).entries({
+                      ...entry,
+                      VKORG_Material_ID: salesDelivery.Material_ID,
+                    })
+                  );
+                }
+              })
+            );
+          }
         }
         else if (ip_type === 'UPDATE'|| ip_type === 'EXTENSION') {
           const insertedMatnrs = new Set();
@@ -1598,11 +1724,37 @@ this.on('replicateToS4Hana', async (req) => {
               })
             );
 
+            const warehouseDummyData = await tx.run(
+              SELECT.from(Warehouse_dummy).where({
+                Material_ID: maraDummyData[0].ID,
+              })
+            );
+  
+            const alternateUOMDummyData = await tx.run(
+              SELECT.from(Alternate_UOM_dummy).where({
+                Material_ID: maraDummyData[0].ID,
+              })
+            );
+  
+            const salesDeliveryDummyData = await tx.run(
+              SELECT.from(Sales_dummy).where({
+                Material_ID: maraDummyData[0].ID,
+              })
+            );
+  
+            const valuationDummyData = await tx.run(
+              SELECT.from(Valuation_dummy).where({
+                Material_ID: maraDummyData[0].ID,
+              })
+            );
+
             //   plantDummyData.forEach(entry => {
             //     entry.mat_plant_MATNR = maraDummyData[0].MATNR;
             //  });
 
             let storageDummyData = [];
+            let storageTypeDummyData = [];
+            let salesTaxDummyData = [];
 
             if (plantDummyData.length > 0) {
               for (const plant of plantDummyData) {
@@ -1619,11 +1771,49 @@ this.on('replicateToS4Hana', async (req) => {
                 }
               }
             }
+            if (warehouseDummyData.length > 0) {
+              for (const warehouse of warehouseDummyData) {
+                const storageTypeData = await tx.run(
+                  SELECT.from(Storage_type_dummy).where({
+                    Warehouse_Material_ID: warehouse.Material_ID,
+                    Warehouse_Material_MATNR: warehouse.Material_MATNR,
+                    Warehouse_LGNUM: warehouse.LGNUM,
+                  })
+                );
+  
+                if (storageTypeData.length > 0) {
+                  storageTypeDummyData.push(...storageTypeData);
+                }
+              }
+            }
+  
+            if (salesDeliveryDummyData.length > 0) {
+              for (const salesDelivery of salesDeliveryDummyData) {
+                const salesTaxData = await tx.run(
+                  SELECT.from(Sales_tax_dummy).where({
+                    VKORG_Material_ID: salesDelivery.Material_ID,
+                    VKORG_Material_MATNR : salesDelivery.Material_MATNR,
+                    VKORG_VKORG: salesDelivery.VKORG,
+                    VKORG_VTWEG: salesDelivery.VTWEG,
+                  })
+                );
+  
+                if (salesTaxData.length > 0) {
+                  salesTaxDummyData.push(...salesTaxData);
+                }
+              }
+            }
 
             let maraInserted = true;
             let plantInserted = true;
             let storageInserted = true;
             let descriptionInserted = true;
+            let warehouseInserted = true;
+            let storageTypeInserted = true;
+            let alternateUOMInserted = true;
+            let salesDeliveryInserted = true;
+            let salesTaxInserted = true;
+            let valuationInserted = true;
 
             if (maraDummyData.length > 0) {
               for (const entry of maraDummyData) {
@@ -1682,11 +1872,100 @@ this.on('replicateToS4Hana', async (req) => {
               }
             }
 
+            if (warehouseDummyData.length > 0 && maraInserted) {
+              for (const entry of warehouseDummyData) {
+                const result = await tx.run(
+                  INSERT.into(Warehouse).entries(entry)
+                );
+                if (result.results.length != 1) {
+                  warehouseInserted = false;
+                  output = "Warehouse Insertion Failed";
+                  break;
+                }
+              }
+            }
+  
+            // Insert Storage Type data
+            if (storageTypeDummyData.length > 0 && warehouseInserted) {
+              for (const entry of storageTypeDummyData) {
+                const result = await tx.run(
+                  INSERT.into(Storage_type).entries(entry)
+                );
+                if (result.results.length != 1) {
+                  storageTypeInserted = false;
+                  output = "Storage Type Insertion Failed";
+                  break;
+                }
+              }
+            }
+  
+            // Insert Alternate UOM data
+            if (alternateUOMDummyData.length > 0 && maraInserted) {
+              for (const entry of alternateUOMDummyData) {
+                const result = await tx.run(
+                  INSERT.into(Alternate_UOM).entries(entry)
+                );
+                if (result.results.length != 1) {
+                  alternateUOMInserted = false;
+                  output = "Alternate UOM Insertion Failed";
+                  break;
+                }
+              }
+            }
+  
+            // Insert Sales Delivery data
+            if (salesDeliveryDummyData.length > 0 && maraInserted) {
+              for (const entry of salesDeliveryDummyData) {
+                const result = await tx.run(
+                  INSERT.into(Sales_Delivery).entries(entry)
+                );
+                if (result.results.length != 1) {
+                  salesDeliveryInserted = false;
+                  output = "Sales Delivery Insertion Failed";
+                  break;
+                }
+              }
+            }
+  
+            // Insert Sales Tax data
+            if (salesTaxDummyData.length > 0 && salesDeliveryInserted) {
+              for (const entry of salesTaxDummyData) {
+                const result = await tx.run(
+                  INSERT.into(Sales_tax).entries(entry)
+                );
+                if (result.results.length != 1) {
+                  salesTaxInserted = false;
+                  output = "Sales Tax Insertion Failed";
+                  break;
+                }
+              }
+            }
+  
+            // Insert Valuation data
+            if (valuationDummyData.length > 0 && maraInserted) {
+              for (const entry of valuationDummyData) {
+                const result = await tx.run(
+                  INSERT.into(Valuation).entries(entry)
+                );
+                if (result.results.length != 1) {
+                  valuationInserted = false;
+                  output = "Valuation Insertion Failed";
+                  break;
+                }
+              }
+            }
+
             if (
               maraInserted &&
               plantInserted &&
               storageInserted &&
-              descriptionInserted
+              descriptionInserted&&
+              warehouseInserted &&
+              storageTypeInserted &&
+              alternateUOMInserted &&
+              salesDeliveryInserted &&
+              salesTaxInserted &&
+              valuationInserted
             ) {
               await tx.run(DELETE.from(mara_dummy).where({ MATNR: object_id }));
               await tx.run(
@@ -1705,6 +1984,51 @@ this.on('replicateToS4Hana', async (req) => {
                   );
                 }
               }
+              await tx.run(
+                DELETE.from(Warehouse_dummy).where({
+                  Material_ID: maraDummyData[0].ID,
+                })
+              );
+              await tx.run(
+                DELETE.from(Alternate_UOM_dummy).where({
+                  Material_ID: maraDummyData[0].ID,
+                })
+              );
+              await tx.run(
+                DELETE.from(Sales_dummy).where({
+                  Material_ID: maraDummyData[0].ID,
+                })
+              );
+              await tx.run(
+                DELETE.from(Valuation_dummy).where({
+                  Material_ID: maraDummyData[0].ID,
+                })
+              );
+              if (warehouseDummyData.length > 0) {
+                for (const warehouse of warehouseDummyData) {
+                  await tx.run(
+                    DELETE.from(Storage_type_dummy).where({
+                      Warehouse_Material_ID: warehouse.Material_ID,
+                      Warehouse_Material_MATNR: warehouse.Material_MATNR,
+                      Warehouse_LGNUM: warehouse.LGNUM,
+                    })
+                  );
+                }
+              }
+  
+              if (salesDeliveryDummyData.length > 0) {
+                for (const salesDelivery of salesDeliveryDummyData) {
+                  await tx.run(
+                    DELETE.from(Sales_tax_dummy).where({
+                      VKORG_Material_ID: salesDelivery.Material_ID,
+                      VKORG_Material_MATNR: salesDelivery.Material_MATNR,
+                      VKORG_VKORG: salesDelivery.VKORG,
+                      VKORG_VTWEG: salesDelivery.VTWEG,
+                    })
+                  );
+                }
+              }
+            
             }
           }
         }
@@ -2583,6 +2907,8 @@ this.on('replicateToS4Hana', async (req) => {
       req.reply({ validation_errors: validateErrors });
 
     });
+
+  //  FieldPropertyDataPopulate(srv);
     return super.init();
   }
 };
