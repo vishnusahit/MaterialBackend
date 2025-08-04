@@ -253,22 +253,31 @@ entity CAPM_Field_Mapping {
         Field_Description : String;
 }
 
-entity ApproverMatrix {
-    key Model               : String default 'Material';
-    key Entity              : String default 'MARA';
-    key ControlField        : String default 'MTART';
-    key ControlFieldName    : String default 'Material Type';
-    key Value               : String;
+entity ApproverMatrix : cuid {
+    key Model            : String;
+    key Entity           : String ;
+     ControlField     : String ;
+     ControlFieldName : String ;
+     Value            : String ;
+
+           to_ApproverList  : Composition of many ApproverList
+        on  to_ApproverList.parent = $self;
+
+}
+
+entity ApproverList {
+        Level               : String;
 
         @mandatory
-        Approver_L1_User_ID : String;
+        key Approver_ID : String  @Common.Label: 'Approver ID';
 
         @mandatory
-        Approver_L1         : String;
-        Approver_L2_User_ID : String;
-        Approver_L2         : String;
-        Approver_L3_User_ID : String;
-        Approver_L3         : String;
+        Approver_Name        : String @Common.Label: 'Approver Name';
+
+        @UI.Hidden
+       parent               : Association to ApproverMatrix;    
+                                  
+
 }
 
 entity ReplicationReport : cuid{
@@ -302,6 +311,11 @@ context REQUEST_NUMBER {
             Description        : String;
             Notes              : String;
             Replication_status : String;
+            CurrentApproverID : String;
+        CurrentApproverName : String;
+        CurrentLevel        :String;
+        ApprovedByLevel  :  String;
+        TotalApproverLevel : String;
             Details            : Composition of many Change_Request_details
                                      on Details.Change = $self;
             to_Action_Details  : Composition of many Change_Request_User_Actions_Details

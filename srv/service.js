@@ -325,12 +325,39 @@ this.on('replicateToS4Hana', async (req) => {
 
             if (result.rootInstanceId) {
 
+
+              let     sCurrentApproverName, sCurrentApproverID, sLevel, sTotalLevel;
+              // Check Total Level Appprovers and assign Current
+              try {
+                  const aApproverList = await SELECT.from('litemdg.ApproverList').where({ parent_Model: 'Material' }).orderBy('Level')
+               console.log("Approver Lists: "+ JSON.stringify(aApproverList));
+                  if (aApproverList.length > 0)
+                  {   
+                    if (aApproverList.length > 0)
+                      {   
+                          sCurrentApproverName = aApproverList[0].Approver_Name ;
+                          sCurrentApproverID = aApproverList[0].Approver_ID ;
+                          sLevel = aApproverList[0].Level;
+                          sTotalLevel = aApproverList[aApproverList.length -1].Level;
+                      }
+                  }
+              }
+              catch (oError) {
+                  console.error("Error processing ApproverLists", oError);
+
+              }
+
+
               await INSERT.into("litemdg.Change_Request").entries({
                 REQUEST_NUMBER: req_no,
                 InstanceID: result.rootInstanceId,
                 REQUEST_TYPE: "CREATE",
                 Overall_status: "Open",
                 Model: "Material",
+                CurrentApproverID: sCurrentApproverID,
+                CurrentApproverName: sCurrentApproverName,
+                CurrentLevel: sLevel,
+                TotalApproverLevel: sTotalLevel,
                 Requested_By: req.user.attr.email,
                 Requested_Date: creationDate,
                 Requested_Time: creationTime,
@@ -2907,6 +2934,65 @@ this.on('replicateToS4Hana', async (req) => {
       req.reply({ validation_errors: validateErrors });
 
     });
+
+    srv.after('CREATE', 'ApproverList.drafts', async (req) => {
+      debugger;
+
+      const createdData = await SELECT.from("litemdg.ApproverList.drafts")
+          .where({
+              parent_ID: req.parent_ID
+          });
+
+      if (!createdData) {
+          console.error("No data found for CostCenter draft.");
+          return;
+      }
+
+      let sLevel = "L" + parseInt(createdData.length);
+
+
+      await UPDATE("litemdg.ApproverList.drafts")
+          .set({ Level: sLevel })
+          .where({
+              Approver_ID: req.Approver_ID
+
+          });
+
+      console.log("Updated");
+
+  });
+  srv.on('DELETE', 'ApproverList.drafts', async (req, next) => {
+      return next(); // No manual delete here
+  });
+
+  srv.before('DELETE', 'ApproverList.drafts', async (req) => {
+      // Get the record about to be deleted
+      const toDelete = await SELECT.one.from('litemdg.ApproverList.drafts').where({ Approver_ID: req.data.Approver_ID });
+      if (!toDelete) return;
+
+      const sParentID = toDelete.parent_ID;
+
+      // Get all draft items for the same parent (excluding the one to be deleted)
+      let approvers = await SELECT.from('litemdg.ApproverList.drafts')
+          .where({ parent_ID: sParentID });
+
+      approvers = approvers.filter(item => item.Approver_ID !== req.data.Approver_ID);
+
+      // Sort by numeric Level
+      approvers.sort((a, b) => {
+          const levelA = parseInt(a.Level?.replace(/\D/g, '')) || 0;
+          const levelB = parseInt(b.Level?.replace(/\D/g, '')) || 0;
+          return levelA - levelB;
+      });
+
+      // Reassign levels
+      for (let i = 0; i < approvers.length; i++) {
+          const sLevel = 'L' + (i + 1);
+          await UPDATE('litemdg.ApproverList.drafts')
+              .set({ Level: sLevel })
+              .where({ Approver_ID: approvers[i].Approver_ID });
+      }
+  });
 
   //  FieldPropertyDataPopulate(srv);
     return super.init();

@@ -52,6 +52,7 @@ service litemdg {
     entity Value_ListAPI as projection on API.ValueHelpSet;
     @odata.draft.enabled
     entity ApproverMatrix as projection on db.ApproverMatrix;
+    entity ApproverList as projection on db.ApproverList;
 
     action   ProcessExcel(ip_mara : many common.t_Mara,
                         ip_plant : many common.t_plant,
@@ -105,7 +106,7 @@ service litemdg {
     action get_ValueList(Key:String) returns String;
     action replicateToS4Hana(ipJobID: String) returns array of common.tyReplicationResult;
     // action replicateToS4Hana(ipMatnrs:many String) returns array of common.tyReplicationResult;
-    action triggerMaterialJob(ipMatnrs:many String, ipMode : String ) returns array of common.tyReplicationResult;
+    action triggerMaterialJob(ipMatnrs:many String, ipMode : String, ipNotes : String) returns array of common.tyReplicationResult;
   // action replicateToS4Hana() returns array of common.tyReplicationResult;
   //entity Exposed for Dashboard
   entity RequestStats           as
