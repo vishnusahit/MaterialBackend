@@ -92,7 +92,8 @@ service litemdg {
                             ip_valuation : many common.t_Valuation,
                             ip_sales_tax : many common.t_Sales_tax,
                             ip_type : String,
-                            ip_Entity : String)                                                                                                                                  returns Integer;
+                            ip_Entity : String,
+                            IsInitialLoad : Boolean)                                                                                                                                  returns Integer;
     action SaveToDB(ip_req_no: Integer,ip_type: String,ip_Entity: String) returns String;
     action FieldStatus(ip_type: String) returns many common.FieldStatus;
     action InsertMaterial(ip_MaterialID:String,ip_NewMaterial:String) returns String;

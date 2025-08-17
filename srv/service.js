@@ -1414,7 +1414,7 @@ this.on('replicateToS4Hana', async (req) => {
     this.on("Trigger_workflow", async (req) => {
       let number = 0;
 
-      const { ip_mara, ip_plant, ip_storage, ip_description, ip_Entity, ip_type } = req.data;
+      const { ip_mara, ip_plant, ip_storage, ip_description, ip_Entity, ip_type, IsInitialLoad } = req.data;
       function replaceNull(value) {
         return value === null || value === undefined ? "" : value;
       }
@@ -1455,174 +1455,202 @@ this.on('replicateToS4Hana', async (req) => {
       
       if (ip_type === 'CREATE'){
         var desc = ip_mara[0].Request_Desc
-      var payload = {
-        definitionId:
-          "eu10.bgsw-sdsc-coe-at1drpz8.changerequesttrigger.material_Governance_Process",
-        context: {
-          material: {
-            ChangeRequest: {
-              Change_Req_Number: req_no.toString(),
-              Requested_By: req.user.attr.email,
-              Creation_Date: creationDate,
-              Creation_Time: creationTime,
-              Request_Status: "To Be Approved",
-              Multiple_Materials: "X",
-              Type_Request: "MASS_CREATE",
-              Description : desc,
+        if (!IsInitialLoad) {
+          var payload = {
+            definitionId:
+              "eu10.bgsw-sdsc-coe-at1drpz8.changerequesttrigger.material_Governance_Process",
+            context: {
+              material: {
+                ChangeRequest: {
+                  Change_Req_Number: req_no.toString(),
+                  Requested_By: req.user.attr.email,
+                  Creation_Date: creationDate,
+                  Creation_Time: creationTime,
+                  Request_Status: "To Be Approved",
+                  Multiple_Materials: "X",
+                  Type_Request: "MASS_CREATE",
+                  Description: desc,
+                },
+                Material: [],
+                to_Description: [],
+                to_SalesDelivery: [],
+                to_Plant: [],
+                to_Storage_Location: [],
+                to_Valuation: [],
+              },
             },
-            Material: [],
-            to_Description: [],
-            to_SalesDelivery: [],
-            to_Plant: [],
-            to_Storage_Location: [],
-            to_Valuation: [],
-          },
-        },
-      };
+          };
 
-      // Loop through materialData and add to payload
-      ip_mara.forEach(function (item) {
-        payload.context.material.Material.push({
-          Product: replaceNull(item.MATNR),
-          BaseUnit: replaceNull(item.MEINS),
-          Division: replaceNull(item.SPART),
-          NetWeight: replaceDec(item.NTGEW),
-          WeightUnit: replaceNull(item.GEWEI),
-          GrossWeight: replaceDec(item.BRGEW),
-          ProductType: replaceNull(item.MTART),
-          ProductGroup: replaceNull(item.MATKL),
-          ProductOldID: replaceNull(item.BISMT),
-          IndustrySector: replaceNull(item.MBRSH),
-          ProductHierarchy: replaceNull(item.PRDHA),
-          VolumeUnit: replaceNull(item.VOLEH),
-          MaterialVolume: replaceDec(item.VOLUM),
-          CrossPlantStatus: replaceNull(item.MSTAE),
-          ItemCategoryGroup: replaceNull(item.MTPOS_MARA),
-          IsMarkedForDeletion: false,
-          ProductStandardID: replaceNull(item.WRKST),
-          ExternalProductGroup: replaceNull(item.EXTWG),
-          MeasurementUnit: replaceNull(item.MEABM),
-          ProductWidth: replaceDec(item.LAENG),
-          ProductHeight: replaceDec(item.BREIT),
-          ProductLength: replaceDec(item.HOEHE),
-          ExpirationDate: replaceNull(item.SLED_BBD),
-          TotalShelfLife: replaceNull(item.MHDHB),
-          StorageConditions: replaceNull(item.RAUBE),
-          MinRemainingShelfLife: replaceNull(item.MHDRZ),
-          ShelfLifeExpirationDatePeriod: replaceNull(item.IPRKZ),
-          TransportationGroup: replaceNull(item.TRAGR),
-          PurchasingAcknProfile: replaceNull(item.EKWSL),
-          QltyMgmtInProcmtIsActive: "",
-        });
-      });
-      ip_description.forEach(function (item) {
-        payload.context.material.to_Description.push({
-          Product: replaceNull(item.Material_MATNR),
-          LanguageID: item.code,
-          Description: replaceNull(item.Description),
-        });
-      });
+          // Loop through materialData and add to payload
+          ip_mara.forEach(function (item) {
+            payload.context.material.Material.push({
+              Product: replaceNull(item.MATNR),
+              BaseUnit: replaceNull(item.MEINS),
+              Division: replaceNull(item.SPART),
+              NetWeight: replaceDec(item.NTGEW),
+              WeightUnit: replaceNull(item.GEWEI),
+              GrossWeight: replaceDec(item.BRGEW),
+              ProductType: replaceNull(item.MTART),
+              ProductGroup: replaceNull(item.MATKL),
+              ProductOldID: replaceNull(item.BISMT),
+              IndustrySector: replaceNull(item.MBRSH),
+              ProductHierarchy: replaceNull(item.PRDHA),
+              VolumeUnit: replaceNull(item.VOLEH),
+              MaterialVolume: replaceDec(item.VOLUM),
+              CrossPlantStatus: replaceNull(item.MSTAE),
+              ItemCategoryGroup: replaceNull(item.MTPOS_MARA),
+              IsMarkedForDeletion: false,
+              ProductStandardID: replaceNull(item.WRKST),
+              ExternalProductGroup: replaceNull(item.EXTWG),
+              MeasurementUnit: replaceNull(item.MEABM),
+              ProductWidth: replaceDec(item.LAENG),
+              ProductHeight: replaceDec(item.BREIT),
+              ProductLength: replaceDec(item.HOEHE),
+              ExpirationDate: replaceNull(item.SLED_BBD),
+              TotalShelfLife: replaceNull(item.MHDHB),
+              StorageConditions: replaceNull(item.RAUBE),
+              MinRemainingShelfLife: replaceNull(item.MHDRZ),
+              ShelfLifeExpirationDatePeriod: replaceNull(item.IPRKZ),
+              TransportationGroup: replaceNull(item.TRAGR),
+              PurchasingAcknProfile: replaceNull(item.EKWSL),
+              QltyMgmtInProcmtIsActive: "",
+            });
+          });
+          ip_description.forEach(function (item) {
+            payload.context.material.to_Description.push({
+              Product: replaceNull(item.Material_MATNR),
+              LanguageID: item.code,
+              Description: replaceNull(item.Description),
+            });
+          });
 
-      ip_mara.forEach(function (item) {
-        payload.context.material.to_SalesDelivery.push({
-          Product: "",
-          ProductSalesOrg: "",
-          ProductDistributionChnl: "",
-          RoundingProfile: "",
-          IsMarkedForDeletion: false,
-          ProductHierarchy: "",
-          ItemCategoryGroup: "",
-        });
-      });
+          ip_mara.forEach(function (item) {
+            payload.context.material.to_SalesDelivery.push({
+              Product: "",
+              ProductSalesOrg: "",
+              ProductDistributionChnl: "",
+              RoundingProfile: "",
+              IsMarkedForDeletion: false,
+              ProductHierarchy: "",
+              ItemCategoryGroup: "",
+            });
+          });
 
-      ip_mara.forEach(function (item) {
-        payload.context.material.to_Valuation.push({
-          Product: "",
-          ValuationArea: "",
-          ValuationType: "",
-          ValuationClass: "",
-          PriceUnitQty: "",
-          StandardPrice: "",
-          Currency: "",
-          CurrencyRole: "",
-          MovingAveragePrice: "",
-          ProductPriceControl: "",
-          IsMarkedForDeletion: false,
-        });
-      });
+          ip_mara.forEach(function (item) {
+            payload.context.material.to_Valuation.push({
+              Product: "",
+              ValuationArea: "",
+              ValuationType: "",
+              ValuationClass: "",
+              PriceUnitQty: "",
+              StandardPrice: "",
+              Currency: "",
+              CurrencyRole: "",
+              MovingAveragePrice: "",
+              ProductPriceControl: "",
+              IsMarkedForDeletion: false,
+            });
+          });
 
-      ip_plant.forEach(function (item) {
-        payload.context.material.to_Plant.push({
-          Product: replaceNull(item.mat_plant_MATNR),
-          Plant: replaceNull(item.WERKS),
-          MRPType: replaceNull(item.DISMM),
-          ProfileCode: replaceNull(item.MMSTA),
-          ABCIndicator: replaceNull(item.MAABC),
-          ProfitCenter: replaceNull(item.PRCTR),
-          MRPResponsible: replaceNull(item.DISPO),
-          ProcurementType: replaceNull(item.BESKZ),
-          PurchasingGroup: replaceNull(item.EKGRP),
-          IsMarkedForDeletion: false,
-          FixedLotSizeQuantity: replaceInt(item.FXLOS),
-          GoodsReceiptDuration: replaceNull(item.SCM_GRPRT),
-          IsInternalBatchManaged: false,
-          ProfileValidityStartDate: replaceNull(item.GSTRS),
-          LoadingGroup: replaceNull(item.LADGR),
-          AvailabilityCheckType: replaceNull(item.AVAILCHECK),
-          Currency: "JPY",
-          MRPGroup: replaceNull(item.DISGR),
-          LotSizingProcedure: replaceNull(item.DISLS),
-          MaximumLotSizeQuantity: replaceInt(item.FXLOS),
-          MinimumLotSizeQuantity: replaceInt(item.FXLOS),
-          ProductProcessingTime: replaceDec3(item.PLIFZ),
-          CountryOfOrigin: replaceNull(item.HERKL),
-        });
-      });
+          ip_plant.forEach(function (item) {
+            payload.context.material.to_Plant.push({
+              Product: replaceNull(item.mat_plant_MATNR),
+              Plant: replaceNull(item.WERKS),
+              MRPType: replaceNull(item.DISMM),
+              ProfileCode: replaceNull(item.MMSTA),
+              ABCIndicator: replaceNull(item.MAABC),
+              ProfitCenter: replaceNull(item.PRCTR),
+              MRPResponsible: replaceNull(item.DISPO),
+              ProcurementType: replaceNull(item.BESKZ),
+              PurchasingGroup: replaceNull(item.EKGRP),
+              IsMarkedForDeletion: false,
+              FixedLotSizeQuantity: replaceInt(item.FXLOS),
+              GoodsReceiptDuration: replaceNull(item.SCM_GRPRT),
+              IsInternalBatchManaged: false,
+              ProfileValidityStartDate: replaceNull(item.GSTRS),
+              LoadingGroup: replaceNull(item.LADGR),
+              AvailabilityCheckType: replaceNull(item.AVAILCHECK),
+              Currency: "JPY",
+              MRPGroup: replaceNull(item.DISGR),
+              LotSizingProcedure: replaceNull(item.DISLS),
+              MaximumLotSizeQuantity: replaceInt(item.FXLOS),
+              MinimumLotSizeQuantity: replaceInt(item.FXLOS),
+              ProductProcessingTime: replaceDec3(item.PLIFZ),
+              CountryOfOrigin: replaceNull(item.HERKL),
+            });
+          });
 
-      ip_storage.forEach(function (item) {
-        payload.context.material.to_Storage_Location.push({
-          Product: replaceNull(item.Material_MATNR),
-          Plant: replaceNull(item.WERKS),
-          StorageLocation: replaceNull(item.LGORT),
-          StorageBin: replaceNull(item.LGPBE),
-        });
-      });
+          ip_storage.forEach(function (item) {
+            payload.context.material.to_Storage_Location.push({
+              Product: replaceNull(item.Material_MATNR),
+              Plant: replaceNull(item.WERKS),
+              StorageLocation: replaceNull(item.LGORT),
+              StorageBin: replaceNull(item.LGPBE),
+            });
+          });
 
-      console.log("payload:", payload);
+          console.log("payload:", payload);
 
-      const WF_API = await cds.connect.to("sap_process_automation_service_user_access_New");
-      const result = await WF_API.send('POST', '/workflow/rest/v1/workflow-instances', JSON.stringify(payload), {
-        "Content-Type": "application/json"
-      });
+          const WF_API = await cds.connect.to("sap_process_automation_service_user_access_New");
+          const result = await WF_API.send('POST', '/workflow/rest/v1/workflow-instances', JSON.stringify(payload), {
+            "Content-Type": "application/json"
+          });
 
-      console.log("result:",result);
+          console.log("result:", result);
 
-      if (result.rootInstanceId){
-      await INSERT.into("litemdg.Change_Request").entries({
-        REQUEST_NUMBER: req_no,
-        InstanceID: result.rootInstanceId,
-        REQUEST_TYPE: "MASS_CREATE",
-        Overall_status: "Open",
-        Model: "Material",
-        Requested_By: req.user.attr.email,
-        Requested_Date: creationDate,
-        Requested_Time: creationTime,
-        Requested_on: timestamp,
-        Description : req.data.Request_Desc,
-      });
+          if (result.rootInstanceId) {
+            await INSERT.into("litemdg.Change_Request").entries({
+              REQUEST_NUMBER: req_no,
+              InstanceID: result.rootInstanceId,
+              REQUEST_TYPE: "MASS_CREATE",
+              Overall_status: "Open",
+              Model: "Material",
+              Requested_By: req.user.attr.email,
+              Requested_Date: creationDate,
+              Requested_Time: creationTime,
+              Requested_on: timestamp,
+              Description: req.data.Request_Desc,
+            });
 
-      for (const item of ip_mara) {
-        await INSERT.into("litemdg.Change_Request_details").entries({
-          Change_REQUEST_NUMBER: req_no,
-          Object_ID: item.MATNR,
-          Description: item.MAKT_MAKTX,
-          Object_CUID: "",
-          Overall_status: "Open",
-          Material_type: item.MTART,
-        });
-      }
-      number = req_no;
-      }
+            for (const item of ip_mara) {
+              await INSERT.into("litemdg.Change_Request_details").entries({
+                Change_REQUEST_NUMBER: req_no,
+                Object_ID: item.MATNR,
+                Description: item.MAKT_MAKTX,
+                Object_CUID: "",
+                Overall_status: "Open",
+                Material_type: item.MTART,
+              });
+            }
+            number = req_no;
+          }
+        }
+        else {
+          await INSERT.into("litemdg.Change_Request").entries({
+            REQUEST_NUMBER: req_no,
+            InstanceID: "",
+            REQUEST_TYPE: "MASS_CREATE",
+            Overall_status: "Open",
+            Model: "Material",
+            Requested_By: req.user.attr.email,
+            Requested_Date: creationDate,
+            Requested_Time: creationTime,
+            Requested_on: timestamp,
+            Description: desc,
+          });
+
+          for (const item of ip_mara) {
+            await INSERT.into("litemdg.Change_Request_details").entries({
+              Change_REQUEST_NUMBER: req_no,
+              Object_ID: item.MATNR,
+              Description: item.MAKT_MAKTX,
+              Object_CUID: "",
+              Overall_status: "Open",
+              Material_type: item.MTART,
+            });
+          }
+          number = req_no;
+        }
     }
     else if(ip_type === "UPDATE"|| ip_type === "EXTENSION"){
       const type = "MASS_"+ip_type;
