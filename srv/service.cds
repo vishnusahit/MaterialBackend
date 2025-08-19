@@ -94,7 +94,7 @@ service litemdg {
                             ip_type : String,
                             ip_Entity : String,
                             IsInitialLoad : Boolean)                                                                                                                                  returns Integer;
-    action SaveToDB(ip_req_no: Integer,ip_type: String,ip_Entity: String) returns String;
+    action SaveToDB(ip_req_no: Integer,ip_type: String,ip_Entity: String,IsInitialLoad : Boolean) returns String;
     action FieldStatus(ip_type: String) returns many common.FieldStatus;
     action InsertMaterial(ip_MaterialID:String,ip_NewMaterial:String) returns String;
     function Rule_validation(ip_ID:String) returns many String;

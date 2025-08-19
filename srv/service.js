@@ -1274,10 +1274,10 @@ this.on('replicateToS4Hana', async (req) => {
                     await tx.run(INSERT.into(Plant_dummy).entries(existing));
 
 
-                    await tx.run(DELETE.from(Plant_dummy).where({
-                      mat_plant_MATNR: entry.mat_plant_MATNR,
-                      WERKS: oldWERKS
-                    }))
+                    // await tx.run(DELETE.from(Plant_dummy).where({
+                    //   mat_plant_MATNR: entry.mat_plant_MATNR,
+                    //   WERKS: oldWERKS
+                    // }))
                   }
                 }
                 const parent = await tx.run(
@@ -1630,13 +1630,15 @@ this.on('replicateToS4Hana', async (req) => {
             REQUEST_NUMBER: req_no,
             InstanceID: "",
             REQUEST_TYPE: "MASS_CREATE",
-            Overall_status: "Open",
+            Overall_status: "Completed",
             Model: "Material",
             Requested_By: req.user.attr.email,
             Requested_Date: creationDate,
             Requested_Time: creationTime,
             Requested_on: timestamp,
             Description: desc,
+            Completed_On: timestamp,
+            Notes : 'Initial Load',
           });
 
           for (const item of ip_mara) {
@@ -1645,7 +1647,7 @@ this.on('replicateToS4Hana', async (req) => {
               Object_ID: item.MATNR,
               Description: item.MAKT_MAKTX,
               Object_CUID: "",
-              Overall_status: "Open",
+              Overall_status: "Completed",
               Material_type: item.MTART,
             });
           }
@@ -1658,13 +1660,14 @@ this.on('replicateToS4Hana', async (req) => {
         REQUEST_NUMBER: req_no,
         InstanceID: "",
         REQUEST_TYPE: type,
-        Overall_status: "Open",
+        Overall_status: "Completed",
         Model: "Material",
         Requested_By: req.user.attr.email,
         Requested_Date: creationDate,
         Requested_Time: creationTime,
         Requested_on: timestamp,
         Description : req.data.Request_Desc,
+        Completed_On: timestamp,
       });
       const materialIds = new Set();
       switch(ip_Entity){
@@ -1748,7 +1751,7 @@ this.on('replicateToS4Hana', async (req) => {
       return number;
     });
     this.on("SaveToDB", async (req) => {
-      const { ip_req_no,ip_type,ip_Entity } = req.data;
+      const { ip_req_no,ip_type,ip_Entity,IsInitialLoad } = req.data;
       const tx = cds.transaction(req);
       let output = "Data saved to DB successfully!";
 
@@ -1878,7 +1881,12 @@ this.on('replicateToS4Hana', async (req) => {
                   CREATION_TYPE,
                   ...cleanedEntry
                 } = entry;
-                cleanedEntry.Status = "Inactive";
+                if(IsInitialLoad){
+                cleanedEntry.Status = "Active";
+                }
+                else{
+                  cleanedEntry.Status = "Inactive";
+                }
                 const result = await tx.run(
                   INSERT.into(Mara).entries(cleanedEntry)
                 );
@@ -2170,7 +2178,7 @@ this.on('replicateToS4Hana', async (req) => {
                       UPDATE(mara_dummy).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
                     );
                     await tx.run(
-                      UPDATE(Mara).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
+                      UPDATE(Mara).set({ Status: 'Active' }).where({ MATNR:p.mat_plant_MATNR })
                     );
                   }
                 }
@@ -2322,11 +2330,11 @@ this.on('replicateToS4Hana', async (req) => {
                   }
               }
               for (const p of originalPlant) {
-                await tx.run( DELETE.from(plant).where({ 
-                  mat_plant_MATNR: p.mat_plant_MATNR, 
-                  WERKS: p.WERKS
-                }));
-                await tx.run(INSERT.into(Plant_dummy).entries(p));
+                // await tx.run( DELETE.from(plant).where({ 
+                //   mat_plant_MATNR: p.mat_plant_MATNR, 
+                //   WERKS: p.WERKS
+                // }));
+                // await tx.run(INSERT.into(Plant_dummy).entries(p));
                 await tx.run(
                   DELETE.from(Plant_dummy).where({
                     mat_plant_MATNR: p.mat_plant_MATNR,
@@ -2337,7 +2345,7 @@ this.on('replicateToS4Hana', async (req) => {
                   UPDATE(mara_dummy).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
                 );
                 await tx.run(
-                  UPDATE(Mara).set({ Status: 'Inactive' }).where({ MATNR:p.mat_plant_MATNR })
+                  UPDATE(Mara).set({ Status: 'Active' }).where({ MATNR:p.mat_plant_MATNR })
                 );
               }
             }
