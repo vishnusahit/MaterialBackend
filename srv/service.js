@@ -1660,7 +1660,7 @@ this.on('replicateToS4Hana', async (req) => {
         REQUEST_NUMBER: req_no,
         InstanceID: "",
         REQUEST_TYPE: type,
-        Overall_status: "Completed",
+        Overall_status: "Approved",
         Model: "Material",
         Requested_By: req.user.attr.email,
         Requested_Date: creationDate,
@@ -1701,7 +1701,7 @@ this.on('replicateToS4Hana', async (req) => {
               Object_ID: item.mat_plant_MATNR,
               Description: matdata[0].MAKT_MAKTX,
               Object_CUID: objectId,
-              Overall_status: "Open",
+              Overall_status: "Approved",
               Material_type: matdata[0].MTART,
             });
             materialIds.add(item.mat_plant_MATNR);
