@@ -197,6 +197,25 @@ this.on('replicateToS4Hana', async (req) => {
       const entity = "StorageLocation" 
       await Rules_Derivation(req,srv,entity,ID)
     });
+    // srv.before(['READ'],Mara, async (req) => {
+    //     try {
+            
+    //         const descriptions = await SELECT.from(Description)
+    //             .columns('Material_MATNR', 'Description');
+            
+    //         // Loop through each description and update MARA
+    //         for (const desc of descriptions) {
+    //             await UPDATE(Mara)
+    //                 .set({ MAKT_MAKTX: desc.Description })
+    //                 .where({ MATNR: desc.Material_MATNR });
+    //         }
+            
+    //         console.log(`Updated descriptions for ${descriptions.length} materials`);
+            
+    //     } catch (error) {
+    //         console.error('Error updating MARA descriptions:', error);
+    //     }
+    // });
 
     srv.after(["EDIT"], Mara, async (req) => {
 
